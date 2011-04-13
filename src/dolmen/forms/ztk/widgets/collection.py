@@ -1,23 +1,21 @@
 # -*- coding: utf-8 -*-
 
-try:
-    import hashlib
-    md5hash = lambda s: hashlib.md5(s).hexdigest()
-except ImportError:
-    import md5
-    md5hash = lambda s: md5.new(s).hexdigest()
+import hashlib
+md5hash = lambda s: hashlib.md5(s).hexdigest()
 
-from zeam.form.base.datamanager import NoneDataManager
-from zeam.form.base.interfaces import IField, IWidget, IWidgetExtractor
-from zeam.form.base.form import cloneFormData
-from zeam.form.base.markers import NO_VALUE
-from zeam.form.base.fields import Fields
-from zeam.form.base.widgets import WidgetExtractor, Widgets, createWidget
-from zeam.form.ztk.fields import (
+from dolmen.forms.base.datamanager import NoneDataManager
+from dolmen.forms.base.interfaces import IField, IWidget, IWidgetExtractor
+from dolmen.forms.base.form import cloneFormData
+from dolmen.forms.base.markers import NO_VALUE
+from dolmen.forms.base.fields import Fields
+from dolmen.forms.base.widgets import WidgetExtractor, Widgets, createWidget
+
+from dolmen.forms.ztk.widgets import getTemplate
+from dolmen.forms.ztk.interfaces import ICollectionSchemaField
+from dolmen.forms.ztk.widgets.choice import ChoiceSchemaField, ChoiceFieldWidget
+from dolmen.forms.ztk.widgets.object import ObjectSchemaField
+from dolmen.forms.ztk.fields import (
     SchemaField, registerSchemaField, SchemaFieldWidget)
-from zeam.form.ztk.interfaces import ICollectionSchemaField
-from zeam.form.ztk.widgets.choice import ChoiceSchemaField, ChoiceFieldWidget
-from zeam.form.ztk.widgets.object import ObjectSchemaField
 
 from zope import component
 from zope.i18nmessageid import MessageFactory
@@ -26,7 +24,7 @@ from zope.schema import interfaces as schema_interfaces
 
 from grokcore import component as grok
 
-_ = MessageFactory("zeam.form.base")
+_ = MessageFactory("dolmen.forms.base")
 
 
 
@@ -111,6 +109,8 @@ class MultiGenericFieldWidget(SchemaFieldWidget):
 
     allowAdding = True
     allowRemove = True
+
+    template = getTemplate('multigenericfieldwidget.pt')
 
     def __init__(self, field, value_field, form, request):
         super(MultiGenericFieldWidget, self).__init__(field, form, request)
@@ -204,12 +204,14 @@ class ListGenericFieldWidget(MultiGenericFieldWidget):
 
 class MultiGenericDisplayFieldWidget(MultiGenericFieldWidget):
     grok.name('display')
-
+    template = getTemplate('multigenericdisplayfieldwidget.pt')
 
 # For collection of objects, generate a different widget (with a table)
 
 class MultiObjectFieldWidget(MultiGenericFieldWidget):
     grok.adapts(ICollectionSchemaField, ObjectSchemaField, Interface, Interface)
+
+    template = getTemplate('multiobjectfieldwidget.pt')
 
     def getFields(self):
         return self.valueField.objectFields
@@ -217,6 +219,8 @@ class MultiObjectFieldWidget(MultiGenericFieldWidget):
 
 class ListObjectFieldWidget(MultiObjectFieldWidget):
     grok.adapts(ListSchemaField, ObjectSchemaField, Interface, Interface)
+
+    template = getTemplate('listobjectfieldwidget.pt')
 
     def __init__(self, field, value_field, form, request):
         super(ListObjectFieldWidget, self).__init__(
@@ -261,6 +265,8 @@ class MultiGenericWidgetExtractor(WidgetExtractor):
 class MultiChoiceFieldWidget(ChoiceFieldWidget):
     grok.adapts(SetSchemaField, ChoiceSchemaField, Interface, Interface)
 
+    template = getTemplate('multichoicefieldwidget.pt')
+
     def __init__(self, field, value_field, form, request):
         super(MultiChoiceFieldWidget, self).__init__(field, form, request)
         self.source = value_field
@@ -297,10 +303,12 @@ grok.global_adapter(
 
 class MultiSelectFieldWidget(MultiChoiceFieldWidget):
     grok.name('multiselect')
+    template = getTemplate('multiselectfieldwidget.pt')
 
 
 class MultiChoiceDisplayFieldWidget(MultiChoiceFieldWidget):
     grok.name('display')
+    template = getTemplate('multichoicedisplayfieldwidget.pt')
 
     def renderableChoice(self):
         current = self.inputValue()

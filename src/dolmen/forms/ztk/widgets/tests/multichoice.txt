@@ -1,5 +1,5 @@
 =================================
-zeam.form.ztk multichoice widgets
+dolmen.forms.ztk multichoice widgets
 =================================
 
 Define some interfaces that specifcy list of choices:
@@ -47,10 +47,10 @@ Field
 
 We can have a field out of the interface:
 
-  >>> from zeam.form.base import interfaces
-  >>> from zeam.form.base.markers import NO_VALUE
-  >>> from zeam.form.ztk import Fields
-  >>> from zeam.form.ztk.interfaces import ICollectionSchemaField
+  >>> from dolmen.forms.base import interfaces
+  >>> from dolmen.forms.base.markers import NO_VALUE
+  >>> from dolmen.forms.ztk import Fields
+  >>> from dolmen.forms.ztk.interfaces import ICollectionSchemaField
 
   >>> fields = Fields(ISetOfChoices)
   >>> field = fields['choices']
@@ -112,7 +112,7 @@ Collection fields can get by default a widget and extractor picked
 differently dependently of the value type. When the value type is a
 choice, you will get a multi-choice widget by default::
 
-  >>> from zeam.form.ztk import Widgets, FormData
+  >>> from dolmen.forms.ztk import Widgets, FormData
   >>> from zope.publisher.browser import TestRequest
 
   >>> request = TestRequest()
@@ -227,7 +227,7 @@ multi-choice widgets::
   ...      (field, form, content_request), interfaces.IWidgetExtractor)
 
   >>> extractor
-  <zeam.form.ztk.widgets.collection.MultiChoiceWidgetExtractor object at ...>
+  <dolmen.forms.ztk.widgets.collection.MultiChoiceWidgetExtractor object at ...>
   >>> verifyObject(interfaces.IWidgetExtractor, extractor)
   True
 

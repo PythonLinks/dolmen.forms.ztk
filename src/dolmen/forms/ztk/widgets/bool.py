@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from grokcore import component as grok
-from zeam.form.base.markers import NO_VALUE
-from zeam.form.base.widgets import WidgetExtractor, DisplayFieldWidget
-from zeam.form.ztk.fields import SchemaField, SchemaFieldWidget
-from zeam.form.ztk.fields import registerSchemaField
+from dolmen.forms.base.markers import NO_VALUE
+from dolmen.forms.base.widgets import WidgetExtractor, DisplayFieldWidget
+from dolmen.forms.ztk.widgets import getTemplate
+from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
+from dolmen.forms.ztk.fields import registerSchemaField
 from zope.i18nmessageid import MessageFactory
 from zope.schema import interfaces as schema_interfaces
 
-_ = MessageFactory("zeam.form.base")
+_ = MessageFactory("dolmen.forms.base")
 
 
 class BooleanSchemaField(SchemaField):
@@ -18,6 +19,7 @@ class BooleanSchemaField(SchemaField):
 
 class CheckBoxWidget(SchemaFieldWidget):
     grok.adapts(BooleanSchemaField, None, None)
+    template = getTemplate('checkboxwidget.pt')
 
 
 class CheckBoxDisplayWidget(DisplayFieldWidget):

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from grokcore import component as grok
-from zeam.form.ztk.fields import SchemaField, SchemaFieldWidget
-from zeam.form.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.widgets import getTemplate
+from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
+from dolmen.forms.ztk.fields import registerSchemaField
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
 
@@ -18,3 +19,4 @@ class TextSchemaField(SchemaField):
 
 class TextFieldWidget(SchemaFieldWidget):
     grok.adapts(TextSchemaField, Interface, Interface)
+    template = getTemplate('textfieldwidget.pt')

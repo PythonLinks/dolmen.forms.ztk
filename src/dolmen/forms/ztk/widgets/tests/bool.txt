@@ -1,5 +1,5 @@
 ============================
-zeam.form.ztk boolean widget
+dolmen.forms.ztk boolean widget
 ============================
 
 We need first a boolean:
@@ -26,8 +26,8 @@ Field
 
 So now you can create a field, and get a boolean field:
 
-  >>> from zeam.form.ztk import Fields
-  >>> from zeam.form.base import interfaces
+  >>> from dolmen.forms.ztk import Fields
+  >>> from dolmen.forms.base import interfaces
 
   >>> fields = Fields(IQuestion)
   >>> booleanField = fields['answer']
@@ -43,7 +43,7 @@ Widget
 
 You have an associated widget:
 
-  >>> from zeam.form.ztk import Widgets, FormData
+  >>> from dolmen.forms.ztk import Widgets, FormData
 
   >>> sub = FormData(content, request)
   >>> sub.ignoreContent = False
@@ -75,7 +75,7 @@ the value is False:
   ...      (booleanField, sub, request), interfaces.IWidgetExtractor)
 
   >>> falseExtractor
-  <zeam.form.ztk.widgets.bool.CheckBoxWidgetExtractor object at ...>
+  <dolmen.forms.ztk.widgets.bool.CheckBoxWidgetExtractor object at ...>
   >>> falseExtractor.extract()
   (False, None)
 

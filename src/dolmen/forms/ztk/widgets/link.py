@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
 
-from zeam.form.base.interfaces import IField
-from zeam.form.base.widgets import FieldWidget
+from dolmen.forms.base.interfaces import IField
+from dolmen.forms.base.widgets import FieldWidget
+from dolmen.forms.ztk.widgets import getTemplate
 
 from zope.component import getMultiAdapter
 from zope.interface import Interface
-from zope.traversing.browser.interfaces import IAbsoluteURL
+from cromlech.browser.interfaces import IURLResolver
 
 from grokcore import component as grok
 
@@ -13,6 +15,8 @@ class LinkFieldWidget(FieldWidget):
     grok.adapts(IField, Interface, Interface)
     grok.name('link')
 
+    template = getTemplate('linkfieldwidget.pt')
+
     def url(self):
-        context = self.form.context
-        return getMultiAdapter((context, self.request), IAbsoluteURL)()
+        return str(getMultiAdapter(
+            (self.form.context, self.request), IURLResolver))

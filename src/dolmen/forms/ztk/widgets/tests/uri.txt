@@ -1,5 +1,5 @@
 ========================
-zeam.form.ztk uri widget
+dolmen.forms.ztk uri widget
 ========================
 
 Simple case
@@ -27,7 +27,7 @@ Field
 
 So now you can create a field, and get a choice field::
 
-  >>> from zeam.form.base import Fields, Field
+  >>> from dolmen.forms.base import Fields, Field
 
   >>> fields = Fields(ILink)
 
@@ -44,7 +44,7 @@ Widget
 
 You have an associated widget::
 
-  >>> from zeam.form.ztk import Widgets, FormData
+  >>> from dolmen.forms.ztk import Widgets, FormData
 
   >>> Form = FormData(content, request)
   >>> Form.ignoreContent = False

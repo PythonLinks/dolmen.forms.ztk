@@ -1,5 +1,5 @@
 ===========================
-zeam.form.ztk choice widget
+dolmen.forms.ztk choice widget
 ===========================
 
 Simple case
@@ -45,8 +45,8 @@ Field
 
 So now you can create a field, and get a choice field:
 
-  >>> from zeam.form.base import Fields
-  >>> from zeam.form.base import interfaces
+  >>> from dolmen.forms.base import Fields
+  >>> from dolmen.forms.base import interfaces
 
   >>> simple_choice_fields = Fields(ISimpleChoice)
   >>> simple_field = simple_choice_fields['choice']
@@ -68,7 +68,7 @@ Widget
 
 You have an associated widget:
 
-  >>> from zeam.form.ztk import Widgets, FormData, DISPLAY
+  >>> from dolmen.forms.ztk import Widgets, FormData, DISPLAY
 
   >>> simple_form = FormData(content, request)
   >>> simple_form.ignoreContent = False
@@ -147,13 +147,13 @@ We need a custom extractor as the token value used in the form can be
 different than the real value:
 
   >>> from zope import component
-  >>> from zeam.form.base import interfaces
+  >>> from dolmen.forms.base import interfaces
 
   >>> simple_extractor = component.getMultiAdapter(
   ...      (simple_field, simple_form, request), interfaces.IWidgetExtractor)
 
   >>> simple_extractor
-  <zeam.form.ztk.widgets.choice.ChoiceWidgetExtractor object at ...>
+  <dolmen.forms.ztk.widgets.choice.ChoiceWidgetExtractor object at ...>
   >>> simple_extractor.extract()
   (<Marker NO_VALUE>, None)
 
@@ -211,7 +211,7 @@ Field
 
 So now you can create a field, and get a choice field:
 
-  >>> from zeam.form.ztk import Fields
+  >>> from dolmen.forms.ztk import Fields
 
   >>> secondChoiceFields = Fields(ISecondChoice)
   >>> secondField = secondChoiceFields['choice']
@@ -237,7 +237,7 @@ Widget
 
 You have an associated widget:
 
-  >>> from zeam.form.ztk import Widgets, FormData
+  >>> from dolmen.forms.ztk import Widgets, FormData
 
   >>> secondSub = FormData(content, request)
   >>> secondSub.ignoreContent = False

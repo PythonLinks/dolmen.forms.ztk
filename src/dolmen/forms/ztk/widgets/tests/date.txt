@@ -1,5 +1,5 @@
 ==========================
-zeam.form.ztk date widgets
+dolmen.forms.ztk date widgets
 ==========================
 
 Let's create some interface using dates::
@@ -37,8 +37,8 @@ Field
 
 You can get a field for a date::
 
-  >>> from zeam.form.base import Fields
-  >>> from zeam.form.base import interfaces
+  >>> from dolmen.forms.base import Fields
+  >>> from dolmen.forms.base import interfaces
 
   >>> dayFields = Fields(IDayInfo)
   >>> dateField = dayFields['date']
@@ -63,7 +63,7 @@ Widget
 You can have a widget for a day. The input value is a formated version
 of the date, based on the locale of the request::
 
-  >>> from zeam.form.ztk import Widgets, FormData
+  >>> from dolmen.forms.ztk import Widgets, FormData
 
   >>> dailyForm = FormData(day, request)
   >>> dailyForm.ignoreContent = False

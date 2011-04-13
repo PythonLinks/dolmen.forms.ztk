@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from zeam.form.base.datamanager import ObjectDataManager
-from zeam.form.base.fields import Fields
-from zeam.form.base.markers import NO_VALUE, Marker
-from zeam.form.base.widgets import WidgetExtractor
-from zeam.form.base.widgets import Widgets
-from zeam.form.base.form import cloneFormData
-from zeam.form.ztk.fields import (
-    SchemaField, registerSchemaField, SchemaFieldWidget)
-from zeam.form.ztk.interfaces import IObjectSchemaField
+from dolmen.forms.base.datamanager import ObjectDataManager
+from dolmen.forms.base.markers import NO_VALUE, Marker
+from dolmen.forms.base.widgets import Widgets, WidgetExtractor
+from dolmen.forms.base.form import cloneFormData
+from dolmen.forms.ztk.widgets import getTemplate
+from dolmen.forms.ztk.interfaces import IObjectSchemaField
+from dolmen.forms.ztk.fields import (
+    Fields, SchemaField, registerSchemaField, SchemaFieldWidget)
 
 from zope.component import getUtility
 from zope.component.interfaces import IFactory
@@ -47,10 +46,10 @@ class ObjectSchemaField(SchemaField):
         return getUtility(IFactory, name=schema.__identifier__)
 
 
-
-
 class ObjectFieldWidget(SchemaFieldWidget):
     grok.adapts(ObjectSchemaField, Interface, Interface)
+
+    template = getTemplate('objectfieldwidget.pt')
 
     def prepareContentValue(self, value):
         if value is NO_VALUE:

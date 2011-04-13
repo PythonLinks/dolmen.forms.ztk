@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from grokcore import component as grok
-from zeam.form.base.markers import NO_VALUE
-from zeam.form.base.widgets import DisplayFieldWidget
-from zeam.form.base.widgets import WidgetExtractor
-from zeam.form.ztk.fields import SchemaField, SchemaFieldWidget
-from zeam.form.ztk.fields import registerSchemaField
+from dolmen.forms.base.markers import NO_VALUE
+from dolmen.forms.base.widgets import DisplayFieldWidget
+from dolmen.forms.base.widgets import WidgetExtractor
+from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
+from dolmen.forms.ztk.fields import registerSchemaField
 from zope.i18n.format import DateTimeParseError
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface

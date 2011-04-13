@@ -1,5 +1,5 @@
 ===========================
-zeam.form.ztk object widget
+dolmen.forms.ztk object widget
 ===========================
 
 First we need a test interface and content::
@@ -41,9 +41,9 @@ Field
 
 You have an Object field you get out of the interface::
 
-  >>> from zeam.form.base.fields import Fields
-  >>> from zeam.form.base import interfaces
-  >>> from zeam.form.ztk.interfaces import IObjectSchemaField
+  >>> from dolmen.forms.base.fields import Fields
+  >>> from dolmen.forms.base import interfaces
+  >>> from dolmen.forms.ztk.interfaces import IObjectSchemaField
 
   >>> postFields = Fields(IPost)
   >>> postField = postFields['comment']
@@ -98,7 +98,7 @@ Widget
 
 You can now have a widget for your object field::
 
-  >>> from zeam.form.ztk import Widgets, FormData
+  >>> from dolmen.forms.ztk import Widgets, FormData
 
   >>> post = FormData(content, request)
   >>> post.ignoreContent = False
@@ -148,7 +148,7 @@ an extractor for the widget::
   ...      interfaces.IWidgetExtractor)
 
   >>> commentExtractor
-  <zeam.form.ztk.widgets.object.ObjectFieldExtractor object at ...>
+  <dolmen.forms.ztk.widgets.object.ObjectFieldExtractor object at ...>
   >>> verifyObject(interfaces.IWidgetExtractor, commentExtractor)
   True
 

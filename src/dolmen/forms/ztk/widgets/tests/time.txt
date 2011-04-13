@@ -1,5 +1,5 @@
 ==========================
-zeam.form.ztk time widgets
+dolmen.forms.ztk time widgets
 ==========================
 
 Let's create some interface using times::
@@ -29,8 +29,8 @@ Field
 
 You can get a field for a time::
 
-  >>> from zeam.form.base import Fields
-  >>> from zeam.form.base import interfaces
+  >>> from dolmen.forms.base import Fields
+  >>> from dolmen.forms.base import interfaces
 
   >>> timeFields = Fields(ITimeInfo)
   >>> timeField = timeFields['time']
@@ -45,7 +45,7 @@ Widget
 You can have a widget for a timeinfo. The input value is a formated version
 of the time, based on the locale of the request::
 
-  >>> from zeam.form.ztk import Widgets, FormData
+  >>> from dolmen.forms.ztk import Widgets, FormData
 
   >>> timeForm = FormData(timeinfo, request)
   >>> timeForm.ignoreContent = False

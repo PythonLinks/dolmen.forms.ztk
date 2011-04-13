@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from zeam.form.base.markers import NO_VALUE
-from zeam.form.base.widgets import WidgetExtractor
-from zeam.form.ztk.fields import (
+from dolmen.forms.base.markers import NO_VALUE
+from dolmen.forms.base.widgets import WidgetExtractor
+from dolmen.forms.ztk.widgets import getTemplate
+from dolmen.forms.ztk.fields import (
     SchemaField, registerSchemaField, SchemaFieldWidget)
 
 from zope import component
@@ -51,6 +52,8 @@ class ChoiceSchemaField(SchemaField):
 class ChoiceFieldWidget(SchemaFieldWidget):
     grok.adapts(ChoiceSchemaField, Interface, Interface)
 
+   template = getTemplate('choicefieldwidget.pt')
+
     def __init__(self, field, form, request):
         super(ChoiceFieldWidget, self).__init__(field, form, request)
         self.source = field
@@ -85,6 +88,8 @@ class ChoiceFieldWidget(SchemaFieldWidget):
 class ChoiceDisplayWidget(ChoiceFieldWidget):
     grok.name('display')
 
+    template = getTemplate('choicedisplaywidget.pt')
+
     def valueToUnicode(self, value):
         term = self.lookupTerm(value)
         if term is not None:
@@ -111,6 +116,8 @@ class ChoiceWidgetExtractor(WidgetExtractor):
 class RadioFieldWidget(ChoiceFieldWidget):
     grok.adapts(ChoiceSchemaField, Interface, Interface)
     grok.name('radio')
+
+    template = getTemplate('radiofieldwidget.pt')
 
     def renderableChoices(self):
         current = self.inputValue()

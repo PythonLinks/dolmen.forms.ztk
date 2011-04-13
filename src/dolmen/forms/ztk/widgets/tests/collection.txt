@@ -1,5 +1,5 @@
 ================================
-zeam.form.ztk collection widgets
+dolmen.forms.ztk collection widgets
 ================================
 
 First we need some test interfaces that uses collections::
@@ -32,10 +32,10 @@ Field
 
 So now you can create a field, and get a collection field:
 
-  >>> from zeam.form.base import interfaces
-  >>> from zeam.form.base.markers import NO_VALUE
-  >>> from zeam.form.ztk import Fields
-  >>> from zeam.form.ztk.interfaces import ICollectionSchemaField
+  >>> from dolmen.forms.base import interfaces
+  >>> from dolmen.forms.base.markers import NO_VALUE
+  >>> from dolmen.forms.ztk import Fields
+  >>> from dolmen.forms.ztk.interfaces import ICollectionSchemaField
 
   >>> fields = Fields(IListOfTextlines)
   >>> field = fields['names']
@@ -109,7 +109,7 @@ Generic Widget
 
 You can get a generic widget out of your field::
 
-  >>> from zeam.form.ztk import Widgets, FormData
+  >>> from dolmen.forms.ztk import Widgets, FormData
   >>> from zope.publisher.browser import TestRequest
 
   >>> request = TestRequest()
@@ -335,7 +335,7 @@ corresponding widget extractor::
   ...      interfaces.IWidgetExtractor)
 
   >>> list_extractor
-  <zeam.form.ztk.widgets.collection.MultiGenericWidgetExtractor object at ...>
+  <dolmen.forms.ztk.widgets.collection.MultiGenericWidgetExtractor object at ...>
   >>> verifyObject(interfaces.IWidgetExtractor, list_extractor)
   True
 
