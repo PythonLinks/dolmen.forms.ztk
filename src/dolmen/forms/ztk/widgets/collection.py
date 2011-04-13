@@ -3,9 +3,9 @@
 import hashlib
 md5hash = lambda s: hashlib.md5(s).hexdigest()
 
-from dolmen.forms.base.datamanager import NoneDataManager
+from dolmen.forms.base.datamanagers import NoneDataManager
 from dolmen.forms.base.interfaces import IField, IWidget, IWidgetExtractor
-from dolmen.forms.base.form import cloneFormData
+from dolmen.forms.base.forms import cloneFormData
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.fields import Fields
 from dolmen.forms.base.widgets import WidgetExtractor, Widgets, createWidget

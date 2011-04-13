@@ -2,6 +2,12 @@
 
 import unittest
 import doctest
+from grokcore.component.testing import grok
+
+
+def setUp(test):
+    grok('dolmen.forms.base')
+    grok('dolmen.forms.ztk')
 
 
 def test_suite():
@@ -12,6 +18,7 @@ def test_suite():
     for filename in ['fields.txt', 'validation.txt']:
         test = doctest.DocFileSuite(
             filename,
+            setUp=setUp,
             optionflags=optionflags,
             globs=globs)
         suite.addTest(test)

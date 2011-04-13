@@ -52,7 +52,7 @@ class ChoiceSchemaField(SchemaField):
 class ChoiceFieldWidget(SchemaFieldWidget):
     grok.adapts(ChoiceSchemaField, Interface, Interface)
 
-   template = getTemplate('choicefieldwidget.pt')
+    template = getTemplate('choicefieldwidget.pt')
 
     def __init__(self, field, form, request):
         super(ChoiceFieldWidget, self).__init__(field, form, request)

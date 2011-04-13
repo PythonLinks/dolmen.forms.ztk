@@ -39,7 +39,7 @@ class IObjectSchemaField(ISchemaField):
         """
 
 
-class IFormZTKAPI(IDolmenFormsBaseAPI):
+class IDolmenFormsZTKAPI(IDolmenFormsBaseAPI):
     """API exported by dolmen.forms.ztk.
     """
     AddAction = interface.Attribute(

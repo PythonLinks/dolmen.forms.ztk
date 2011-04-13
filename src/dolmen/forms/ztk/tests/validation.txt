@@ -37,7 +37,7 @@ Instanciation
 -------------
 
   >>> from dolmen.forms.base import Fields, FormData
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
   >>> form = FormData(object(), TestRequest())
   >>> fields = Fields(IPasswords)
 

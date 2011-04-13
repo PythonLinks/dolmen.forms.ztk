@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms.base.datamanager import ObjectDataManager
+from dolmen.forms.base.datamanagers import ObjectDataManager
 from dolmen.forms.base.markers import NO_VALUE, Marker
 from dolmen.forms.base.widgets import Widgets, WidgetExtractor
-from dolmen.forms.base.form import cloneFormData
+from dolmen.forms.base.forms import cloneFormData
+from dolmen.forms.base.fields import Fields
+
 from dolmen.forms.ztk.widgets import getTemplate
 from dolmen.forms.ztk.interfaces import IObjectSchemaField
 from dolmen.forms.ztk.fields import (
-    Fields, SchemaField, registerSchemaField, SchemaFieldWidget)
+    SchemaField, registerSchemaField, SchemaFieldWidget)
 
 from zope.component import getUtility
 from zope.component.interfaces import IFactory

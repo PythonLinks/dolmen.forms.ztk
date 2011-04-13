@@ -2,7 +2,7 @@
 
 from dolmen.forms.base import Action, _
 from dolmen.forms.base.markers import NO_VALUE, NO_CHANGE, SUCCESS, FAILURE
-from dolmen.forms.base.datamanager import ObjectDataManager
+from dolmen.forms.base.datamanagers import ObjectDataManager
 from zope.event import notify
 from zope.i18nmessageid import MessageFactory
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
