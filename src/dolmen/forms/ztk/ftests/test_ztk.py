@@ -1,15 +1,21 @@
+# -*- coding: utf-8 -*-
 
 import unittest
 from pkg_resources import resource_listdir
 from zope.testing import doctest
-from zope.app.testing.functional import getRootFolder
-from zeam.form.ztk.testing import FunctionalLayer, setUp, tearDown
+from grokcore.component.testing import grok
+
+
+def setUp(test):
+    grok('dolmen.forms.base')
+    grok('dolmen.forms.ztk')
+
 
 def suiteFromPackage(name):
     optionflags = doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
-    globs = {'getRootFolder': getRootFolder}
     files = resource_listdir(__name__, name)
     suite = unittest.TestSuite()
+
     for filename in files:
         if not filename.endswith('.py'):
             continue
@@ -18,13 +24,11 @@ def suiteFromPackage(name):
         if filename == '__init__.py':
             continue
 
-        dottedname = 'zeam.form.ztk.ftests.%s.%s' % (name, filename[:-3])
-        test = doctest.DocTestSuite(dottedname,
-                                    setUp=setUp,
-                                    tearDown=tearDown,
-                                    extraglobs=globs,
-                                    optionflags=optionflags)
-        test.layer = FunctionalLayer
+        dottedname = 'dolmen.forms.ztk.ftests.%s.%s' % (name, filename[:-3])
+        test = doctest.DocTestSuite(
+            dottedname,
+            setUp=setUp,
+            optionflags=optionflags)
         suite.addTest(test)
     return suite
 

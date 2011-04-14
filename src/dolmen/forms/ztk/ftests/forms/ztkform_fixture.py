@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 
-from zeam.form import base
-from zope import interface, schema
-
+from dolmen.forms import base
 from grokcore import component as grok
+from zope import interface, schema
 
 
 class IPerson(interface.Interface):
@@ -28,4 +28,3 @@ class PersonForm(base.Form):
     def send(self):
         data, errors = self.extractData()
         self.status = u"We sent %s, age %d" % (data['name'], data['age'])
-

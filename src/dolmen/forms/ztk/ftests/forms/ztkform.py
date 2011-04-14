@@ -3,27 +3,27 @@ We are going to define a simple form with an action and two fields
 coming from a Zope interface.
 
 We put our example in a separate file, since the configure.zcml of
-zeam.form needs to be loaded in order to be able to create the fields,
+dolmen.forms needs to be loaded in order to be able to create the fields,
 which is no the case when the tests are collected.
 
 Let's grok our example:
 
-  >>> from zeam.form.ztk.testing import grok
-  >>> grok('zeam.form.ztk.ftests.forms.ztkform_fixture')
+  >>> from dolmen.forms.ztk.testing import grok
+  >>> grok('dolmen.forms.ztk.ftests.forms.ztkform_fixture')
 
 We can now lookup our form by the name of its class:
 
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
   >>> request = TestRequest()
 
-  >>> from zeam.form.ztk.ftests.forms.ztkform_fixture import Person
+  >>> from dolmen.forms.ztk.ftests.forms.ztkform_fixture import Person
   >>> context = Person()
 
   >>> from zope import component
   >>> form = component.getMultiAdapter(
   ...     (context, request), name='personform')
   >>> form
-  <zeam.form.ztk.ftests.forms.ztkform_fixture.PersonForm object at ...>
+  <dolmen.forms.ztk.ftests.forms.ztkform_fixture.PersonForm object at ...>
 
   >>> len(form.actions)
   1
