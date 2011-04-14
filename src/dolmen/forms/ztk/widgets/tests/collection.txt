@@ -1,6 +1,6 @@
-================================
+===================================
 dolmen.forms.ztk collection widgets
-================================
+===================================
 
 First we need some test interfaces that uses collections::
 
@@ -40,7 +40,8 @@ So now you can create a field, and get a collection field:
   >>> fields = Fields(IListOfTextlines)
   >>> field = fields['names']
   >>> field
-  <CollectionSchemaField People Names>
+  <ListSchemaField People Names>
+
   >>> verifyObject(ICollectionSchemaField, field)
   True
   >>> ICollectionSchemaField.extends(interfaces.IField)
@@ -65,7 +66,8 @@ On a required list of required booleans:
   >>> required_fields = Fields(IRequiredListOfBools)
   >>> required_field = required_fields['assertions']
   >>> required_field
-  <CollectionSchemaField Assertions result>
+  <ListSchemaField Assertions result>
+
   >>> verifyObject(ICollectionSchemaField, required_field)
   True
   >>> required_field.required
@@ -110,7 +112,7 @@ Generic Widget
 You can get a generic widget out of your field::
 
   >>> from dolmen.forms.ztk import Widgets, FormData
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
 
   >>> request = TestRequest()
   >>> form = FormData(content, request)
@@ -120,7 +122,7 @@ You can get a generic widget out of your field::
   >>> widgets.update()
   >>> widget = widgets['form.field.names']
   >>> widget
-  <MultiGenericFieldWidget People Names>
+  <ListGenericFieldWidget People Names>
   >>> verifyObject(interfaces.IFieldWidget, widget)
   True
 
@@ -136,7 +138,7 @@ well::
   >>> widget.allowAdding
   True
   >>> widget.allowRemove
-  False
+  True
 
 Let's now create a widget which have values, and we will see that we
 have a sub-widget for each entry of the collection::
@@ -153,7 +155,7 @@ have a sub-widget for each entry of the collection::
   >>> list_widgets.update()
   >>> list_widget = list_widgets['form.field.names']
   >>> list_widget
-  <MultiGenericFieldWidget People Names>
+  <ListGenericFieldWidget People Names>
 
   >>> len(list_widget.valueWidgets)
   3
@@ -293,7 +295,7 @@ remove values::
   >>> peopleWidget.allowAdding
   True
   >>> peopleWidget.allowRemove
-  False
+  True
 
 And you have the same with a request containing just the marker::
 
@@ -313,7 +315,7 @@ And you have the same with a request containing just the marker::
   >>> peopleWidget.allowAdding
   True
   >>> peopleWidget.allowRemove
-  False
+  True
 
 Generic Widget extractor
 ~~~~~~~~~~~~~~~~~~~~~~~~

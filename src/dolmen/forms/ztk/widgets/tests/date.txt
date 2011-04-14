@@ -1,6 +1,6 @@
-==========================
+=============================
 dolmen.forms.ztk date widgets
-==========================
+=============================
 
 Let's create some interface using dates::
 
@@ -17,7 +17,7 @@ Let's create some interface using dates::
 
 And some content for them::
 
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
   >>> request = TestRequest()
 
   >>> class DayInfo(object):

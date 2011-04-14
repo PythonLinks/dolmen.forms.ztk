@@ -144,7 +144,6 @@ class ReadOnlySchemaWidgetExtractor(SchemaWidgetExtractor):
 def registerDefault():
     """Register default fields factories.
     """
-    component.provideAdapter(SchemaFieldFactory,
-                             (zope.schema.interfaces.IField,))
+    component.provideAdapter(SchemaFieldFactory, (schema.interfaces.IField,))
     component.provideAdapter(InterfaceSchemaFieldFactory, (IInterface,))
     registerSchemaField(SchemaField, schema_interfaces.IField)

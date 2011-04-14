@@ -113,7 +113,7 @@ differently dependently of the value type. When the value type is a
 choice, you will get a multi-choice widget by default::
 
   >>> from dolmen.forms.ztk import Widgets, FormData
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
 
   >>> request = TestRequest()
   >>> content.choices = set(['42%', '12%'])

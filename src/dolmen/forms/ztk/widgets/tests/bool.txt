@@ -12,7 +12,7 @@ We need first a boolean:
 
 And a test content and request:
 
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
   >>> request = TestRequest()
 
   >>> class Question(object):

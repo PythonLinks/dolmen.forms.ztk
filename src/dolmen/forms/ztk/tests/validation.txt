@@ -54,7 +54,7 @@ Instanciation
 Providing some data
 -------------------
 
-  >>> from dolmen.forms.base.form import FieldsValues
+  >>> from dolmen.forms.base.forms import FieldsValues
 
   >>> data = FieldsValues(form, fields)
   >>> data.update({'passwd': 'test', 'verify': 'nopass'})
@@ -142,8 +142,12 @@ Integration environment
   >>> class SomeContent(Context):
   ...     pass
 
+  >>> from cromlech.io.testing import TestResponse
+
   >>> class MyLegalPage(Form):
   ...     context(SomeContent)
+  ...
+  ...     responseFactory = TestResponse
   ...     fields = Fields(IAgeAndLegals)
   ...     dataValidators = [InvariantsValidation]
   ...     ignoreRequest = False

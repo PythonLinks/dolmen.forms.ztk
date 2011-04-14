@@ -14,7 +14,7 @@ Let's create some interface using times::
 
 And some content for them::
 
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
   >>> request = TestRequest()
 
   >>> class TimeInfo(object):

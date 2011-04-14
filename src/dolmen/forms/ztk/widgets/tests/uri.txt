@@ -1,6 +1,6 @@
-========================
+===========================
 dolmen.forms.ztk uri widget
-========================
+===========================
 
 Simple case
 ===========
@@ -19,7 +19,7 @@ Setup
   ...     pass
   >>> content = Link()
 
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
   >>> request = TestRequest()
 
 Field

@@ -28,7 +28,7 @@ First we need a choice::
 
 And we will need a content and a request to test:
 
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
   >>> request = TestRequest()
 
   >>> class FirstContent(object):

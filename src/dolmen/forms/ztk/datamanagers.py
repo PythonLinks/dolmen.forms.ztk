@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from zope.interface import alsoProvides
-from dolmen.forms.base.datamanager import ObjectDataManager
+from dolmen.forms.base.datamanagers import ObjectDataManager
 
 
 def makeGenericAdaptiveDataManager(*fields):

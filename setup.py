@@ -31,7 +31,7 @@ setup(name='dolmen.forms.ztk',
       install_requires=[
           'cromlech.browser',
           'cromlech.io',
-          'dolmen.collection',
+          'dolmen.collection >= 0.2',
           'dolmen.forms.base',
           'dolmen.template',
           'grokcore.component',
@@ -48,7 +48,7 @@ setup(name='dolmen.forms.ztk',
       extras_require = {'test': tests_require},
       entry_points="""
       # -*- Entry points: -*-
-      [dolmen.forms.components]
+      [dolmen.collection.components]
       default = dolmen.forms.ztk.fields:registerDefault
       bool = dolmen.forms.ztk.widgets.bool:register
       choice = dolmen.forms.ztk.widgets.choice:register

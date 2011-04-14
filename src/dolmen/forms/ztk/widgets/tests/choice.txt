@@ -1,6 +1,6 @@
-===========================
+==============================
 dolmen.forms.ztk choice widget
-===========================
+==============================
 
 Simple case
 ===========
@@ -28,7 +28,7 @@ First we need a choice:
 
 And we will need a content and a request to test:
 
-  >>> from zope.publisher.browser import TestRequest
+  >>> from cromlech.io.testing import TestRequest
   >>> request = TestRequest()
 
   >>> class SimpleContent(object):
@@ -181,6 +181,7 @@ And a value which is not in the vocabulary:
   >>> broken_extractor.extract()
   (None, u'Invalid value')
 
+
 Context binded source
 =====================
 
@@ -262,48 +263,3 @@ You have an associated widget:
     <option value="b1">Letter B</option>
     <option value="c1" selected="selected">Letter C</option>
   </select>
-
-Registered vocabulary
-=====================
-
-Let's create a vocabulary that is registered in the ZCA, and use it in
-a schema:
-
-  >>> from zope.schema.interfaces import IVocabularyFactory
-  >>> from zope.component import provideUtility, queryUtility
-
-  >>> @component.provider(IVocabularyFactory)
-  ... def vocabulary_factory(context):
-  ...     return letter_vocabulary
-
-  >>> provideUtility(vocabulary_factory, IVocabularyFactory, name="Third letter")
-  >>> vocabulary = queryUtility(IVocabularyFactory, name="Third letter")
-  >>> vocabulary
-  <function vocabulary_factory at ...>
-
-  >>> class IThirdChoice(interface.Interface):
-  ...     choice = schema.Choice(
-  ...         title=u"The third letter",
-  ...         vocabulary="Third letter")
-
-Field
------
-
-So now you can create a field, and get a choice field:
-
-  >>> vocabulary_fields = Fields(IThirdChoice)
-  >>> vocabulary_field = vocabulary_fields['choice']
-  >>> vocabulary_field
-  <ChoiceSchemaField The third letter>
-  >>> vocabulary_field.source is vocabulary_factory
-  True
-
-  >>> choices = vocabulary_field.getChoices(None)
-  >>> choices
-  <zope.schema.vocabulary.SimpleVocabulary object at ...>
-  >>> display_vocabulary(choices)
-  'A' 'a1' 'Letter A'
-  'B' 'b1' 'Letter B'
-  'C' 'c1' 'Letter C'
-
-  >>> vocabulary_field.validate('C')
