@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from grokcore import component as grok
+from dolmen.forms.base import _
 from dolmen.forms.base.markers import NO_VALUE
-from dolmen.forms.base.widgets import DisplayFieldWidget
-from dolmen.forms.base.widgets import WidgetExtractor
-from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
-from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.base.widgets import DisplayFieldWidget, WidgetExtractor
+from dolmen.forms.ztk.fields import (
+    SchemaField, SchemaFieldWidget, registerSchemaField)
+
+from grokcore import component as grok
+
 from zope.i18n.format import DateTimeParseError
+from zope.i18n.interfaces.locales import ILocale
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
-
-_ = MessageFactory("zeam-form")
 
 
 def register():
@@ -35,7 +36,7 @@ class DateFieldWidget(SchemaFieldWidget):
     valueType = 'date'
 
     def valueToUnicode(self, value):
-        locale = self.request.locale
+        locale = ILocale(self.request)
         formatter = locale.dates.getFormatter(self.valueType, 'short')
         return formatter.format(value)
 
@@ -48,7 +49,7 @@ class DateWidgetExtractor(WidgetExtractor):
     def extract(self):
         value, error = super(DateWidgetExtractor, self).extract()
         if value is not NO_VALUE:
-            locale = self.request.locale
+            locale = ILocale(self.request)
             formatter = locale.dates.getFormatter(self.valueType, 'short')
             try:
                 value = formatter.parse(value)
@@ -75,7 +76,8 @@ class DateFieldDisplayWidget(DisplayFieldWidget):
     valueType = 'date'
 
     def valueToUnicode(self, value):
-        formatter = self.request.locale.dates.getFormatter(self.valueType)
+        locale = ILocale(self.request)
+        formatter = locale.dates.getFormatter(self.valueType)
         return formatter.format(value)
 
 

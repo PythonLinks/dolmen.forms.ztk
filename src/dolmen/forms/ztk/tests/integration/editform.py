@@ -3,20 +3,23 @@ We are going to use a simple form with an edit action to edit a comment.
 
 Let's grok our example:
 
-  >>> from zeam.form.ztk.testing import grok
-  >>> grok('zeam.form.ztk.ftests.forms.editform_fixture')
+  >>> from dolmen.forms.ztk.testing import grok
+  >>> grok('dolmen.forms.ztk.tests.integration.editform_fixture')
 
 Let's add a comment and try to edit it with our form:
 
-  >>> from zeam.form.ztk.ftests.forms.editform_fixture import Comment
+  >>> from dolmen.forms.ztk.tests.integration.editform_fixture import Comment
   >>> root = getRootFolder()
-  >>> root['comment'] = Comment(u'zeam.form', u'Is great')
-  >>> root['comment'].title
-  u'zeam.form'
-  >>> root['comment'].comment
+  >>> comment = Comment(u'dolmen.forms', u'Is great')
+  >>> comment.__name__ = 'comment'
+  >>> comment.__parent__ = root
+  
+  >>> comment.title
+  u'dolmen.forms'
+  >>> comment.comment
   u'Is great'
 
-  >>> from zope.testbrowser.testing import Browser
+  >>> from infrae.testbrowser import Browser
   >>> browser = Browser()
   >>> browser.handleErrors = False
 
@@ -32,7 +35,7 @@ Now acccess the edit form:
   >>> titlefield
   <Control name='form.field.title' type='text'>
   >>> titlefield.value
-  'zeam.form'
+  'dolmen.forms'
 
   >>> commentfield = browser.getControl('Comment')
   >>> commentfield
@@ -48,7 +51,7 @@ Now acccess the edit form:
 
 We can now edit the content, and so it get modified:
 
-  >>> titlefield.value = 'zeam.form.ztk'
+  >>> titlefield.value = 'dolmen.forms.ztk'
   >>> commentfield.value = 'Is far cooler than not ztk'
   >>> changebutton = browser.getControl('Change')
   >>> changebutton

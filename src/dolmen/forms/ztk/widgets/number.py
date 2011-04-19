@@ -14,6 +14,7 @@ class IntSchemaField(SchemaField):
     """A integer field.
     """
 
+
 class FloatSchemaField(SchemaField):
     """A float field.
     """

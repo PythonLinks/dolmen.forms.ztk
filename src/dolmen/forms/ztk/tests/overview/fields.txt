@@ -191,7 +191,7 @@ manager::
 
   >>> class TitleProvider(grok.Adapter):
   ...     grok.context(Item)
-  ...     grok.implements(ITitledItem)
+  ...     grok.provides(ITitledItem)
   ...
   ...     def get_title(self):
   ...         return getattr(self.context, '_title', None)
@@ -203,7 +203,7 @@ manager::
 
   >>> class DescProvider(grok.Adapter):
   ...     grok.context(Item)
-  ...     grok.implements(IDescriptiveItem)
+  ...     grok.provides(IDescriptiveItem)
   ...
   ...     def get_description(self):
   ...         return getattr(self.context, '_description', None)
@@ -215,6 +215,7 @@ manager::
 
   >>> grok.testing.grok_component('title', TitleProvider)
   True
+
   >>> grok.testing.grok_component('desc', DescProvider)
   True
 

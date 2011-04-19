@@ -9,26 +9,28 @@ which is no the case when the tests are collected.
 Let's grok our example:
 
   >>> from dolmen.forms.ztk.testing import grok
-  >>> grok('dolmen.forms.ztk.ftests.forms.ztkform_fixture')
+  >>> grok('dolmen.forms.ztk.tests.integration.ztkform_fixture')
 
 We can now lookup our form by the name of its class:
 
   >>> from cromlech.io.testing import TestRequest
   >>> request = TestRequest()
 
-  >>> from dolmen.forms.ztk.ftests.forms.ztkform_fixture import Person
+  >>> from dolmen.forms.ztk.tests.integration.ztkform_fixture import Person
   >>> context = Person()
+  >>> context.__name__ = 'person'
 
   >>> from zope import component
   >>> form = component.getMultiAdapter(
   ...     (context, request), name='personform')
   >>> form
-  <dolmen.forms.ztk.ftests.forms.ztkform_fixture.PersonForm object at ...>
+  <dolmen.forms.ztk.tests.integration.ztkform_fixture.PersonForm object at ...>
 
   >>> len(form.actions)
   1
-  >>> len(form.fields)
-  2
+
+  >>> print list(form.fields)
+  [<TextLineSchemaField Person name>, <IntSchemaField Person age>]
 
 
 Integration test
@@ -37,30 +39,32 @@ Integration test
 Let's try to take a browser and submit that form:
 
   >>> root = getRootFolder()
-  >>> root['person'] = context
+  >>> context.__parent__ = root
+  >>> app = makeApplication(context, 'personform')
 
-  >>> from zope.testbrowser.testing import Browser
-  >>> browser = Browser()
+  >>> from infrae.testbrowser.browser import Browser
+  >>> browser = Browser(app)
+  >>> browser.options.handle_errors = False
   >>> browser.handleErrors = False
 
 We can access the form, fill it and submit it:
 
   >>> browser.open('http://localhost/person/personform')
-  >>> namefield = browser.getControl('Person name')
-  >>> namefield
-  <Control name='form.field.name' type='text'>
+  200
+  >>> form = browser.get_form(id='form')
+  >>> namefield = form.get_control('form.field.name')
+  >>> namefield.name, namefield.type
+  ('form.field.name', 'text')
   >>> namefield.value = 'Arthur Sanderman'
 
-  >>> agefield = browser.getControl('Person age')
-  >>> agefield
-  <Control name='form.field.age' type='text'>
+  >>> agefield = form.get_control('form.field.age')
+  >>> agefield.name, agefield.type
+  ('form.field.age', 'text')
   >>> agefield.value = '42'
 
-  >>> action = browser.getControl('Send')
-  >>> action
-  <SubmitControl name='form.action.send' type='submit'>
+  >>> form.get_control('form.action.send').click()
+  200
 
-  >>> action.click()
   >>> 'We sent Arthur Sanderman, age 42' in browser.contents
   True
 

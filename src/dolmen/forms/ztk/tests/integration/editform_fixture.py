@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 
-from zeam.form import ztk
+from dolmen.forms import ztk
 from zope import interface, schema
-
 from grokcore import component as grok
 
 
@@ -34,7 +34,7 @@ class Edit(ztk.Form):
     actions = ztk.Actions(ztk.EditAction(u"Change"))
 
 
-from zope.app.security.protectclass import protectName, protectSetAttribute
+from zope.security.protectclass import protectName, protectSetAttribute
 # Need to declare security for Zope madness
 
 protectName(Comment, 'title', 'zope.Public')

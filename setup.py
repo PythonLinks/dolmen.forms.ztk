@@ -6,6 +6,13 @@ import os
 version = '0.1dev'
 
 tests_require = [
+    'WebOb',
+    'cromlech.webob',
+    'dolmen.location',
+    'infrae.testbrowser',
+    'zope.configuration',
+    'zope.location',
+    'zope.security',
     ]
 
 setup(name='dolmen.forms.ztk',
@@ -31,7 +38,6 @@ setup(name='dolmen.forms.ztk',
       install_requires=[
           'cromlech.browser',
           'cromlech.io',
-          'dolmen.collection >= 0.2',
           'dolmen.forms.base',
           'dolmen.template',
           'grokcore.component',
