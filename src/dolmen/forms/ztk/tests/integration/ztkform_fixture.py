@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from cromlech.webob.response import Response
-from dolmen.forms.ztk import Form, Fields, action
+from dolmen.forms.base import Form, Fields, action
 from grokcore import component as grok
 from zope import interface, schema
 

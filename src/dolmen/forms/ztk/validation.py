@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from zope.interface.interfaces import IMethod
-from zope.interface import directlyProvides, Invalid
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.ztk.interfaces import ISchemaField
+
+from zope.interface.interfaces import IMethod
+from zope.interface import directlyProvides, Invalid
 
 
 class Data(object):

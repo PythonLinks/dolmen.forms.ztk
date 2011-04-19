@@ -45,7 +45,7 @@ Widget
 You can have a widget for a timeinfo. The input value is a formated version
 of the time, based on the locale of the request::
 
-  >>> from dolmen.forms.ztk import Widgets, FormData
+  >>> from dolmen.forms.base import Widgets, FormData
 
   >>> timeForm = FormData(timeinfo, request)
   >>> timeForm.ignoreContent = False

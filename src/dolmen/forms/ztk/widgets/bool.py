@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from grokcore import component as grok
+import grokcore.component as grok
+
+from dolmen.forms.base import _
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import WidgetExtractor, DisplayFieldWidget
+
 from dolmen.forms.ztk.widgets import getTemplate
 from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
 from dolmen.forms.ztk.fields import registerSchemaField
-from zope.i18nmessageid import MessageFactory
-from zope.schema import interfaces as schema_interfaces
 
-_ = MessageFactory("dolmen.forms.base")
+from zope.schema import interfaces as schema_interfaces
 
 
 class BooleanSchemaField(SchemaField):

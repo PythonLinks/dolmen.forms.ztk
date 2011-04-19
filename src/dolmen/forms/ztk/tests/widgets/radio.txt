@@ -1,6 +1,6 @@
-===========================
+=============================
 dolmen.forms.ztk radio widget
-===========================
+=============================
 
 Simple case
 ===========
@@ -76,7 +76,7 @@ Widget
 
 You have an associated widget::
 
-  >>> from dolmen.forms.ztk import Widgets, FormData
+  >>> from dolmen.forms.base import Widgets, FormData
 
   >>> firstForm = FormData(content, request)
   >>> firstForm.ignoreContent = False
@@ -167,7 +167,7 @@ Field
 
 So now you can create a field, and get a choice field::
 
-  >>> from dolmen.forms.ztk import Fields
+  >>> from dolmen.forms.base import Fields
 
   >>> secondChoiceFields = Fields(ISecondChoice)
   >>> secondField = secondChoiceFields['choice']
@@ -194,7 +194,7 @@ Widget
 
 You have an associated widget::
 
-  >>> from dolmen.forms.ztk import Widgets, FormData
+  >>> from dolmen.forms.base import Widgets, FormData
 
   >>> secondSub = FormData(content, request)
   >>> secondSub.ignoreContent = False

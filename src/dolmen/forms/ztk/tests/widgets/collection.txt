@@ -34,7 +34,8 @@ So now you can create a field, and get a collection field:
 
   >>> from dolmen.forms.base import interfaces
   >>> from dolmen.forms.base.markers import NO_VALUE
-  >>> from dolmen.forms.ztk import Fields
+  >>> from dolmen.forms.base import Fields
+
   >>> from dolmen.forms.ztk.interfaces import ICollectionSchemaField
 
   >>> fields = Fields(IListOfTextlines)
@@ -111,7 +112,7 @@ Generic Widget
 
 You can get a generic widget out of your field::
 
-  >>> from dolmen.forms.ztk import Widgets, FormData
+  >>> from dolmen.forms.base import Widgets, FormData
   >>> from cromlech.io.testing import TestRequest
 
   >>> request = TestRequest()

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms import ztk
+from dolmen.forms.base import Fields, Actions, Form
+from dolmen.forms.ztk import EditAction
 from zope import interface, schema
 from grokcore import component as grok
 
@@ -26,12 +27,12 @@ class Comment(grok.Context):
         self.name = name
 
 
-class Edit(ztk.Form):
+class Edit(Form):
     label = u"Modify your comment"
 
     ignoreContent = False
-    fields = ztk.Fields(IComment)
-    actions = ztk.Actions(ztk.EditAction(u"Change"))
+    fields = Fields(IComment)
+    actions = Actions(EditAction(u"Change"))
 
 
 from zope.security.protectclass import protectName, protectSetAttribute

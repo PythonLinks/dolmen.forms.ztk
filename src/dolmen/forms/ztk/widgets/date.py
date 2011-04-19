@@ -3,6 +3,7 @@
 from dolmen.forms.base import _
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import DisplayFieldWidget, WidgetExtractor
+
 from dolmen.forms.ztk.fields import (
     SchemaField, SchemaFieldWidget, registerSchemaField)
 

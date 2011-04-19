@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import grokcore.component as grok
 import hashlib
 md5hash = lambda s: hashlib.md5(s).hexdigest()
 
+from dolmen.forms.base import _
 from dolmen.forms.base.datamanagers import NoneDataManager
 from dolmen.forms.base.interfaces import IField, IWidget, IWidgetExtractor
 from dolmen.forms.base.forms import cloneFormData
@@ -18,14 +20,8 @@ from dolmen.forms.ztk.fields import (
     SchemaField, registerSchemaField, SchemaFieldWidget)
 
 from zope import component
-from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
-
-from grokcore import component as grok
-
-_ = MessageFactory("dolmen.forms.base")
-
 
 
 def register():

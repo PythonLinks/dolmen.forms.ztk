@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms.ztk.fields import SchemaField
-from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.fields import SchemaField, registerSchemaField
 from zope.schema import interfaces as schema_interfaces
 
 

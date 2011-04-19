@@ -63,7 +63,7 @@ Widget
 You can have a widget for a day. The input value is a formated version
 of the date, based on the locale of the request::
 
-  >>> from dolmen.forms.ztk import Widgets, FormData
+  >>> from dolmen.forms.base import Widgets, FormData
 
   >>> dailyForm = FormData(day, request)
   >>> dailyForm.ignoreContent = False

@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 
+from cromlech.io.interfaces import IRequest
+from grokcore import component as grok
+
 from dolmen.forms.base import interfaces, _
 from dolmen.forms.base.fields import Field
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import FieldWidget, WidgetExtractor
 from dolmen.forms.base.interfaces import IFieldExtractionValueSetting
+
 from dolmen.forms.ztk.interfaces import ISchemaField
 
-from grokcore import component as grok
 from zope import schema, component
 from zope.interface import Interface, Invalid
 from zope.interface.interfaces import IInterface
 from zope.schema import interfaces as schema_interfaces
-from cromlech.io.interfaces import IRequest
 
 
 class SchemaFieldFactory(object):

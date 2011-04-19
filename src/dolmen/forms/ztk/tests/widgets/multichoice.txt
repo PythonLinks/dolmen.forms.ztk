@@ -1,6 +1,6 @@
-=================================
+====================================
 dolmen.forms.ztk multichoice widgets
-=================================
+====================================
 
 Define some interfaces that specifcy list of choices:
 
@@ -49,7 +49,8 @@ We can have a field out of the interface:
 
   >>> from dolmen.forms.base import interfaces
   >>> from dolmen.forms.base.markers import NO_VALUE
-  >>> from dolmen.forms.ztk import Fields
+  >>> from dolmen.forms.base import Fields
+
   >>> from dolmen.forms.ztk.interfaces import ICollectionSchemaField
 
   >>> fields = Fields(ISetOfChoices)
@@ -112,7 +113,7 @@ Collection fields can get by default a widget and extractor picked
 differently dependently of the value type. When the value type is a
 choice, you will get a multi-choice widget by default::
 
-  >>> from dolmen.forms.ztk import Widgets, FormData
+  >>> from dolmen.forms.base import Widgets, FormData
   >>> from cromlech.io.testing import TestRequest
 
   >>> request = TestRequest()

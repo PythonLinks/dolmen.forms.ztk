@@ -1,6 +1,6 @@
-===========================
+==============================
 dolmen.forms.ztk object widget
-===========================
+==============================
 
 First we need a test interface and content::
 
@@ -41,7 +41,7 @@ Field
 
 You have an Object field you get out of the interface::
 
-  >>> from dolmen.forms.base.fields import Fields
+  >>> from dolmen.forms.base import Fields
   >>> from dolmen.forms.base import interfaces
   >>> from dolmen.forms.ztk.interfaces import IObjectSchemaField
 
@@ -98,7 +98,7 @@ Widget
 
 You can now have a widget for your object field::
 
-  >>> from dolmen.forms.ztk import Widgets, FormData
+  >>> from dolmen.forms.base import Widgets, FormData
 
   >>> post = FormData(content, request)
   >>> post.ignoreContent = False
