@@ -9,9 +9,8 @@ import unittest
 import webob.dec
 
 from cromlech.io.interfaces import IPublicationRoot
-from grokcore.component.testing import grok
 from pkg_resources import resource_listdir
-from zope.component import testing, provideAdapter, getMultiAdapter
+from zope.component import provideAdapter, getMultiAdapter
 from zope.component.testlayer import ZCMLFileLayer
 from zope.i18n.interfaces.locales import ILocale
 from zope.i18n.locales import locales

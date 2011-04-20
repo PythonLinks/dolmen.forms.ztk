@@ -19,33 +19,37 @@ Let's add a comment and try to edit it with our form:
   >>> comment.comment
   u'Is great'
 
-  >>> from infrae.testbrowser import Browser
-  >>> browser = Browser()
+  >>> from infrae.testbrowser.browser import Browser
+  >>> edit = makeApplication(comment, 'edit')
+  
+  >>> browser = Browser(edit)
   >>> browser.handleErrors = False
 
 Now acccess the edit form:
 
   >>> browser.open('http://localhost/comment/edit')
-  >>> browser.addHeader('Authorization', 'Basic mgr:mgrpw')
+  200
+  >>> browser.set_request_header('Authorization', 'Basic mgr:mgrpw')
 
   >>> u'Modify your comment' in browser.contents
   True
 
-  >>> titlefield = browser.getControl('Title')
-  >>> titlefield
-  <Control name='form.field.title' type='text'>
+  >>> form = browser.get_form(id='form')
+  >>> titlefield = form.get_control('form.field.title')
+  >>> titlefield.name, titlefield.type
+  ('form.field.title', 'text')
   >>> titlefield.value
   'dolmen.forms'
 
-  >>> commentfield = browser.getControl('Comment')
-  >>> commentfield
-  <Control name='form.field.comment' type='textarea'>
+  >>> commentfield = form.get_control('form.field.comment')
+  >>> commentfield.name, commentfield.type
+  ('form.field.comment', 'textarea')
   >>> commentfield.value
   'Is great'
 
-  >>> namefield = browser.getControl('Name')
-  >>> namefield
-  <Control name='form.field.name' type='text'>
+  >>> namefield = form.get_control('form.field.name')
+  >>> namefield.name, namefield.type
+  ('form.field.name', 'text')
   >>> namefield.value
   ''
 
@@ -53,11 +57,12 @@ We can now edit the content, and so it get modified:
 
   >>> titlefield.value = 'dolmen.forms.ztk'
   >>> commentfield.value = 'Is far cooler than not ztk'
-  >>> changebutton = browser.getControl('Change')
-  >>> changebutton
-  <SubmitControl name='form.action.change' type='submit'>
+  >>> changebutton = form.get_control('form.action.change')
+  >>> changebutton.name, changebutton.type
+  ('form.action.change', 'submit')
 
   >>> changebutton.click()
+  200
   >>> 'Modification saved' in browser.contents
   True
 

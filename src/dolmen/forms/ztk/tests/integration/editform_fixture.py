@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
 
+import grokcore.component as grok
+
+from cromlech.webob.response import Response
 from dolmen.forms.base import Fields, Actions, Form
 from dolmen.forms.ztk import EditAction
 from zope import interface, schema
-from grokcore import component as grok
 
 
 class IComment(interface.Interface):
+
     title = schema.TextLine(
         title=u"Title",
         required=True)
+
     comment = schema.Text(
         title=u"Comment",
         required=True)
+
     name = schema.TextLine(
         title=u"Name",
         required=False)
@@ -28,9 +33,13 @@ class Comment(grok.Context):
 
 
 class Edit(Form):
-    label = u"Modify your comment"
+    """An edit form.
+    """
+    responseFactory = Response
 
+    label = u"Modify your comment"
     ignoreContent = False
+
     fields = Fields(IComment)
     actions = Actions(EditAction(u"Change"))
 

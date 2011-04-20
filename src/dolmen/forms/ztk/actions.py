@@ -4,7 +4,6 @@ from dolmen.forms.base import Action, _
 from dolmen.forms.base.markers import NO_VALUE, NO_CHANGE, SUCCESS, FAILURE
 from dolmen.forms.base.datamanagers import ObjectDataManager
 from zope.event import notify
-from zope.i18nmessageid import MessageFactory
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 
 
@@ -26,7 +25,7 @@ class EditAction(Action):
         for field in form.fields:
             value = data.get(field.identifier, _marker)
             if value is NO_VALUE and not field.required:
-                value = data.getDefault(field, _marker)
+                value = data.getWithDefault(field, _marker)
             if value is not _marker and value is not NO_CHANGE:
                 content.set(field.identifier, value)
 
