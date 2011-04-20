@@ -3,7 +3,22 @@
 from setuptools import setup, find_packages
 import os
 
-version = '0.1dev'
+version = '2.0a1dev'
+
+install_requires=[
+    'cromlech.browser',
+    'cromlech.io',
+    'dolmen.forms.base >= 2.0a1dev',
+    'dolmen.template',
+    'grokcore.component',
+    'setuptools',
+    'zope.component',
+    'zope.event',
+    'zope.i18n',
+    'zope.interface',
+    'zope.lifecycleevent',
+    'zope.schema',
+    ],
 
 tests_require = [
     'WebOb',
@@ -35,21 +50,8 @@ setup(name='dolmen.forms.ztk',
       packages=find_packages('src'),
       include_package_data=True,
       zip_safe=False,
-      install_requires=[
-          'cromlech.browser',
-          'cromlech.io',
-          'dolmen.forms.base',
-          'dolmen.template',
-          'grokcore.component',
-          'setuptools',
-          'zope.component',
-          'zope.event',
-          'zope.i18n',
-          'zope.interface',
-          'zope.lifecycleevent',
-          'zope.schema',
-        ],
       tests_require = tests_require,
+      install_requires = install_requires,
       extras_require = {'test': tests_require},
       entry_points="""
       # -*- Entry points: -*-
