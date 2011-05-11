@@ -36,7 +36,7 @@ tests_require = [
 setup(name='dolmen.forms.ztk',
       version=version,
       description="Zope Toolkit support for dolmen.forms",
-      long_description="%s\n\n%s" % (readme, history)
+      long_description="%s\n\n%s" % (readme, history),
       classifiers=[
         "Programming Language :: Python",
         "Intended Audience :: Developers",
