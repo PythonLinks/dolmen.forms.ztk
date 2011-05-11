@@ -3,12 +3,14 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.0a1dev'
+version = '2.0a1'
+readme = open("README.txt").read()
+history = open(os.path.join("docs", "HISTORY.txt")).read()
 
 install_requires=[
     'cromlech.browser',
     'cromlech.io',
-    'dolmen.forms.base >= 2.0a1dev',
+    'dolmen.forms.base >= 2.0a1',
     'dolmen.template',
     'grokcore.component',
     'setuptools',
@@ -23,6 +25,7 @@ install_requires=[
 tests_require = [
     'WebOb',
     'cromlech.webob',
+    'cromlech.browser [test]',
     'dolmen.location',
     'infrae.testbrowser',
     'zope.configuration',
@@ -33,8 +36,7 @@ tests_require = [
 setup(name='dolmen.forms.ztk',
       version=version,
       description="Zope Toolkit support for dolmen.forms",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+      long_description="%s\n\n%s" % (readme, history)
       classifiers=[
         "Programming Language :: Python",
         "Intended Audience :: Developers",

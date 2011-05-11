@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a1 (unreleased)
+2.0a1 (2011-05-11)
 ------------------
 
-  * forking ``zeam.form.ztk``
+* forking ``zeam.form.ztk``

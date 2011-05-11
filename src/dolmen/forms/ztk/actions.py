@@ -6,6 +6,8 @@ from dolmen.forms.base.datamanagers import ObjectDataManager
 from zope.event import notify
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 
+_marker = object()
+
 
 class CancelAction(Action):
     """Cancel the current form and return on the default content view.
@@ -14,8 +16,6 @@ class CancelAction(Action):
     def __call__(self, form):
         form.redirect(form.url())
 
-
-_marker = object()
 
 class EditAction(Action):
     """Edit the form content using the form fields.
