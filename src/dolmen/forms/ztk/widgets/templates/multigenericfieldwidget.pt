@@ -27,7 +27,7 @@
        tal:condition="widget.jsonAddIdentifier"
        tal:define="valueWidget widget.jsonAddTemplate"
        tal:attributes="rel widget.jsonAddIdentifier">
-    <metal:line metal:use-macro="template.macros.line" />
+    <metal:line metal:use-macro="template.macros['line']" />
   </div>
 
   <input type="hidden" class="field-collection-counter" name="#" value="#"

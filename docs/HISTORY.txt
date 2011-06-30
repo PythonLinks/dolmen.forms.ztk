@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0a2 (2011-06-30)
+------------------
+
+* Macros access is no longer using attributes, but a dict-like interface.
+
+
 2.0a1 (2011-05-11)
 ------------------
 
