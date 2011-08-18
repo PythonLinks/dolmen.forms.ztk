@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0a3 (2011-08-19)
+------------------
+
+* Better extraction of Date and Time, u'' means None. As a consequence a date
+  can be deleted !
+
 2.0a2 (2011-06-30)
 ------------------
 

@@ -88,6 +88,17 @@ here because the parsing is a bit more advanced::
   >>> niceTimeExtractor.extract()
   (datetime.time(12, 21), None)
 
+Empty text is interpreted as None::
+
+  >>> timeRequest = TestRequest(form={
+  ...     'form.field.time': u''})
+  >>> niceTimeData = FormData(timeinfo, timeRequest)
+  >>> niceTimeExtractor = getMultiAdapter(
+  ...      (timeField, niceTimeData, timeRequest),
+  ...      interfaces.IWidgetExtractor)
+  >>> niceTimeExtractor.extract()
+  (None, None)
+
 Now if you give an invalid date you will have an error::
 
   >>> invalidTimeRequest = TestRequest(form={

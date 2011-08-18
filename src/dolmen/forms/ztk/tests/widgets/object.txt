@@ -164,6 +164,7 @@ And you can extract the object of the request::
   >>> value.comment
   u'Everything is working alright.'
   >>> value.email
+  u''
 
 If nothing is in the request, you have no value::
 

@@ -42,12 +42,15 @@ class TimeWidgetExtractor(WidgetExtractor):
     def extract(self):
         value, error = super(TimeWidgetExtractor, self).extract()
         if value is not NO_VALUE:
-            locale = ILocale(self.request)
-            formatter = locale.dates.getFormatter(self.valueType, 'short')
-            try:
-                value = formatter.parse(value)
-            except (ValueError, DateTimeParseError), error:
-                return None, str(error)
+            if value:
+                locale = ILocale(self.request)
+                formatter = locale.dates.getFormatter(self.valueType, 'short')
+                try:
+                    value = formatter.parse(value)
+                except (ValueError, DateTimeParseError), error:
+                    return None, str(error)
+            else:
+                value = None
         return value, error
 
 

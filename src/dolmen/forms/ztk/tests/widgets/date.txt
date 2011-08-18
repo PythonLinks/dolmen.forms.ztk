@@ -106,6 +106,18 @@ here because the parsing is a bit more advanced::
   >>> niceDayExtractor.extract()
   (datetime.date(1982, 6, 10), None)
 
+If date is empty it means None::
+
+  >>> dateRequest = TestRequest(form={
+  ...     'form.field.date': u''})
+  >>> niceDayData = FormData(day, dateRequest)
+  >>> niceDayExtractor = getMultiAdapter(
+  ...      (dateField, niceDayData, dateRequest),
+  ...      interfaces.IWidgetExtractor)
+  >>> niceDayExtractor.extract()
+  (None, None)
+  
+  
 Now if you give an invalid date you will have an error::
 
   >>> invalidDateRequest = TestRequest(form={
