@@ -121,8 +121,12 @@ class SchemaWidgetExtractor(WidgetExtractor):
                 IFieldExtractionValueSetting,
                 IRequest)
 
+    empty_is_None = False
+
     def extract(self):
         value, error = super(SchemaWidgetExtractor, self).extract()
+        if self.empty_is_None and hasattr(value, '__len__') and not len(value):
+            value = None
         if error is not None:
             return value, error
 

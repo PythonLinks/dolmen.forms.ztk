@@ -1,7 +1,12 @@
 Changelog
 =========
 
-2.0a3 (2011-08-19)
+2.0a4 (2011-08-19)
+------------------
+
+* corrected bug on number extraction and added tests
+
+2.0a3 (2011-08-18)
 ------------------
 
 * Better extraction of Date and Time, u'' means None. As a consequence a date
