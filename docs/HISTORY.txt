@@ -1,16 +1,25 @@
 Changelog
 =========
 
+2.0a5 (2011-09-19)
+------------------
+
+* Validators are now form aware. Echoed the changed in `InvariantValidator`.
+  It now gives the `Data` wrapper the form's dataManager.
+
+
 2.0a4 (2011-08-19)
 ------------------
 
 * corrected bug on number extraction and added tests
+
 
 2.0a3 (2011-08-18)
 ------------------
 
 * Better extraction of Date and Time, u'' means None. As a consequence a date
   can be deleted !
+
 
 2.0a2 (2011-06-30)
 ------------------

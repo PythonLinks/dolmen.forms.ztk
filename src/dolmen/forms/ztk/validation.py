@@ -11,7 +11,7 @@ class Data(object):
     """Wraps the data dicts into an object, acting as
     an attribute access proxy.
     """
-    def __init__(self, interface, data):
+    def __init__(self, interface, data, dataManager):
         self.interface = interface
         self.data = data
         directlyProvides(self, interface)
@@ -28,7 +28,7 @@ class Data(object):
         value = self.data.getWithDefault(name)
 
         if value is NO_VALUE:
-            raise AttributeError(name)
+            return dataManager.get(name)
 
         return value
 
@@ -36,18 +36,21 @@ class Data(object):
 class InvariantsValidation(object):
     """Validates the invariants of the given fields' interfaces.
     """
-    def __init__(self, fields):
+    def __init__(self, fields, form):
         self.interfaces = []
         for field in fields:
             if ISchemaField.providedBy(field):
                 interface = field._field.interface
                 if interface not in self.interfaces:
                     self.interfaces.append(interface)
+        self.form = form
+
 
     def validate(self, data):
         errors = []
+        manager = self.form.getContentData()
         for interface in self.interfaces:
-            obj = Data(interface, data)
+            obj = Data(interface, data, manager)
             try:
                 interface.validateInvariants(obj, errors)
             except Invalid:

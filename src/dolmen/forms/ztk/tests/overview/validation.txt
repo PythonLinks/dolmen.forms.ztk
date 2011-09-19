@@ -42,7 +42,7 @@ Instanciation
   >>> fields = Fields(IPasswords)
 
   >>> from dolmen.forms.ztk import InvariantsValidation
-  >>> validator = InvariantsValidation(fields)
+  >>> validator = InvariantsValidation(fields, form)
 
   >>> print validator
   <dolmen.forms.ztk.validation.InvariantsValidation object at ...>
@@ -101,7 +101,7 @@ Instanciation
 
   >>> form = FormData(object(), TestRequest())
   >>> fields = Fields(IAgeAndLegals)
-  >>> validator = InvariantsValidation(fields)
+  >>> validator = InvariantsValidation(fields, form)
 
   >>> print validator
   <dolmen.forms.ztk.validation.InvariantsValidation object at ...>
