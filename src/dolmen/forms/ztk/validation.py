@@ -32,7 +32,11 @@ class Data(object):
             value = NO_VALUE
 
         if value is NO_VALUE:
-            return self.dataManager.get(name)
+            try:
+                return self.dataManager.get(name)
+            except KeyError:
+                # an attribute error is more sane here
+                raise AttributeError(name)
 
         return value
 

@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0a7 (2011-09-20)
+------------------
+
+* validation.Data reraise KeyError of dataManager.get(name) in a more logical
+  attribute error
+
+
 2.0a6 (2011-09-20)
 ------------------
 
