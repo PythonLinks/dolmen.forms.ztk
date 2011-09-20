@@ -130,6 +130,66 @@ Providing some data
   []
 
 
+Invariant involving values not in form
+======================================
+
+If some attributes used by invariant computation are not in the form the values
+will be ask to datamanager::
+
+  >>> class IAdult(Interface):
+  ...    age = Int(
+  ...        title=u"Enter your age.",
+  ...        required=True)
+  ...        
+  ...    country = Choice(
+  ...        title=u"Country",
+  ...        required=True,
+  ...        values=[u'Korea', u'France'])
+  ...
+  ...    @invariant
+  ...    def check_age(data):
+  ...        
+  ...        if data.age < {u'Korea': 17, u'France':18}[data.country]:
+  ...            raise Invalid(u"You must be major to proceed.")
+
+
+
+Instanciation
+-------------
+
+We will have two form permitting to edit already existing object, but
+just the age::
+
+  >>> class Person(object):
+  ... 
+  ...     def __init__(self, country, age):
+  ...         self.country, self.age = country, age
+
+  >>> edit_french = FormData(Person(u'France', None), TestRequest())
+  >>> edit_korean = FormData(Person(u'Korea', None), TestRequest())
+  >>> fields = Fields(IAdult).omit('country')
+
+
+Providing some data
+-------------------
+
+Let's edit the french and check
+
+  >>> data = FieldsValues(edit_french, fields)
+  >>> data.update({'age': 17})
+  >>> print InvariantsValidation(fields, edit_french).validate(data)
+  [Invalid(u'You must be major to proceed.',)]
+
+  >>> data.update({'age': 18})
+  >>> print InvariantsValidation(fields, edit_french).validate(data)
+  []
+
+  >>> data = FieldsValues(edit_korean, fields)
+  >>> data.update({'age': 17})
+  >>> print InvariantsValidation(fields, edit_korean).validate(data)
+  []
+
+
 Form integration
 ================
 

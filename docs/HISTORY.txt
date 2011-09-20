@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0a6 (2011-09-20)
+------------------
+
+* fix error on InvariantValidator and added test for case when invariant
+  depends on data not present in form
+
+
 2.0a5 (2011-09-19)
 ------------------
 
