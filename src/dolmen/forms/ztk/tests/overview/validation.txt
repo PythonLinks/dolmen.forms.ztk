@@ -165,8 +165,8 @@ just the age::
   ...     def __init__(self, country, age):
   ...         self.country, self.age = country, age
 
-  >>> edit_french = FormData(Person(u'France', None), TestRequest())
-  >>> edit_korean = FormData(Person(u'Korea', None), TestRequest())
+  >>> edit_french = FormData(Person(u'France', None), TestHTTPRequest())
+  >>> edit_korean = FormData(Person(u'Korea', None), TestHTTPRequest())
   >>> fields = Fields(IAdult).omit('country')
 
 
