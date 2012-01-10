@@ -12,8 +12,8 @@ We need first a boolean:
 
 And a test content and request:
 
-  >>> from cromlech.io.testing import TestRequest
-  >>> request = TestRequest()
+  >>> from cromlech.browser.testing import TestHTTPRequest
+  >>> request = TestHTTPRequest()
 
   >>> class Question(object):
   ...    interface.implements(IQuestion)
@@ -85,7 +85,7 @@ the value is False:
 And if there is True in the request that means the checkbox is
 checked:
 
-  >>> trueRequest = TestRequest(
+  >>> trueRequest = TestHTTPRequest(
   ...         form={booleanWidget.identifier: u'True', })
 
   >>> extractor = component.getMultiAdapter(

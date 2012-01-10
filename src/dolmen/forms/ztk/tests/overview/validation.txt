@@ -1,6 +1,6 @@
-=============
+================
 dolmen.forms.ztk
-=============
+================
 
 Interfaces can be validated, if they contain invariants. Invariants
 are explicit contacts defining constraints on the data.
@@ -37,8 +37,8 @@ Instanciation
 -------------
 
   >>> from dolmen.forms.base import Fields, FormData
-  >>> from cromlech.io.testing import TestRequest
-  >>> form = FormData(object(), TestRequest())
+  >>> from cromlech.browser.testing import TestHTTPRequest
+  >>> form = FormData(object(), TestHTTPRequest())
   >>> fields = Fields(IPasswords)
 
   >>> from dolmen.forms.ztk import InvariantsValidation
@@ -99,7 +99,7 @@ Definition
 Instanciation
 -------------
 
-  >>> form = FormData(object(), TestRequest())
+  >>> form = FormData(object(), TestHTTPRequest())
   >>> fields = Fields(IAgeAndLegals)
   >>> validator = InvariantsValidation(fields, form)
 
@@ -142,12 +142,12 @@ Integration environment
   >>> class SomeContent(Context):
   ...     pass
 
-  >>> from cromlech.io.testing import TestResponse
+  >>> from cromlech.browser.testing import TestHTTPResponse
 
   >>> class MyLegalPage(Form):
   ...     context(SomeContent)
   ...
-  ...     responseFactory = TestResponse
+  ...     responseFactory = TestHTTPResponse
   ...     fields = Fields(IAgeAndLegals)
   ...     dataValidators = [InvariantsValidation]
   ...     ignoreRequest = False
@@ -162,7 +162,7 @@ Erroneous submissions
 Let's try an empty request. There is two invariants, so that generate
 two errors for the form itself:
 
-  >>> request = TestRequest(form={'age': 10})
+  >>> request = TestHTTPRequest(form={'age': 10})
   >>> form = MyLegalPage(content, request)
   >>> form.update()
 

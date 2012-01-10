@@ -28,8 +28,8 @@ First we need a choice:
 
 And we will need a content and a request to test:
 
-  >>> from cromlech.io.testing import TestRequest
-  >>> request = TestRequest()
+  >>> from cromlech.browser.testing import TestHTTPRequest
+  >>> request = TestHTTPRequest()
 
   >>> class SimpleContent(object):
   ...    interface.implements(ISimpleChoice)
@@ -159,7 +159,7 @@ different than the real value:
 
 Let's now do it with a value:
 
-  >>> simple_request = TestRequest(
+  >>> simple_request = TestHTTPRequest(
   ...    form={simple_widget.identifier: u'a1', })
 
   >>> simple_extractor = component.getMultiAdapter(
@@ -171,7 +171,7 @@ Let's now do it with a value:
 
 And a value which is not in the vocabulary:
 
-  >>> broken_request = TestRequest(
+  >>> broken_request = TestHTTPRequest(
   ...    form={simple_widget.identifier: u'z42', })
 
   >>> broken_extractor = component.getMultiAdapter(
