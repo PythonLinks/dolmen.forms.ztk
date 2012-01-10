@@ -14,6 +14,7 @@ class Data(object):
     def __init__(self, interface, data, dataManager):
         self.interface = interface
         self.data = data
+        self.dataManager = dataManager
         directlyProvides(self, interface)
 
     def __getattr__(self, name):
@@ -25,10 +26,17 @@ class Data(object):
         if IMethod.providedBy(field):
             raise RuntimeError("Data value is not a schema field", name)
 
-        value = self.data.getWithDefault(name)
+        try:
+            value = self.data.getWithDefault(name)
+        except KeyError:
+            value = NO_VALUE
 
         if value is NO_VALUE:
-            return dataManager.get(name)
+            try:
+                return self.dataManager.get(name)
+            except KeyError:
+                # an attribute error is more sane here
+                raise AttributeError(name)
 
         return value
 
