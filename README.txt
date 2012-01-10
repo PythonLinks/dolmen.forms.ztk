@@ -48,68 +48,11 @@ We assume that a Person is in a Clan. We can implement a Person::
       age = None
       single = True
 
-Add form
---------
-
-You can add a new Person in a clan like this::
-
-  import dolmen.forms.ztk as form
-
-  class Add(form.Form):
-
-      form.context(IClan)
-
-      label = u"New person"
-      fields = form.Fields(IPerson)
-      actions =  form.Actions(
-           form.AddAction("Add", factory=Person),
-           form.CancelAction("Cancel"))
-      actions['add'].fieldName = 'last_name'
-
-
-Edit form
----------
-
-You can edit a Person like this::
-
-  class Edit(form.Form):
-
-      form.context(IPerson)
-
-      label = u"Change person details"
-      fields = form.Fields(IPerson)
-      actions =  form.Actions(
-           form.EditAction("Update"),
-           form.CancelAction("Cancel"))
-
-      ignoreContent = False
-
 
 API
 ===
 
 All the API of ``dolmen.forms.base`` is exported as well.
-
-Actions
--------
-
-``AddAction``
-  Action which take an extra parameter, factory, to create an object
-  stored on the content object. The created object is added with the
-  help of ``INameChooser`` to get its identifier. The option
-  ``fieldName`` will be used to lookup a value in the form data to
-  give as potential identifier to ``INameChooser``. Afterwards the
-  created object is edited (like EditAction does) with the form data.
-
-``EditAction``
-  Action which use the form data to change values on the content
-  object, designated by the form fields, after validation of the form
-  submission.
-
-``CancelAction``
-  Simple action which return on default view of the content without
-  validating the form submission.
-
 
 Fields
 ------
