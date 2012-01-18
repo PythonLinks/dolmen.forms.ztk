@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from dolmen.forms.base import cloneFormData, Fields, Widgets
 from dolmen.forms.base.datamanagers import ObjectDataManager
 from dolmen.forms.base.markers import NO_VALUE, Marker
-from dolmen.forms.base.widgets import Widgets, WidgetExtractor
-from dolmen.forms.base.forms import cloneFormData
-from dolmen.forms.base.fields import Fields
+from dolmen.forms.base.widgets import WidgetExtractor
 
 from dolmen.forms.ztk.widgets import getTemplate
 from dolmen.forms.ztk.interfaces import IObjectSchemaField

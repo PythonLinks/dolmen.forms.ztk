@@ -54,7 +54,7 @@ Instanciation
 Providing some data
 -------------------
 
-  >>> from dolmen.forms.base.forms import FieldsValues
+  >>> from dolmen.forms.base.components import FieldsValues
 
   >>> data = FieldsValues(form, fields)
   >>> data.update({'passwd': 'test', 'verify': 'nopass'})

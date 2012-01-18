@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0 (2012-01-17)
+----------------
+
+* Updated to follow the major changes initiated by ``dolmen.view`` and
+  ``cromlech.browser``.
+
+
 2.0b1 (2012-01-10)
 ------------------
 
