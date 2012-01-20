@@ -1,0 +1,198 @@
+=====================================
+dolmen.forms.ztk int and float widget
+=====================================
+
+We need first an int and a float::
+
+  >>> from zope import interface, schema
+  >>> from zope.interface.verify import verifyObject
+
+  >>> class IAnimal(interface.Interface):
+  ...     age = schema.Int(title=u"Age")
+  ...     weight = schema.Float(title=u"Weight")
+
+And a test content and request::
+
+  >>> from cromlech.browser.testing import TestHTTPRequest
+  >>> request = TestHTTPRequest()
+
+  >>> class Dog(object):
+  ...    interface.implements(IAnimal)
+  ...    age = 4
+  ...    weight = 15.3
+  >>> content = Dog()
+
+
+Field
+-----
+
+So now you can create a field, and get a int/float field::
+
+  >>> from dolmen.forms.base import Fields
+  >>> from dolmen.forms.base import interfaces
+
+  >>> fields = Fields(IAnimal)
+  >>> intField = fields['age']
+  >>> intField
+  <IntSchemaField Age>
+  >>> verifyObject(interfaces.IField, intField)
+  True
+  >>> floatField = fields['weight']
+  >>> floatField
+  <FloatSchemaField Weight>
+  >>> verifyObject(interfaces.IField, floatField)
+  True
+
+
+Widget
+------
+
+You have associated widgets::
+
+  >>> from dolmen.forms.base import Widgets, FormData
+
+  >>> sub = FormData(content, request)
+  >>> sub.ignoreContent = False
+
+  >>> widgets = Widgets(fields, form=sub, request=request)
+  >>> widgets.update()
+
+  >>> intWidget = widgets['form.field.age']
+  >>> intWidget
+  <SchemaFieldWidget Age>
+  >>> verifyObject(interfaces.IWidget, intWidget)
+  True
+  >>> floatWidget = widgets['form.field.weight']
+  >>> floatWidget
+  <SchemaFieldWidget Weight>
+  >>> verifyObject(interfaces.IWidget, floatWidget)
+  True
+
+  >>> print intWidget.render()
+  <input type="text" id="form-field-age" name="form.field.age"
+         class="field field-int field-required" value="4" />
+  <BLANKLINE>
+  >>> print floatWidget.render()
+  <input type="text" id="form-field-weight" name="form.field.weight"
+         class="field field-float field-required" value="15.3" />
+  <BLANKLINE>
+
+Extractor
+---------
+
+And finaly we have extractors.
+
+If there is nothing in the request the value is NO_VALUE:
+
+  >>> from zope import component
+
+For int::
+  
+  >>> emptyExtractor = component.getMultiAdapter(
+  ...      (intField, sub, request), interfaces.IWidgetExtractor)
+  
+  >>> emptyExtractor
+  <dolmen.forms.ztk.widgets.number.IntWidgetExtractor object at ...>
+  >>> emptyExtractor.extract()
+  (<Marker NO_VALUE>, None)
+  
+  >>> verifyObject(interfaces.IWidgetExtractor, emptyExtractor)
+  True
+
+And for float::
+
+  >>> emptyExtractor = component.getMultiAdapter(
+  ...      (floatField, sub, request), interfaces.IWidgetExtractor)
+  
+  >>> emptyExtractor
+  <dolmen.forms.ztk.widgets.number.FloatWidgetExtractor object at ...>
+  >>> emptyExtractor.extract()
+  (<Marker NO_VALUE>, None)
+  
+  >>> verifyObject(interfaces.IWidgetExtractor, emptyExtractor)
+  True
+
+And if there is a correct value in the request it works:
+  
+  >>> validRequest = TestHTTPRequest(
+  ...         form={intWidget.identifier: u'3',
+  ...               floatWidget.identifier : u'13.2'})
+
+For int::
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (intField, sub, validRequest), interfaces.IWidgetExtractor)
+  
+  >>> extractor.extract()
+  (3, None)
+
+
+
+And for float::
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (floatField, sub, validRequest), interfaces.IWidgetExtractor)
+  
+  >>> extractor.extract()
+  (13.199999999999999, None)
+
+
+Event with longs::
+  
+  >>> longRequest = TestHTTPRequest(
+  ...         form={intWidget.identifier: u'10000000000000000000'})
+  >>> extractor = component.getMultiAdapter(
+  ...      (intField, sub, longRequest), interfaces.IWidgetExtractor)
+  
+  >>> extractor.extract()
+  (10000000000000000000L, None)
+
+
+Empty value in the request gives None:
+  
+  >>> noneRequest = TestHTTPRequest(
+  ...         form={intWidget.identifier: u'',
+  ...               floatWidget.identifier : u''})
+
+For int::
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (intField, sub, noneRequest), interfaces.IWidgetExtractor)
+  
+  >>> extractor.extract()
+  (None, None)
+
+
+
+And for float::
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (floatField, sub, noneRequest), interfaces.IWidgetExtractor)
+  
+  >>> extractor.extract()
+  (None, None)
+
+Strange values triggers errors::
+  
+  
+  >>> invalidRequest = TestHTTPRequest(
+  ...         form={intWidget.identifier: u'what ?',
+  ...               floatWidget.identifier : u"don't know"})
+
+For int::
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (intField, sub, invalidRequest), interfaces.IWidgetExtractor)
+  
+  >>> extractor.extract()
+  (None, u'Invalid value.')
+
+
+
+And for float::
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (floatField, sub, invalidRequest), interfaces.IWidgetExtractor)
+  
+  >>> extractor.extract()
+  (None, u'Invalid value.')
