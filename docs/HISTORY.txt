@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.1 (2012-01-20)
+----------------
+
+* tests on numbers widgets (int and float)
+* added a display field for text rendering in a ``pre`` element
+
+
 2.0 (2012-01-17)
 ----------------
 

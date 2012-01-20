@@ -1,0 +1,76 @@
+============================
+dolmen.forms.ztk text widget
+============================
+
+Simple case
+===========
+
+Setup
+-----
+
+  >>> from zope import interface
+  >>> from zope import schema
+  >>> class ICode(interface.Interface):
+  ...     text = schema.Text(
+  ...         title=u"Some text")
+
+
+  >>> class Code(object):
+  ...     pass
+  >>> content = Code()
+
+  >>> from cromlech.browser.testing import TestHTTPRequest
+  >>> request = TestHTTPRequest()
+
+Field
+-----
+
+So now you can create a field, and get a text field::
+
+  >>> from dolmen.forms.base import Fields, Field
+
+  >>> fields = Fields(ICode)
+
+  >>> TextField = fields.get('text')
+  >>> TextField.mode
+  <Marker DEFAULT>
+
+Widget
+------
+
+You have an associated widget::
+
+  >>> from dolmen.forms.base import Widgets, FormData
+
+  >>> Form = FormData(content, request)
+  >>> Form.ignoreContent = False
+
+  >>> CodeWidgets = Widgets(
+  ...     fields,
+  ...     form=Form,
+  ...     request=request)
+
+  >>> CodeWidgets.update()
+
+  >>> TextWidget = CodeWidgets['form.field.text']
+  >>> TextWidget
+  <TextFieldWidget Some text>
+
+  >>> print TextWidget.render() #doctest: +NORMALIZE_WHITESPACE
+  <textarea id="form-field-text" name="form.field.text"
+  class="field field-text field-required" cols="80" rows="5"></textarea>
+
+And the display mode::
+
+  >>> from dolmen.forms.base import markers
+  >>> fields.get('text').mode = markers.DISPLAY
+  >>> CodeWidgets = Widgets(
+  ...     fields,
+  ...     form=Form,
+  ...     request=request)
+  >>> CodeWidgets.update()
+  >>> TextWidget = CodeWidgets['form.field.text']
+
+  >>> print TextWidget.render() #doctest: +NORMALIZE_WHITESPACE
+  <pre class="field field-text field-required" name="form.field.text"
+  id="form-field-text"></pre>

@@ -20,3 +20,9 @@ class TextSchemaField(SchemaField):
 class TextFieldWidget(SchemaFieldWidget):
     grok.adapts(TextSchemaField, Interface, Interface)
     template = getTemplate('textfieldwidget.pt')
+
+
+class TextDisplayWidget(SchemaFieldWidget):
+    grok.adapts(TextSchemaField, Interface, Interface)
+    grok.name('display')
+    template = getTemplate('textdisplaywidget.pt')

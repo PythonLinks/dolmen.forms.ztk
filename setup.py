@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.0'
+version = '2.1'
 readme = open("README.txt").read()
 history = open(os.path.join("docs", "HISTORY.txt")).read()
 
@@ -24,6 +24,7 @@ tests_require = [
     'WebOb',
     'cromlech.browser [test]',
     'cromlech.webob',
+    'cromlech.file',
     'dolmen.location',
     'infrae.testbrowser',
     'zope.configuration',
