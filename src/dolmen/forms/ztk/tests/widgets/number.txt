@@ -134,7 +134,7 @@ And for float::
   ...      (floatField, sub, validRequest), interfaces.IWidgetExtractor)
   
   >>> extractor.extract()
-  (13.199999999999999, None)
+  (13.2, None)
 
 
 Event with longs::

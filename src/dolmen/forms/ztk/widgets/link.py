@@ -3,12 +3,9 @@
 from dolmen.forms.base.interfaces import IField
 from dolmen.forms.base.widgets import FieldWidget
 from dolmen.forms.ztk.widgets import getTemplate
-
-from zope.component import getMultiAdapter
-from zope.interface import Interface
-from cromlech.browser.interfaces import IURLResolver
-
+from dolmen.location import get_absolute_url
 from grokcore import component as grok
+from zope.interface import Interface
 
 
 class LinkFieldWidget(FieldWidget):
@@ -18,5 +15,5 @@ class LinkFieldWidget(FieldWidget):
     template = getTemplate('linkfieldwidget.pt')
 
     def url(self):
-        return str(getMultiAdapter(
-            (self.form.context, self.request), IURLResolver))
+        content = self.form.getContentData().getContent()
+        return get_absolute_url(content, self.request)
