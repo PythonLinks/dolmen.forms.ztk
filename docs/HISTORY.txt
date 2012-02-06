@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.1.1 (2012-02-06)
+------------------
+
+* Fixed the "Link" widget. It now uses the normalized `getContentData` from
+  the form to get the right context.
+* Cleaned up dependencies.
+
+
 2.1 (2012-01-20)
 ----------------
 
