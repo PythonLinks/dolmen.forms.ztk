@@ -1,0 +1,91 @@
+
+zope.schema bug with Objects with choice
+------------------------------------------
+
+Note that because of a bug in zope.schema, if you use object with a
+schema using a vocabulary you have to use this package Object field::
+
+  >>> from zope import interface, schema
+  >>> from zope.schema.interfaces import IContextSourceBinder
+  >>> from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+
+The first different thing is that Choice in zope schema get linked
+to their value and not to context. See the bug in action::
+
+  >>> class EnumSource(object):
+  ...     interface.implements(IContextSourceBinder)
+  ...
+  ...     def __call__(self, context):
+  ...         return SimpleVocabulary([
+  ...             SimpleTerm(value=v, token=v, title='Letter %s' % v)
+  ...             for v in context])
+
+  >>> class ISimpleChoice(interface.Interface):
+  ...     choice = schema.Choice(source=EnumSource())
+
+  >>> class Choice(object):
+  ...     interface.implements(ISimpleChoice)
+  ...
+  ...     def __init__(self, choice):
+  ...         self.choice = choice
+
+  >>> class IFavorite(interface.Interface):
+  ...     fav = schema.Object(title=u"Favorite number", schema=ISimpleChoice)
+
+  >>> context = range(5)
+  >>> IFavorite['fav'].bind(context).validate(Choice(1))
+  Traceback (most recent call last):
+  ...
+  TypeError: 'Choice' object is not iterable
+
+Now use our special field::
+
+  >>> from dolmen.forms.ztk.widgets.object import Object
+  >>> class IFavorite(interface.Interface):
+  ...    fav = Object(title=u"Favorite number", schema=ISimpleChoice)
+
+  >>> context = range(5)
+  >>> IFavorite['fav'].bind(context).validate(Choice(1))
+
+
+zope.schema bug with nested Objects
+-----------------------------------
+
+zope.schema.Object does not support nested object with lists.
+
+  >>> from zope import interface, schema
+  >>> from zope.schema.interfaces import IContextSourceBinder
+  >>> from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+
+See the bug in action::
+
+
+  >>> class IMultipleChoice(interface.Interface):
+  ...     choices = schema.Set(value_type=schema.Choice(source=EnumSource()))
+
+  >>> class Choices(object):
+  ...     interface.implements(IMultipleChoice)
+  ...
+  ...     def __iter__(self):
+  ...         return iter(range(5))  # to have EnumSource work
+  ...
+  ...     def __init__(self, choices):
+  ...         self.choices = choices
+
+  >>> class IFavorites(interface.Interface):
+  ...     fav = schema.Object(
+  ...              title=u"Favorites number", schema=IMultipleChoice)
+
+  >>> context = range(5)
+  >>> IFavorites['fav'].bind(context).validate(Choices(set([1, 3])))
+  Traceback (most recent call last):
+  TypeError: argument of type 'EnumSource' is not iterable
+
+Now use our special field::
+
+  >>> from dolmen.forms.ztk.widgets.object import Object
+  >>> class IFavorites(interface.Interface):
+  ...    fav = Object(title=u"Favorites numbers", schema=IMultipleChoice)
+
+  >>> context = range(5)
+  >>> IFavorites['fav'].bind(context).validate(Choices(set([1, 3])))
