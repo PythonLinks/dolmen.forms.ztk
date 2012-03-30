@@ -133,8 +133,9 @@ And for float::
   >>> extractor = component.getMultiAdapter(
   ...      (floatField, sub, validRequest), interfaces.IWidgetExtractor)
   
-  >>> extractor.extract()
-  (13.2, None)
+  >>> num, errors = extractor.extract()
+  >>> ('%.1f' % num, errors)  # use %.1f to avoid rounding problem
+  ('13.2', None)
 
 
 Event with longs::

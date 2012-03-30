@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.1.2 (2012-03-30)
+------------------
+
+* added Object field to replace zope.schema.Object and overcome some bugs.
+
+
 2.1.1 (2012-02-06)
 ------------------
 
