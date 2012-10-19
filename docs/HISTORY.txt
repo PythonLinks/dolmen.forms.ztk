@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.2 (2012-10-18)
+----------------
+
+* fixed test to pass, after cromlech.io has been dropped
+* added Hidden field extractor for date, time, choice, number and bool
+
 2.1.2 (2012-03-30)
 ------------------
 
