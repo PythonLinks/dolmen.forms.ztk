@@ -13,8 +13,8 @@ Let's grok our example:
 
 We can now lookup our form by the name of its class:
 
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> request = TestHTTPRequest()
+  >>> from cromlech.browser.testing import TestRequest
+  >>> request = TestRequest()
 
   >>> from dolmen.forms.ztk.tests.integration.ztkform_fixture import Person
   >>> context = Person()
@@ -38,7 +38,10 @@ Integration test
 
 Let's try to take a browser and submit that form:
 
+  >>> from cromlech.browser import IPublicationRoot
+  >>> from zope.interface import alsoProvides
   >>> root = getRootFolder()
+  >>> alsoProvides(root, IPublicationRoot)
   >>> context.__parent__ = root
   >>> app = makeApplication(context, 'personform')
 

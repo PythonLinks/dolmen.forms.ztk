@@ -114,9 +114,9 @@ differently dependently of the value type. When the value type is a
 choice, you will get a multi-choice widget by default::
 
   >>> from dolmen.forms.base import Widgets, FormData
-  >>> from cromlech.browser.testing import TestHTTPRequest
+  >>> from cromlech.browser.testing import TestRequest
 
-  >>> request = TestHTTPRequest()
+  >>> request = TestRequest()
   >>> content.choices = set(['42%', '12%'])
 
   >>> form = FormData(content, request)
@@ -174,7 +174,7 @@ marker is used in case the user select nothing, because in that case
 the browser will send nothing and it would sounds like nothing was in
 the request::
 
-  >>> content_request = TestHTTPRequest(form={
+  >>> content_request = TestRequest(form={
   ...     'form.field.choices': [u'vodka', u'tequila'],
   ...     'form.field.choices.present' : u'1'})
   >>> choice_form = FormData(content, content_request)
@@ -198,7 +198,7 @@ And so now you have only Vodka and Tequila of selected by the widget::
 
 However the user can uncheck all available choices::
 
-  >>> empty_request = TestHTTPRequest(form={
+  >>> empty_request = TestRequest(form={
   ...     'form.field.choices.present' : u'1'})
   >>> empty_form = FormData(content, empty_request)
 
@@ -262,7 +262,7 @@ Multi select widget
 
 You can use a multi select widget as well:
 
-  >>> request = TestHTTPRequest()
+  >>> request = TestRequest()
   >>> content.choices = set(['42%', '12%'])
 
   >>> select_form = FormData(content, request)

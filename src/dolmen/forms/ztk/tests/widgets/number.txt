@@ -13,8 +13,8 @@ We need first an int and a float::
 
 And a test content and request::
 
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> request = TestHTTPRequest()
+  >>> from cromlech.browser.testing import TestRequest
+  >>> request = TestRequest()
 
   >>> class Dog(object):
   ...    interface.implements(IAnimal)
@@ -114,7 +114,7 @@ And for float::
 
 And if there is a correct value in the request it works:
   
-  >>> validRequest = TestHTTPRequest(
+  >>> validRequest = TestRequest(
   ...         form={intWidget.identifier: u'3',
   ...               floatWidget.identifier : u'13.2'})
 
@@ -140,7 +140,7 @@ And for float::
 
 Event with longs::
   
-  >>> longRequest = TestHTTPRequest(
+  >>> longRequest = TestRequest(
   ...         form={intWidget.identifier: u'10000000000000000000'})
   >>> extractor = component.getMultiAdapter(
   ...      (intField, sub, longRequest), interfaces.IWidgetExtractor)
@@ -151,7 +151,7 @@ Event with longs::
 
 Empty value in the request gives None:
   
-  >>> noneRequest = TestHTTPRequest(
+  >>> noneRequest = TestRequest(
   ...         form={intWidget.identifier: u'',
   ...               floatWidget.identifier : u''})
 
@@ -176,7 +176,7 @@ And for float::
 Strange values triggers errors::
   
   
-  >>> invalidRequest = TestHTTPRequest(
+  >>> invalidRequest = TestRequest(
   ...         form={intWidget.identifier: u'what ?',
   ...               floatWidget.identifier : u"don't know"})
 

@@ -19,8 +19,8 @@ Setup
   ...     pass
   >>> content = Code()
 
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> request = TestHTTPRequest()
+  >>> from cromlech.browser.testing import TestRequest
+  >>> request = TestRequest()
 
 Field
 -----
@@ -72,5 +72,5 @@ And the display mode::
   >>> TextWidget = CodeWidgets['form.field.text']
 
   >>> print TextWidget.render() #doctest: +NORMALIZE_WHITESPACE
-  <pre class="field field-text field-required" name="form.field.text"
-  id="form-field-text"></pre>
+  <pre  name="form.field.text" id="form-field-text" 
+  class="field field-text field-required"></pre>

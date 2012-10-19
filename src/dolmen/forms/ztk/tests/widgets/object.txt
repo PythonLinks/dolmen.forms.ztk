@@ -18,8 +18,8 @@ First we need a test interface and content::
 
 And we will need a content and a request to test::
 
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> request = TestHTTPRequest()
+  >>> from cromlech.browser.testing import TestRequest
+  >>> request = TestRequest()
 
   >>> class Comment(object):
   ...    interface.implements(IComment)
@@ -136,7 +136,7 @@ Widget Extractor
 You can extract from a request values to create an object by getting
 an extractor for the widget::
 
-  >>> commentRequest = TestHTTPRequest(form={
+  >>> commentRequest = TestRequest(form={
   ...     'form.field.comment': u'1',
   ...     'form.field.comment.field.title': u'Super cool',
   ...     'form.field.comment.field.comment': u'Everything is working alright.',

@@ -28,8 +28,8 @@ First we need a choice::
 
 And we will need a content and a request to test:
 
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> request = TestHTTPRequest()
+  >>> from cromlech.browser.testing import TestRequest
+  >>> request = TestRequest()
 
   >>> class FirstContent(object):
   ...    interface.implements(IFirstChoice)
@@ -126,7 +126,7 @@ different than the real value::
 
 Let's now do it with a value::
 
-  >>> firstRequest = TestHTTPRequest(
+  >>> firstRequest = TestRequest(
   ...         form={firstWidget.identifier: u'a1', })
 
   >>> firstExtractor = component.getMultiAdapter(
