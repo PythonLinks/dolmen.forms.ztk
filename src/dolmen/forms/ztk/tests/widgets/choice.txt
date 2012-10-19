@@ -181,6 +181,22 @@ And a value which is not in the vocabulary:
   >>> broken_extractor.extract()
   (None, u'Invalid value')
 
+hidden mode
+-------------
+
+The extractor also work in HIDDEN mode::
+
+  >>> simple_request = TestRequest(
+  ...    form={simple_widget.identifier: u'a1', })
+
+  >>> simple_extractor = component.getMultiAdapter(
+  ...    (simple_field, simple_form, simple_request),
+  ...    interfaces.IWidgetExtractor,
+  ...    'hidden')
+
+  >>> simple_extractor.extract()
+  ('A', None)
+
 
 Context binded source
 =====================

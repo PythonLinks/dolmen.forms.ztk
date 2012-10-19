@@ -197,3 +197,30 @@ And for float::
   
   >>> extractor.extract()
   (None, u'Invalid value.')
+
+Hidden mode
+------------
+
+Extractor works in HIDDEN mode::
+  
+  >>> validRequest = TestRequest(
+  ...         form={intWidget.identifier: u'3',
+  ...               floatWidget.identifier : u'13.2'})
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (intField, sub, validRequest), 
+  ...      interfaces.IWidgetExtractor, 
+  ...      'hidden')
+  
+  >>> extractor.extract()
+  (3, None)
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (floatField, sub, validRequest),
+  ...      interfaces.IWidgetExtractor,
+  ...      'hidden')
+  
+  >>> num, errors = extractor.extract()
+  >>> ('%.1f' % num, errors)  # use %.1f to avoid rounding problem
+  ('13.2', None)
+
