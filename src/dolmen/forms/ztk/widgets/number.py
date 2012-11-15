@@ -35,6 +35,14 @@ class IntWidgetExtractor(SchemaWidgetExtractor):
     empty_is_None = True
 
 
+class HiddenIntWidgetExtractor(IntWidgetExtractor):
+    grok.name('hidden')
+
+
 class FloatWidgetExtractor(SchemaWidgetExtractor):
     grok.adapts(FloatSchemaField, Interface, Interface)
     empty_is_None = True
+
+
+class HiddenFloatWidgetExtractor(FloatWidgetExtractor):
+    grok.name('hidden')

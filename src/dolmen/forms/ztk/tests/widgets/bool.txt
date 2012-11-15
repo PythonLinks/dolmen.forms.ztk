@@ -94,3 +94,22 @@ checked:
   >>> extractor.extract()
   (True, None)
 
+hidden mode
+-------------
+
+The extractor also work in HIDDEN mode::
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (booleanField, sub, request), interfaces.IWidgetExtractor, 'hidden')
+  >>> extractor
+  <dolmen.forms.ztk.widgets.bool.HiddenCheckBoxWidgetExtractor object at ...>
+  >>> extractor.extract()
+  (False, None)
+
+  >>> extractor = component.getMultiAdapter(
+  ...      (booleanField, sub, trueRequest), 
+  ...      interfaces.IWidgetExtractor, 'hidden')
+
+  >>> extractor.extract()
+  (True, None)
+

@@ -132,3 +132,21 @@ Now if you give an invalid date you will have an error::
   True
   >>> invalidDayExtractor.extract()
   (None, "The datetime string did not match the pattern u'yy/MM/dd'.")
+
+hidden mode
+-------------
+
+The extractor also work in HIDDEN mode::
+
+  >>> dateRequest = TestRequest(form={
+  ...     'form.field.date': u'82/06/10'})
+  >>> niceDayData = FormData(day, dateRequest)
+
+  >>> niceDayExtractor = getMultiAdapter(
+  ...      (dateField, niceDayData, dateRequest),
+  ...      interfaces.IWidgetExtractor,
+  ...      'hidden')
+
+  >>> niceDayExtractor.extract()
+  (datetime.date(1982, 6, 10), None)
+

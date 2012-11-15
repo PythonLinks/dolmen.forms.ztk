@@ -54,6 +54,10 @@ class TimeWidgetExtractor(WidgetExtractor):
         return value, error
 
 
+class HiddenTimeWidgetExtractor(TimeWidgetExtractor):
+    grok.name('hidden')
+
+
 class TimeFieldDisplayWidget(DisplayFieldWidget):
     grok.adapts(TimeSchemaField, Interface, Interface)
 

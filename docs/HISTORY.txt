@@ -1,6 +1,18 @@
 Changelog
 =========
 
+2.2 (2012-10-18)
+----------------
+
+* fixed test to pass, after cromlech.io has been dropped
+* added Hidden field extractor for date, time, choice, number and bool
+
+2.1.2 (2012-03-30)
+------------------
+
+* added Object field to replace zope.schema.Object and overcome some bugs.
+
+
 2.1.1 (2012-02-06)
 ------------------
 

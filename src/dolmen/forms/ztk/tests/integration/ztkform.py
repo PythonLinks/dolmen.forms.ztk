@@ -38,7 +38,10 @@ Integration test
 
 Let's try to take a browser and submit that form:
 
+  >>> from cromlech.browser import IPublicationRoot
+  >>> from zope.interface import alsoProvides
   >>> root = getRootFolder()
+  >>> alsoProvides(root, IPublicationRoot)
   >>> context.__parent__ = root
   >>> app = makeApplication(context, 'personform')
 

@@ -112,6 +112,10 @@ class ChoiceWidgetExtractor(WidgetExtractor):
         return (value, error)
 
 
+class HiddenChoiceWidgetExtractor(ChoiceWidgetExtractor):
+    grok.name('hidden')
+
+
 # Radio Widget
 
 class RadioFieldWidget(ChoiceFieldWidget):

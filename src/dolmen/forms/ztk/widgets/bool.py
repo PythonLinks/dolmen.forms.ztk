@@ -44,6 +44,10 @@ class CheckBoxWidgetExtractor(WidgetExtractor):
         return (value, error)
 
 
+class HiddenCheckBoxWidgetExtractor(CheckBoxWidgetExtractor):
+    grok.name('hidden')
+
+
 def register():
     """Entry point hook.
     """

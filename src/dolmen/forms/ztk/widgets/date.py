@@ -59,6 +59,10 @@ class DateWidgetExtractor(WidgetExtractor):
         return value, error
 
 
+class HiddenDateWidgetExtractor(DateWidgetExtractor):
+    grok.name('hidden')
+
+
 class DatetimeFieldWidget(DateFieldWidget):
     grok.adapts(DatetimeSchemaField, Interface, Interface)
 
@@ -69,6 +73,10 @@ class DatetimeWidgetExtractor(DateWidgetExtractor):
     grok.adapts(DatetimeSchemaField, Interface, Interface)
 
     valueType = 'dateTime'
+
+
+class HiddenDatetimeWidgetExtractor(DatetimeWidgetExtractor):
+    grok.name('hidden')
 
 
 class DateFieldDisplayWidget(DisplayFieldWidget):

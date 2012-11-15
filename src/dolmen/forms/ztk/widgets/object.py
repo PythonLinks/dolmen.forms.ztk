@@ -14,12 +14,38 @@ from zope.component import getUtility
 from zope.component.interfaces import IFactory
 from zope.interface import Interface, implements
 from zope.schema import interfaces as schema_interfaces
+from zope import schema
 
 from grokcore import component as grok
 
 
 def register():
     registerSchemaField(ObjectSchemaField, schema_interfaces.IObject)
+
+
+class BindedSchema(object):
+
+    def __init__(self, schema, context):
+        self.schema = schema
+        self.context = context
+
+    # we redefine getitem
+    def __getitem__(self, name):
+        attr = self.schema[name]
+        return attr.bind(self.context)
+
+    # but let all the rest slip to schema
+    def __getattr__(self, name):
+        return getattr(self.schema, name)
+        
+
+class Object(schema.Object):
+    """inherit schema.Object but binds correctly"""
+
+    def bind(self, context=None):
+        binded = super(Object, self).bind(context)
+        binded.schema = BindedSchema(self.schema, context)
+        return binded
 
 
 class ObjectSchemaField(SchemaField):
