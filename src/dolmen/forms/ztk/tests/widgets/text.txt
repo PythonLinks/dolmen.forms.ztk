@@ -72,10 +72,5 @@ And the display mode::
   >>> TextWidget = CodeWidgets['form.field.text']
 
   >>> print TextWidget.render() #doctest: +NORMALIZE_WHITESPACE
-<<<<<<< HEAD
   <pre name="form.field.text" id="form-field-text" class="field field-text
   field-required"></pre>
-=======
-  <pre  name="form.field.text" id="form-field-text" 
-  class="field field-text field-required"></pre>
->>>>>>> b783c53668bcfd496575c6487cbdba3dbbe7b753
