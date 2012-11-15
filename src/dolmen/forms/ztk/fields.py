@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from cromlech.io.interfaces import IRequest
+from cromlech.browser.interfaces import IRequest
 from grokcore import component as grok
 
 from dolmen.forms.base import interfaces, _

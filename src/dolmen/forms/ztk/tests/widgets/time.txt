@@ -14,8 +14,8 @@ Let's create some interface using times::
 
 And some content for them::
 
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> request = TestHTTPRequest()
+  >>> from cromlech.browser.testing import TestRequest
+  >>> request = TestRequest()
 
   >>> class TimeInfo(object):
   ...    interface.implements(ITimeInfo)
@@ -75,7 +75,7 @@ Widget extractor
 You can extract a value from the request. It is a bit more difficult
 here because the parsing is a bit more advanced::
 
-  >>> timeRequest = TestHTTPRequest(form={
+  >>> timeRequest = TestRequest(form={
   ...     'form.field.time': u'12:21'})
   >>> niceTimeData = FormData(timeinfo, timeRequest)
 
@@ -90,7 +90,7 @@ here because the parsing is a bit more advanced::
 
 Empty text is interpreted as None::
 
-  >>> timeRequest = TestHTTPRequest(form={
+  >>> timeRequest = TestRequest(form={
   ...     'form.field.time': u''})
   >>> niceTimeData = FormData(timeinfo, timeRequest)
   >>> niceTimeExtractor = getMultiAdapter(
@@ -101,7 +101,7 @@ Empty text is interpreted as None::
 
 Now if you give an invalid date you will have an error::
 
-  >>> invalidTimeRequest = TestHTTPRequest(form={
+  >>> invalidTimeRequest = TestRequest(form={
   ...     'form.field.time': u'the best time ever'})
   >>> invalidTimeData = FormData(timeinfo, invalidTimeRequest)
 

@@ -17,8 +17,8 @@ Let's create some interface using dates::
 
 And some content for them::
 
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> request = TestHTTPRequest()
+  >>> from cromlech.browser.testing import TestRequest
+  >>> request = TestRequest()
 
   >>> class DayInfo(object):
   ...    interface.implements(IDayInfo)
@@ -93,7 +93,7 @@ Widget extractor
 You can extract a value from the request. It is a bit more difficult
 here because the parsing is a bit more advanced::
 
-  >>> dateRequest = TestHTTPRequest(form={
+  >>> dateRequest = TestRequest(form={
   ...     'form.field.date': u'82/06/10'})
   >>> niceDayData = FormData(day, dateRequest)
 
@@ -108,7 +108,7 @@ here because the parsing is a bit more advanced::
 
 If date is empty it means None::
 
-  >>> dateRequest = TestHTTPRequest(form={
+  >>> dateRequest = TestRequest(form={
   ...     'form.field.date': u''})
   >>> niceDayData = FormData(day, dateRequest)
   >>> niceDayExtractor = getMultiAdapter(
@@ -120,7 +120,7 @@ If date is empty it means None::
   
 Now if you give an invalid date you will have an error::
 
-  >>> invalidDateRequest = TestHTTPRequest(form={
+  >>> invalidDateRequest = TestRequest(form={
   ...     'form.field.date': u'the best day ever'})
   >>> invalidDayData = FormData(day, invalidDateRequest)
 

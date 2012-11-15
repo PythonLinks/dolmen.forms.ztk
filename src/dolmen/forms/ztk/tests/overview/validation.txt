@@ -37,8 +37,8 @@ Instanciation
 -------------
 
   >>> from dolmen.forms.base import Fields, FormData
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> form = FormData(object(), TestHTTPRequest())
+  >>> from cromlech.browser.testing import TestRequest
+  >>> form = FormData(object(), TestRequest())
   >>> fields = Fields(IPasswords)
 
   >>> from dolmen.forms.ztk import InvariantsValidation
@@ -99,7 +99,7 @@ Definition
 Instanciation
 -------------
 
-  >>> form = FormData(object(), TestHTTPRequest())
+  >>> form = FormData(object(), TestRequest())
   >>> fields = Fields(IAgeAndLegals)
   >>> validator = InvariantsValidation(fields, form)
 
@@ -165,8 +165,8 @@ just the age::
   ...     def __init__(self, country, age):
   ...         self.country, self.age = country, age
 
-  >>> edit_french = FormData(Person(u'France', None), TestHTTPRequest())
-  >>> edit_korean = FormData(Person(u'Korea', None), TestHTTPRequest())
+  >>> edit_french = FormData(Person(u'France', None), TestRequest())
+  >>> edit_korean = FormData(Person(u'Korea', None), TestRequest())
   >>> fields = Fields(IAdult).omit('country')
 
 
@@ -202,12 +202,12 @@ Integration environment
   >>> class SomeContent(Context):
   ...     pass
 
-  >>> from cromlech.browser.testing import TestHTTPResponse
+  >>> from cromlech.browser.testing import TestResponse
 
   >>> class MyLegalPage(Form):
   ...     context(SomeContent)
   ...
-  ...     responseFactory = TestHTTPResponse
+  ...     responseFactory = TestResponse
   ...     fields = Fields(IAgeAndLegals)
   ...     dataValidators = [InvariantsValidation]
   ...     ignoreRequest = False
@@ -222,7 +222,7 @@ Erroneous submissions
 Let's try an empty request. There is two invariants, so that generate
 two errors for the form itself:
 
-  >>> request = TestHTTPRequest(form={'age': 10})
+  >>> request = TestRequest(form={'age': 10})
   >>> form = MyLegalPage(content, request)
   >>> form.update()
 

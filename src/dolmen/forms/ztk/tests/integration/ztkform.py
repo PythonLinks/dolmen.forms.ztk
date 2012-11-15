@@ -13,8 +13,8 @@ Let's grok our example:
 
 We can now lookup our form by the name of its class:
 
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> request = TestHTTPRequest()
+  >>> from cromlech.browser.testing import TestRequest
+  >>> request = TestRequest()
 
   >>> from dolmen.forms.ztk.tests.integration.ztkform_fixture import Person
   >>> context = Person()

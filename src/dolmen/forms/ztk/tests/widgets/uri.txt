@@ -19,8 +19,8 @@ Setup
   ...     pass
   >>> content = Link()
 
-  >>> from cromlech.browser.testing import TestHTTPRequest
-  >>> request = TestHTTPRequest()
+  >>> from cromlech.browser.testing import TestRequest
+  >>> request = TestRequest()
 
 Field
 -----

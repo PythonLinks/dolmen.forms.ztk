@@ -3,12 +3,12 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.1.1'
+version = '2.2'
 readme = open("README.txt").read()
 history = open(os.path.join("docs", "HISTORY.txt")).read()
 
 install_requires=[
-    'cromlech.io >= 0.2a1',
+    'cromlech.browser >= 0.4',
     'dolmen.forms.base >= 2.2',
     'dolmen.location',
     'dolmen.template',
@@ -22,7 +22,7 @@ install_requires=[
 
 tests_require = [
     'WebOb',
-    'cromlech.browser [test] >= 0.4',
+    'cromlech.browser [test]',
     'cromlech.webob',
     'infrae.testbrowser',
     'zope.configuration',
