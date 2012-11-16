@@ -37,10 +37,15 @@ class CheckBoxWidgetExtractor(WidgetExtractor):
 
     def extract(self):
         value, error = WidgetExtractor.extract(self)
-        if value is NO_VALUE:
-            value = False
-        elif value == 'True':
+        is_present = self.request.form.get(
+            self.identifier + '.present', NO_VALUE)
+
+        if is_present is NO_VALUE:
+            value = NO_VALUE
+        elif is_present is not NO_VALUE and value == u'True':
             value = True
+        else:
+            value = False
         return (value, error)
 
 
