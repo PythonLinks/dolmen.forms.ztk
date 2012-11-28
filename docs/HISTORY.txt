@@ -1,6 +1,14 @@
 Changelog
 =========
 
+2.2.2 (2012-11-28)
+------------------
+
+* Fixed the object / multi object / list object templates.
+  It will now correctly display the errors, thanks to the changes in
+  ``dolmen.forms.base``.
+
+
 2.2.1 (2012-11-16)
 ------------------
 

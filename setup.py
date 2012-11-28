@@ -3,13 +3,13 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.2.1'
+version = '2.2.2'
 readme = open("README.txt").read()
 history = open(os.path.join("docs", "HISTORY.txt")).read()
 
 install_requires=[
     'cromlech.browser >= 0.4',
-    'dolmen.forms.base >= 2.2',
+    'dolmen.forms.base >= 2.2.4',
     'dolmen.location',
     'dolmen.template',
     'grokcore.component',
