@@ -37,7 +37,7 @@ class BindedSchema(object):
     # but let all the rest slip to schema
     def __getattr__(self, name):
         return getattr(self.schema, name)
-        
+
 
 class Object(schema.Object):
     """inherit schema.Object but binds correctly"""
@@ -53,14 +53,16 @@ class ObjectSchemaField(SchemaField):
     """
     implements(IObjectSchemaField)
     objectFactory = None
+    dataManager = ObjectDataManager
 
     def __init__(self, field):
         super(ObjectSchemaField, self).__init__(field)
-        self.__object_fields = Fields(field.schema)
+        self.schema = field.schema
+        self.__object_fields = Fields(self.schema)
 
     @property
     def objectSchema(self):
-        return self._field.schema
+        return self.schema
 
     @property
     def objectFields(self):
@@ -85,12 +87,10 @@ class ObjectFieldWidget(SchemaFieldWidget):
 
     def update(self):
         super(ObjectFieldWidget, self).update()
-        value = self.inputValue()
-        fields = self.component.objectFields
-        form = cloneFormData(
-            self.form, ObjectDataManager(value), self.identifier)
+        value = self.component.dataManager(self.inputValue())
+        form = cloneFormData(self.form, value, self.identifier)
         self.objectWidgets = Widgets(form=form, request=self.request)
-        self.objectWidgets.extend(fields)
+        self.objectWidgets.extend(self.component.objectFields)
         self.objectWidgets.update()
 
 
