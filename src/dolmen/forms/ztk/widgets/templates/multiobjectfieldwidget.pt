@@ -1,5 +1,5 @@
 <div class="field-table field-collection"
-     i18n:domain="zeam.form.base">
+     i18n:domain="dolmen.forms.base">
   <p class="field-collection-empty"
      tal:condition="widget.includeEmptyMessage"
      tal:attributes="style python:widget.haveValues and 'display:none' or None">
@@ -32,6 +32,14 @@
                    tal:attributes="name valueWidget.identifier" />
           </td>
           <td tal:repeat="objectWidget valueWidget.objectWidgets">
+            <tal:error tal:define="error objectWidget.error"
+                       tal:condition="error">
+              <span class="field-error"
+                    tal:content="error.title">
+                Error
+              </span>
+              <br />
+            </tal:error>
             <tal:widget tal:replace="structure objectWidget.render()" />
           </td>
         </tr>
@@ -42,7 +50,7 @@
          tal:condition="widget.jsonAddIdentifier"
          tal:define="valueWidget widget.jsonAddTemplate"
          tal:attributes="rel widget.jsonAddIdentifier">
-    <metal:line metal:use-macro="template.macros['line']" />
+    <metal:line metal:use-macro="template.macros.line" />
   </table>
 
   <input type="hidden" class="field-collection-counter" name="#" value="#"
