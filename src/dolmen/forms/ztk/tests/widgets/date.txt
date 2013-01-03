@@ -136,7 +136,7 @@ Now if you give an invalid date you will have an error::
 hidden mode
 -------------
 
-The extractor also work in HIDDEN mode::
+The extractor also work in HIDDEN mode::
 
   >>> dateRequest = TestRequest(form={
   ...     'form.field.date': u'82/06/10'})

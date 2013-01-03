@@ -184,7 +184,7 @@ And a value which is not in the vocabulary:
 hidden mode
 -------------
 
-The extractor also work in HIDDEN mode::
+The extractor also work in HIDDEN mode::
 
   >>> simple_request = TestRequest(
   ...    form={simple_widget.identifier: u'a1', })

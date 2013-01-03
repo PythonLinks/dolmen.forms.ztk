@@ -201,7 +201,7 @@ And for float::
 Hidden mode
 ------------
 
-Extractor works in HIDDEN mode::
+Extractor works in HIDDEN mode::
   
   >>> validRequest = TestRequest(
   ...         form={intWidget.identifier: u'3',

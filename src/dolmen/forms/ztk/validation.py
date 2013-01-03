@@ -35,7 +35,7 @@ class Data(object):
             try:
                 return self.dataManager.get(name)
             except KeyError:
-                # an attribute error is more sane here
+                # an attribute error is more sane here
                 raise AttributeError(name)
 
         return value

@@ -117,7 +117,7 @@ Now if you give an invalid time you will have an error::
 hidden mode
 -------------
 
-The extractor also work in HIDDEN mode::
+The extractor also work in HIDDEN mode::
 
   >>> timeRequest = TestRequest(form={
   ...     'form.field.time': u'12:21'})
