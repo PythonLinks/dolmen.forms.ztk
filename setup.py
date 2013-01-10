@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.2.2'
+version = '2.3'
 readme = open("README.txt").read()
 history = open(os.path.join("docs", "HISTORY.txt")).read()
 
@@ -18,6 +18,8 @@ install_requires=[
     'zope.i18n',
     'zope.interface',
     'zope.schema',
+    'fanstatic',
+    'zeam.jsontemplate',
     ],
 
 tests_require = [
@@ -66,5 +68,8 @@ setup(name='dolmen.forms.ztk',
       textline = dolmen.forms.ztk.widgets.textline:register
       uri = dolmen.forms.ztk.widgets.uri:register
       time = dolmen.forms.ztk.widgets.time:register
+
+      [fanstatic.libraries]
+      dolmen_forms_ztk = dolmen.forms.ztk.resources:DolmenFormsZTKLibrary
       """,
       )

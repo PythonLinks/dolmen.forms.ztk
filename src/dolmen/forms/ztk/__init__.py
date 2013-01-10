@@ -1,3 +1,4 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms.ztk.validation import InvariantsValidation
+from .validation import InvariantsValidation
+from .resources import collection_js
