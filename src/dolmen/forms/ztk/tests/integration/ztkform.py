@@ -6,10 +6,11 @@ We put our example in a separate file, since the configure.zcml of
 dolmen.forms needs to be loaded in order to be able to create the fields,
 which is no the case when the tests are collected.
 
-Let's grok our example:
+Let's configure our example:
 
-  >>> from dolmen.forms.ztk.testing import grok
-  >>> grok('dolmen.forms.ztk.tests.integration.ztkform_fixture')
+  >>> import crom
+  >>> from dolmen.forms.ztk.tests.integration import ztkform_fixture
+  >>> crom.configure(ztkform_fixture)
 
 We can now lookup our form by the name of its class:
 
@@ -20,9 +21,8 @@ We can now lookup our form by the name of its class:
   >>> context = Person()
   >>> context.__name__ = 'person'
 
-  >>> from zope import component
-  >>> form = component.getMultiAdapter(
-  ...     (context, request), name='personform')
+  >>> from cromlech.browser import IForm
+  >>> form = IForm(context, request, name='personform')
   >>> form
   <dolmen.forms.ztk.tests.integration.ztkform_fixture.PersonForm object at ...>
 
@@ -36,11 +36,14 @@ We can now lookup our form by the name of its class:
 Integration test
 ----------------
 
+  >>> class Root(dict):
+  ...     pass
+
 Let's try to take a browser and submit that form:
 
   >>> from cromlech.browser import IPublicationRoot
   >>> from zope.interface import alsoProvides
-  >>> root = getRootFolder()
+  >>> root = Root()
   >>> alsoProvides(root, IPublicationRoot)
   >>> context.__parent__ = root
   >>> app = makeApplication(context, 'personform')

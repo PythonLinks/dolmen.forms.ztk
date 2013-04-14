@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from grokcore import component as grok
+import crom
+
+from dolmen.forms.base.interfaces import IWidget
 from dolmen.forms.ztk.widgets import getTemplate
 from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
 from dolmen.forms.ztk.fields import registerSchemaField
@@ -17,12 +19,16 @@ class TextSchemaField(SchemaField):
     """
 
 
+@crom.adapter
+@crom.target(IWidget)
+@crom.sources(TextSchemaField, Interface, Interface)
 class TextFieldWidget(SchemaFieldWidget):
-    grok.adapts(TextSchemaField, Interface, Interface)
     template = getTemplate('textfieldwidget.pt')
 
 
+@crom.adapter
+@crom.name('display')
+@crom.target(IWidget)
+@crom.sources(TextSchemaField, Interface, Interface)
 class TextDisplayWidget(SchemaFieldWidget):
-    grok.adapts(TextSchemaField, Interface, Interface)
-    grok.name('display')
     template = getTemplate('textdisplaywidget.pt')

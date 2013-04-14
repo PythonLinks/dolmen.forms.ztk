@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from grokcore import component as grok
+import crom
+from dolmen.forms.base.interfaces import IWidget
 from dolmen.forms.ztk.widgets import getTemplate
 from dolmen.forms.ztk.fields import registerSchemaField
 from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
 from zope.schema import interfaces as schema_interfaces
+from zope.interface import Interface
 
 
 def register():
@@ -16,6 +18,8 @@ class PasswordField(SchemaField):
     """
 
 
+@crom.adapter
+@crom.target(IWidget)
+@crom.sources(PasswordField, Interface, Interface)
 class PasswordWidget(SchemaFieldWidget):
-    grok.adapts(PasswordField, None, None)
     template = getTemplate('passwordwidget.pt')

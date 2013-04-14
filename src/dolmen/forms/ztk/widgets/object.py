@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms.base import cloneFormData, Fields, Widgets
+import crom
+
+from dolmen.forms.base import interfaces, cloneFormData, Fields, Widgets
 from dolmen.forms.base.datamanagers import ObjectDataManager
 from dolmen.forms.base.markers import NO_VALUE, Marker
 from dolmen.forms.base.widgets import WidgetExtractor
@@ -10,13 +12,9 @@ from dolmen.forms.ztk.interfaces import IObjectSchemaField
 from dolmen.forms.ztk.fields import (
     SchemaField, registerSchemaField, SchemaFieldWidget)
 
-from zope.component import getUtility
-from zope.component.interfaces import IFactory
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import interfaces as schema_interfaces
 from zope import schema
-
-from grokcore import component as grok
 
 
 def register():
@@ -48,10 +46,10 @@ class Object(schema.Object):
         return binded
 
 
+@implementer(IObjectSchemaField)
 class ObjectSchemaField(SchemaField):
     """A collection field.
     """
-    implements(IObjectSchemaField)
     objectFactory = None
     dataManager = ObjectDataManager
 
@@ -72,11 +70,14 @@ class ObjectSchemaField(SchemaField):
         if self.objectFactory is not None:
             return self.objectFactory
         schema = self.objectSchema
-        return getUtility(IFactory, name=schema.__identifier__)
+        raise NotImplementedError('FIXME')
+        #return getUtility(IFactory, name=schema.__identifier__)
 
 
+@crom.adapter
+@crom.target(interfaces.IWidget)
+@crom.sources(ObjectSchemaField, Interface, Interface)
 class ObjectFieldWidget(SchemaFieldWidget):
-    grok.adapts(ObjectSchemaField, Interface, Interface)
 
     template = getTemplate('objectfieldwidget.pt')
 
@@ -94,8 +95,10 @@ class ObjectFieldWidget(SchemaFieldWidget):
         self.objectWidgets.update()
 
 
+@crom.adapter
+@crom.target(interfaces.IWidgetExtractor)
+@crom.sources(ObjectSchemaField, Interface, Interface)
 class ObjectFieldExtractor(WidgetExtractor):
-    grok.adapts(ObjectSchemaField, Interface, Interface)
 
     def extract(self):
         is_present = self.request.form.get(self.identifier, NO_VALUE)

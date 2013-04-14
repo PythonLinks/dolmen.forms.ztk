@@ -5,7 +5,6 @@ dolmen.forms.ztk object widget
 First we need a test interface and content::
 
   >>> from zope import interface, schema
-  >>> from zope.component import getMultiAdapter
   >>> from zope.interface.verify import verifyObject
 
   >>> class IComment(interface.Interface):
@@ -143,9 +142,8 @@ an extractor for the widget::
   ...     'form.field.comment.field.email': u''})
   >>> commentData = FormData(content, commentRequest)
 
-  >>> commentExtractor = getMultiAdapter(
-  ...      (postField, commentData, commentRequest),
-  ...      interfaces.IWidgetExtractor)
+  >>> commentExtractor = interfaces.IWidgetExtractor(
+  ...      postField, commentData, commentRequest)
 
   >>> commentExtractor
   <dolmen.forms.ztk.widgets.object.ObjectFieldExtractor object at ...>
@@ -170,9 +168,8 @@ If nothing is in the request, you have no value::
 
   >>> commentData = FormData(content, request)
 
-  >>> commentExtractor = getMultiAdapter(
-  ...      (postField, commentData, request),
-  ...      interfaces.IWidgetExtractor)
+  >>> commentExtractor = interfaces.IWidgetExtractor(
+  ...      postField, commentData, request)
 
   >>> commentExtractor.extract()
   (<Marker NO_VALUE>, None)

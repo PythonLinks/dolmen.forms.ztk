@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import grokcore.component as grok
-
+import crom
+from dolmen.forms.base.interfaces import IWidget, IWidgetExtractor
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import DisplayFieldWidget
 from dolmen.forms.base.widgets import WidgetExtractor
@@ -23,8 +23,10 @@ class TimeSchemaField(SchemaField):
     """
 
 
+@crom.adapter
+@crom.target(IWidget)
+@crom.sources(TimeSchemaField, Interface, Interface)
 class TimeFieldWidget(SchemaFieldWidget):
-    grok.adapts(TimeSchemaField, Interface, Interface)
 
     valueType = 'time'
 
@@ -34,8 +36,10 @@ class TimeFieldWidget(SchemaFieldWidget):
         return formatter.format(value)
 
 
+@crom.adapter
+@crom.target(IWidgetExtractor)
+@crom.sources(TimeSchemaField, Interface, Interface)
 class TimeWidgetExtractor(WidgetExtractor):
-    grok.adapts(TimeSchemaField, Interface, Interface)
 
     valueType = 'time'
 
@@ -54,12 +58,19 @@ class TimeWidgetExtractor(WidgetExtractor):
         return value, error
 
 
+@crom.adapter
+@crom.name('hidden')
+@crom.target(IWidgetExtractor)
+@crom.sources(TimeSchemaField, Interface, Interface)
 class HiddenTimeWidgetExtractor(TimeWidgetExtractor):
-    grok.name('hidden')
+    pass
 
 
+@crom.adapter
+@crom.name('display')
+@crom.target(IWidget)
+@crom.sources(TimeSchemaField, Interface, Interface)
 class TimeFieldDisplayWidget(DisplayFieldWidget):
-    grok.adapts(TimeSchemaField, Interface, Interface)
 
     valueType = 'time'
 

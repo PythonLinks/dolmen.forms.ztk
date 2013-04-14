@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
+import crom
 from cromlech.webob.response import Response
 from dolmen.forms.base import Form, Fields, action
-from grokcore import component as grok
-from zope import interface, schema
+from dolmen.forms.base import form_component, context
+from zope import schema
+from zope.interface import Interface, implementer
 
 
-class IPerson(interface.Interface):
+class IPerson(Interface):
 
     name = schema.TextLine(
         title=u"Person name")
@@ -16,10 +18,14 @@ class IPerson(interface.Interface):
         description=u"Age in years")
 
 
-class Person(grok.Context):
-    grok.implements(IPerson)
+@implementer(IPerson)
+class Person(object):
+    name = ''
+    age = 0
 
 
+@form_component
+@context(IPerson)
 class PersonForm(Form):
 
     responseFactory = Response

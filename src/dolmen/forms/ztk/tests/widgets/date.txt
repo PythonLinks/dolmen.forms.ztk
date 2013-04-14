@@ -97,9 +97,8 @@ here because the parsing is a bit more advanced::
   ...     'form.field.date': u'82/06/10'})
   >>> niceDayData = FormData(day, dateRequest)
 
-  >>> niceDayExtractor = getMultiAdapter(
-  ...      (dateField, niceDayData, dateRequest),
-  ...      interfaces.IWidgetExtractor)
+  >>> niceDayExtractor = interfaces.IWidgetExtractor(
+  ...      dateField, niceDayData, dateRequest)
 
   >>> verifyObject(interfaces.IWidgetExtractor, niceDayExtractor)
   True
@@ -111,9 +110,9 @@ If date is empty it means None::
   >>> dateRequest = TestRequest(form={
   ...     'form.field.date': u''})
   >>> niceDayData = FormData(day, dateRequest)
-  >>> niceDayExtractor = getMultiAdapter(
-  ...      (dateField, niceDayData, dateRequest),
-  ...      interfaces.IWidgetExtractor)
+
+  >>> niceDayExtractor = interfaces.IWidgetExtractor(
+  ...      dateField, niceDayData, dateRequest)
   >>> niceDayExtractor.extract()
   (None, None)
   
@@ -124,9 +123,8 @@ Now if you give an invalid date you will have an error::
   ...     'form.field.date': u'the best day ever'})
   >>> invalidDayData = FormData(day, invalidDateRequest)
 
-  >>> invalidDayExtractor = getMultiAdapter(
-  ...      (dateField, invalidDayData, invalidDateRequest),
-  ...      interfaces.IWidgetExtractor)
+  >>> invalidDayExtractor = interfaces.IWidgetExtractor(
+  ...      dateField, invalidDayData, invalidDateRequest)
 
   >>> verifyObject(interfaces.IWidgetExtractor, invalidDayExtractor)
   True
@@ -142,10 +140,8 @@ The extractor also work in HIDDEN mode::
   ...     'form.field.date': u'82/06/10'})
   >>> niceDayData = FormData(day, dateRequest)
 
-  >>> niceDayExtractor = getMultiAdapter(
-  ...      (dateField, niceDayData, dateRequest),
-  ...      interfaces.IWidgetExtractor,
-  ...      'hidden')
+  >>> niceDayExtractor = interfaces.IWidgetExtractor(
+  ...      dateField, niceDayData, dateRequest, name='hidden')
 
   >>> niceDayExtractor.extract()
   (datetime.date(1982, 6, 10), None)

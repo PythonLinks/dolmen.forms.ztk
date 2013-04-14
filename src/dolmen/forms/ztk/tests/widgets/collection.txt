@@ -5,7 +5,6 @@ dolmen.forms.ztk collection widgets
 First we need some test interfaces that uses collections::
 
   >>> from zope import schema, interface
-  >>> from zope.component import getMultiAdapter
   >>> from zope.interface.verify import verifyObject
 
   >>> class IListOfTextlines(interface.Interface):
@@ -333,9 +332,8 @@ corresponding widget extractor::
 
   >>> list_form = FormData(content, list_request)
 
-  >>> list_extractor = getMultiAdapter(
-  ...      (field, list_form, list_request),
-  ...      interfaces.IWidgetExtractor)
+  >>> list_extractor = interfaces.IWidgetExtractor(
+  ...      field, list_form, list_request)
 
   >>> list_extractor
   <dolmen.forms.ztk.widgets.collection.MultiGenericWidgetExtractor object at ...>
@@ -353,9 +351,8 @@ It will work as well if you have no values in your request::
   ...     'form.field.names': u'0'})
   >>> noPeopleInvitation = FormData(content, noPeopleRequest)
 
-  >>> noPeopleExtractor = getMultiAdapter(
-  ...      (field, noPeopleInvitation, noPeopleRequest),
-  ...      interfaces.IWidgetExtractor)
+  >>> noPeopleExtractor = interfaces.IWidgetExtractor(
+  ...      field, noPeopleInvitation, noPeopleRequest)
   >>> noPeopleExtractor.extract()
   ([], None)
 
@@ -363,9 +360,8 @@ If you have a fully empty request::
 
   >>> noPeopleInvitation = FormData(content, request)
 
-  >>> noPeopleExtractor = getMultiAdapter(
-  ...      (field, noPeopleInvitation, request),
-  ...      interfaces.IWidgetExtractor)
+  >>> noPeopleExtractor = interfaces.IWidgetExtractor(
+  ...      field, noPeopleInvitation, request)
   >>> noPeopleExtractor.extract()
   (<Marker NO_VALUE>, None)
 

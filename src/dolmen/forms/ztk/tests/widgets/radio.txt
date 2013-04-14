@@ -116,8 +116,8 @@ different than the real value::
   >>> from zope import component
   >>> from dolmen.forms.base import interfaces
 
-  >>> firstExtractor = component.getMultiAdapter(
-  ...      (firstField, firstForm, request), interfaces.IWidgetExtractor)
+  >>> firstExtractor = interfaces.IWidgetExtractor(
+  ...      firstField, firstForm, request)
 
   >>> firstExtractor
   <dolmen.forms.ztk.widgets.choice.ChoiceWidgetExtractor object at ...>
@@ -129,8 +129,8 @@ Let's now do it with a value::
   >>> firstRequest = TestRequest(
   ...         form={firstWidget.identifier: u'a1', })
 
-  >>> firstExtractor = component.getMultiAdapter(
-  ...      (firstField, firstForm, firstRequest), interfaces.IWidgetExtractor)
+  >>> firstExtractor = interfaces.IWidgetExtractor(
+  ...      firstField, firstForm, firstRequest)
 
   >>> firstExtractor.extract()
   ('A', None)

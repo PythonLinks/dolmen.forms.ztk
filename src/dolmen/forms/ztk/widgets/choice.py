@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import crom
+
+from dolmen.forms.base.interfaces import IWidget, IWidgetExtractor
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import WidgetExtractor
 
@@ -7,11 +10,9 @@ from dolmen.forms.ztk.widgets import getTemplate
 from dolmen.forms.ztk.fields import (
     SchemaField, registerSchemaField, SchemaFieldWidget)
 
-from zope import component
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
 
-from grokcore import component as grok
 
 
 def register():
@@ -37,8 +38,9 @@ class ChoiceSchemaField(SchemaField):
     @property
     def source(self):
         if self.__source is None:
-            self.__source = component.getUtility(
-                schema_interfaces.IVocabularyFactory, name=self.__source_name)
+            raise NotImplementedError('Provide your own source!')
+            #self.__source = component.getUtility(
+            #    schema_interfaces.IVocabularyFactory, name=self.__source_name)
         return self.__source
 
     def getChoices(self, context):
@@ -50,8 +52,10 @@ class ChoiceSchemaField(SchemaField):
         return source
 
 
+@crom.adapter
+@crom.target(IWidget)
+@crom.sources(ChoiceSchemaField, Interface, Interface)
 class ChoiceFieldWidget(SchemaFieldWidget):
-    grok.adapts(ChoiceSchemaField, Interface, Interface)
 
     template = getTemplate('choicefieldwidget.pt')
 
@@ -86,8 +90,11 @@ class ChoiceFieldWidget(SchemaFieldWidget):
         return self.__choices
 
 
+@crom.adapter
+@crom.name('display')
+@crom.target(IWidget)
+@crom.sources(ChoiceSchemaField, Interface, Interface)
 class ChoiceDisplayWidget(ChoiceFieldWidget):
-    grok.name('display')
 
     template = getTemplate('choicedisplaywidget.pt')
 
@@ -98,8 +105,10 @@ class ChoiceDisplayWidget(ChoiceFieldWidget):
         return u''
 
 
+@crom.adapter
+@crom.target(IWidgetExtractor)
+@crom.sources(ChoiceSchemaField, Interface, Interface)
 class ChoiceWidgetExtractor(WidgetExtractor):
-    grok.adapts(ChoiceSchemaField, Interface, Interface)
 
     def extract(self):
         value, error = super(ChoiceWidgetExtractor, self).extract()
@@ -112,15 +121,20 @@ class ChoiceWidgetExtractor(WidgetExtractor):
         return (value, error)
 
 
+@crom.adapter
+@crom.name('hidden')
+@crom.target(IWidgetExtractor)
+@crom.sources(ChoiceSchemaField, Interface, Interface)
 class HiddenChoiceWidgetExtractor(ChoiceWidgetExtractor):
-    grok.name('hidden')
+    pass
 
 
 # Radio Widget
-
+@crom.adapter
+@crom.name('radio')
+@crom.target(IWidget)
+@crom.sources(ChoiceSchemaField, Interface, Interface)
 class RadioFieldWidget(ChoiceFieldWidget):
-    grok.adapts(ChoiceSchemaField, Interface, Interface)
-    grok.name('radio')
 
     template = getTemplate('radiofieldwidget.pt')
 

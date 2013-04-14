@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import grokcore.component as grok
+
 import hashlib
 md5hash = lambda s: hashlib.md5(s).hexdigest()
 
+import crom
+
+from dolmen.forms.base.interfaces import IWidget, IWidgetExtractor
 from dolmen.forms.base import _, Fields, Widgets, cloneFormData
 from dolmen.forms.base.datamanagers import NoneDataManager
 from dolmen.forms.base.interfaces import IField, IWidget, IWidgetExtractor
@@ -17,8 +20,7 @@ from dolmen.forms.ztk.widgets.object import ObjectSchemaField
 from dolmen.forms.ztk.fields import (
     SchemaField, registerSchemaField, SchemaFieldWidget)
 
-from zope import component
-from zope.interface import Interface
+from zope.interface import Interface, implementer
 from zope.schema import interfaces as schema_interfaces
 
 
@@ -29,11 +31,10 @@ def register():
     registerSchemaField(TupleSchemaField, schema_interfaces.ITuple)
 
 
+@implementer(ICollectionSchemaField)
 class CollectionSchemaField(SchemaField):
     """A collection field.
     """
-    grok.implements(ICollectionSchemaField)
-
     collectionType = list
     allowAdding = True
     allowRemove = True
@@ -74,32 +75,39 @@ def newCollectionWidgetFactory(mode=u"", interface=IWidget):
         """A widget of a collection is a bit advanced. We have to adapt
         the sub-type of the field as well.
         """
-        widget = component.getMultiAdapter(
-            (field, field.valueField, form, request), interface, name=mode)
-        return widget
+        return interface(field, field.valueField, form, request, name=mode)
     return collectionWidgetFactory
 
 
-grok.global_adapter(
-    newCollectionWidgetFactory(mode='input'),
-    adapts=(ICollectionSchemaField, Interface, Interface),
-    provides=IWidget,
-    name='input')
-
-grok.global_adapter(
-    newCollectionWidgetFactory(mode='display'),
-    adapts=(ICollectionSchemaField, Interface, Interface),
-    provides=IWidget,
-    name='display')
-
-grok.global_adapter(
-    newCollectionWidgetFactory(interface=IWidgetExtractor),
-    adapts=(ICollectionSchemaField, Interface, Interface),
-    provides=IWidgetExtractor)
+@crom.adapter
+@crom.name('input')
+@crom.target(IWidget)
+@crom.sources(ICollectionSchemaField, Interface, Interface)
+def input_collection(field, form, request):
+    return newCollectionWidgetFactory(mode='input')(field, form, request)
 
 
+@crom.adapter
+@crom.name('display')
+@crom.target(IWidget)
+@crom.sources(ICollectionSchemaField, Interface, Interface)
+def display_collection(field, form, request):
+    return newCollectionWidgetFactory(mode='display')(field, form, request)
+
+
+@crom.adapter
+@crom.target(IWidgetExtractor)
+@crom.sources(ICollectionSchemaField, Interface, Interface)
+def extractor_collection(field, form, request):
+    return newCollectionWidgetFactory(
+        interface=IWidgetExtractor)(field, form, request)
+
+
+
+@crom.adapter
+@crom.target(IWidget)
+@crom.sources(ICollectionSchemaField, Interface, Interface, Interface)
 class MultiGenericFieldWidget(SchemaFieldWidget):
-    grok.adapts(ICollectionSchemaField, Interface, Interface, Interface)
 
     allowAdding = True
     allowRemove = True
@@ -187,8 +195,10 @@ class MultiGenericFieldWidget(SchemaFieldWidget):
             self.jsonAddTemplate = list(widgets)[0]
 
 
+@crom.adapter
+@crom.target(IWidget)
+@crom.sources(ListSchemaField, Interface, Interface, Interface)
 class ListGenericFieldWidget(MultiGenericFieldWidget):
-    grok.adapts(ListSchemaField, Interface, Interface, Interface)
 
     def __init__(self, field, value_field, form, request):
         super(ListGenericFieldWidget, self).__init__(
@@ -196,14 +206,20 @@ class ListGenericFieldWidget(MultiGenericFieldWidget):
         self.allowOrdering = field.allowOrdering
 
 
+@crom.adapter
+@crom.name('display')
+@crom.target(IWidget)
+@crom.sources(ICollectionSchemaField, Interface, Interface, Interface)
 class MultiGenericDisplayFieldWidget(MultiGenericFieldWidget):
-    grok.name('display')
     template = getTemplate('multigenericdisplayfieldwidget.pt')
+
 
 # For collection of objects, generate a different widget (with a table)
 
+@crom.adapter
+@crom.target(IWidget)
+@crom.sources(ICollectionSchemaField, ObjectSchemaField, Interface, Interface)
 class MultiObjectFieldWidget(MultiGenericFieldWidget):
-    grok.adapts(ICollectionSchemaField, ObjectSchemaField, Interface, Interface)
 
     template = getTemplate('multiobjectfieldwidget.pt')
 
@@ -211,8 +227,10 @@ class MultiObjectFieldWidget(MultiGenericFieldWidget):
         return self.valueField.objectFields
 
 
+@crom.adapter
+@crom.target(IWidget)
+@crom.sources(ListSchemaField, ObjectSchemaField, Interface, Interface)
 class ListObjectFieldWidget(MultiObjectFieldWidget):
-    grok.adapts(ListSchemaField, ObjectSchemaField, Interface, Interface)
 
     template = getTemplate('listobjectfieldwidget.pt')
 
@@ -222,8 +240,10 @@ class ListObjectFieldWidget(MultiObjectFieldWidget):
         self.allowOrdering = field.allowOrdering
 
 
+@crom.adapter
+@crom.target(IWidgetExtractor)
+@crom.sources(ICollectionSchemaField, Interface, Interface, Interface)
 class MultiGenericWidgetExtractor(WidgetExtractor):
-    grok.adapts(ICollectionSchemaField, Interface, Interface, Interface)
 
     def __init__(self, field, value_field, form, request):
         super(MultiGenericWidgetExtractor, self).__init__(
@@ -256,8 +276,10 @@ class MultiGenericWidgetExtractor(WidgetExtractor):
 
 # Multi-Choice widget
 
+@crom.adapter
+@crom.target(IWidget)
+@crom.sources(SetSchemaField, ChoiceSchemaField, Interface, Interface)
 class MultiChoiceFieldWidget(ChoiceFieldWidget):
-    grok.adapts(SetSchemaField, ChoiceSchemaField, Interface, Interface)
 
     template = getTemplate('multichoicefieldwidget.pt')
 
@@ -288,20 +310,28 @@ class MultiChoiceFieldWidget(ChoiceFieldWidget):
                    'id': base_id + '-' + str(i)}
 
 
-grok.global_adapter(
-    newCollectionWidgetFactory(mode='multiselect'),
-    adapts=(ICollectionSchemaField, Interface, Interface),
-    provides=IWidget,
-    name='multiselect')
+@crom.adapter
+@crom.name('multiselect')
+@crom.target(IWidget)
+@crom.sources(ICollectionSchemaField, Interface, Interface)
+def multiselect_collection(field, form, request):
+    return newCollectionWidgetFactory(mode='multiselect')(field, form, request)
 
 
+@crom.adapter
+@crom.name('multiselect')
+@crom.target(IWidget)
+@crom.sources(SetSchemaField, ChoiceSchemaField, Interface, Interface)
 class MultiSelectFieldWidget(MultiChoiceFieldWidget):
-    grok.name('multiselect')
     template = getTemplate('multiselectfieldwidget.pt')
 
 
+
+@crom.adapter
+@crom.name('display')
+@crom.target(IWidget)
+@crom.sources(SetSchemaField, ChoiceSchemaField, Interface, Interface)
 class MultiChoiceDisplayFieldWidget(MultiChoiceFieldWidget):
-    grok.name('display')
     template = getTemplate('multichoicedisplayfieldwidget.pt')
 
     def renderableChoice(self):
@@ -313,8 +343,10 @@ class MultiChoiceDisplayFieldWidget(MultiChoiceFieldWidget):
                        'id': base_id + '-' + str(i)}
 
 
+@crom.adapter
+@crom.target(IWidgetExtractor)
+@crom.sources(SetSchemaField, ChoiceSchemaField, Interface, Interface)
 class MultiChoiceWidgetExtractor(WidgetExtractor):
-    grok.adapts(SetSchemaField, ChoiceSchemaField, Interface, Interface)
 
     def __init__(self, field, value_field, form, request):
         super(MultiChoiceWidgetExtractor, self).__init__(field, form, request)

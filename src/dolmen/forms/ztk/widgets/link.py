@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms.base.interfaces import IField
+import crom
+from dolmen.forms.base.interfaces import IField, IWidget
 from dolmen.forms.base.widgets import FieldWidget
 from dolmen.forms.ztk.widgets import getTemplate
-from dolmen.location import get_absolute_url
-from grokcore import component as grok
 from zope.interface import Interface
 
 
+@crom.adapter
+@crom.name('link')
+@crom.target(IWidget)
+@crom.sources(IField, Interface, Interface)
 class LinkFieldWidget(FieldWidget):
-    grok.adapts(IField, Interface, Interface)
-    grok.name('link')
 
     template = getTemplate('linkfieldwidget.pt')
 
     def url(self):
         content = self.form.getContentData().getContent()
-        return get_absolute_url(content, self.request)
+        return IURL(content, self.request)

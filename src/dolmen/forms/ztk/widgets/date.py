@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import grokcore.component as grok
-
+import crom
+from dolmen.forms.base import interfaces
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import DisplayFieldWidget, WidgetExtractor
 from dolmen.forms.ztk.fields import (
@@ -28,8 +28,10 @@ class DateSchemaField(SchemaField):
     """
 
 
+@crom.adapter
+@crom.target(interfaces.IWidget)
+@crom.sources(DateSchemaField, Interface, Interface)
 class DateFieldWidget(SchemaFieldWidget):
-    grok.adapts(DateSchemaField, Interface, Interface)
 
     valueType = 'date'
 
@@ -39,8 +41,10 @@ class DateFieldWidget(SchemaFieldWidget):
         return formatter.format(value)
 
 
+@crom.adapter
+@crom.target(interfaces.IWidgetExtractor)
+@crom.sources(DateSchemaField, Interface, Interface)
 class DateWidgetExtractor(WidgetExtractor):
-    grok.adapts(DateSchemaField, Interface, Interface)
 
     valueType = 'date'
 
@@ -59,28 +63,42 @@ class DateWidgetExtractor(WidgetExtractor):
         return value, error
 
 
+@crom.adapter
+@crom.name('hidden')
+@crom.target(interfaces.IWidgetExtractor)
+@crom.sources(DateSchemaField, Interface, Interface)
 class HiddenDateWidgetExtractor(DateWidgetExtractor):
-    grok.name('hidden')
+    pass
 
 
+@crom.adapter
+@crom.target(interfaces.IWidget)
+@crom.sources(DatetimeSchemaField, Interface, Interface)
 class DatetimeFieldWidget(DateFieldWidget):
-    grok.adapts(DatetimeSchemaField, Interface, Interface)
-
     valueType = 'dateTime'
 
 
+@crom.adapter
+@crom.target(interfaces.IWidgetExtractor)
+@crom.sources(DatetimeSchemaField, Interface, Interface)
 class DatetimeWidgetExtractor(DateWidgetExtractor):
-    grok.adapts(DatetimeSchemaField, Interface, Interface)
-
     valueType = 'dateTime'
 
 
+@crom.adapter
+@crom.name('hidden')
+@crom.target(interfaces.IWidgetExtractor)
+@crom.sources(DatetimeSchemaField, Interface, Interface)
 class HiddenDatetimeWidgetExtractor(DatetimeWidgetExtractor):
-    grok.name('hidden')
+    pass
 
 
+
+@crom.adapter
+@crom.name('display')
+@crom.target(interfaces.IWidget)
+@crom.sources(DateSchemaField, Interface, Interface)
 class DateFieldDisplayWidget(DisplayFieldWidget):
-    grok.adapts(DateSchemaField, Interface, Interface)
 
     valueType = 'date'
 
@@ -90,7 +108,9 @@ class DateFieldDisplayWidget(DisplayFieldWidget):
         return formatter.format(value)
 
 
+@crom.adapter
+@crom.name('display')
+@crom.target(interfaces.IWidget)
+@crom.sources(DatetimeSchemaField, Interface, Interface)
 class DatetimeFieldDisplayWidget(DateFieldDisplayWidget):
-    grok.adapts(DatetimeSchemaField, Interface, Interface)
-
     valueType = 'dateTime'

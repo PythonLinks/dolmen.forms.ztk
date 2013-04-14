@@ -1,7 +1,8 @@
 # URI widget
 
-from grokcore import component as grok
+import crom
 
+from dolmen.forms.base.interfaces import IWidget
 from dolmen.forms.ztk.widgets import getTemplate
 from dolmen.forms.ztk.fields import (
     SchemaField, SchemaFieldWidget, registerSchemaField)
@@ -18,7 +19,9 @@ class URISchemaField(SchemaField):
     """A text line field.
     """
 
-
+@crom.adapter
+@crom.name('input')
+@crom.target(IWidget)
+@crom.sources(URISchemaField, Interface, Interface)
 class URIWidget(SchemaFieldWidget):
-    grok.adapts(URISchemaField, Interface, Interface)
     template = getTemplate('uriwidget.pt')

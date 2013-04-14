@@ -180,18 +180,18 @@ error, since no adapters are registered, yet::
   >>> gadm = factory(item)
   Traceback (most recent call last):
   ...
-  TypeError: ('Could not adapt', <Item object at ...>,
-              <InterfaceClass __builtin__.ITitledItem>)
+  ComponentLookupError...
 
 
 Now, if we provide the correct adapters, we can build the data
 manager::
 
-  >>> import grokcore.component as grok
+  >>> from crom import implicit
 
-  >>> class TitleProvider(grok.Adapter):
-  ...     grok.context(Item)
-  ...     grok.provides(ITitledItem)
+  >>> class TitleProvider(object):
+  ...    
+  ...     def __init__(self, context):
+  ...         self.context = context
   ...
   ...     def get_title(self):
   ...         return getattr(self.context, '_title', None)
@@ -201,9 +201,12 @@ manager::
   ...
   ...     title = property(get_title, set_title)
 
-  >>> class DescProvider(grok.Adapter):
-  ...     grok.context(Item)
-  ...     grok.provides(IDescriptiveItem)
+  >>> implicit.registry.register((Item,), ITitledItem, '', TitleProvider)
+
+  >>> class DescProvider(object):
+  ...    
+  ...     def __init__(self, context):
+  ...         self.context = context
   ...
   ...     def get_description(self):
   ...         return getattr(self.context, '_description', None)
@@ -213,12 +216,8 @@ manager::
   ...
   ...     description = property(get_description, set_description)
 
-  >>> grok.testing.grok_component('title', TitleProvider)
-  True
-
-  >>> grok.testing.grok_component('desc', DescProvider)
-  True
-
+  >>> implicit.registry.register((Item,), IDescriptiveItem, '', DescProvider)
+ 
   >>> gadm = factory(item)
   >>> print gadm
   <GenericAdaptiveDataManager used for <Item object at ...>>

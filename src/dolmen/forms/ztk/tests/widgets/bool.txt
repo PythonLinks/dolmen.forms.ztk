@@ -72,10 +72,9 @@ Extractor
 And finaly we have an extractor. If there is nothing in the request
 the value is NO_VALUE:
 
-  >>> from zope import component
 
-  >>> falseExtractor = component.getMultiAdapter(
-  ...      (booleanField, sub, request), interfaces.IWidgetExtractor)
+  >>> falseExtractor = interfaces.IWidgetExtractor(
+  ...      booleanField, sub, request)
 
   >>> falseExtractor
   <dolmen.forms.ztk.widgets.bool.CheckBoxWidgetExtractor object at ...>
@@ -92,8 +91,8 @@ marker in the form data too:
   >>> trueRequest = TestRequest(
   ...         form={booleanWidget.identifier: u'True', })
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (booleanField, sub, trueRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      booleanField, sub, trueRequest)
 
   >>> extractor.extract()
   (<Marker NO_VALUE>, None)
@@ -105,8 +104,8 @@ Once we add the presence marker, it works:
   ...         form={booleanWidget.identifier: u'True',
   ...               booleanWidget.identifier + '.present': u'True'})
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (booleanField, sub, trueRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      booleanField, sub, trueRequest)
 
   >>> extractor.extract()
   (True, None)
@@ -118,8 +117,8 @@ The string 'True' is the only accepted valid value:
   ...         form={booleanWidget.identifier: u'Something',
   ...               booleanWidget.identifier + '.present': u'True'})
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (booleanField, sub, trueRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      booleanField, sub, trueRequest)
 
   >>> extractor.extract()
   (False, None)
@@ -134,16 +133,15 @@ The extractor also work in HIDDEN mode::
   ...         form={booleanWidget.identifier: u'True',
   ...               booleanWidget.identifier + '.present': u'True'})
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (booleanField, sub, request), interfaces.IWidgetExtractor, 'hidden')
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      booleanField, sub, request, name='hidden')
   >>> extractor
   <dolmen.forms.ztk.widgets.bool.HiddenCheckBoxWidgetExtractor object at ...>
   >>> extractor.extract()
   (<Marker NO_VALUE>, None)
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (booleanField, sub, trueRequest), 
-  ...      interfaces.IWidgetExtractor, 'hidden')
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      booleanField, sub, trueRequest, name='hidden')
 
   >>> extractor.extract()
   (True, None)

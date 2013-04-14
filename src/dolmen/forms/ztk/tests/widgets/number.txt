@@ -84,12 +84,10 @@ And finaly we have extractors.
 
 If there is nothing in the request the value is NO_VALUE:
 
-  >>> from zope import component
-
 For int::
   
-  >>> emptyExtractor = component.getMultiAdapter(
-  ...      (intField, sub, request), interfaces.IWidgetExtractor)
+  >>> emptyExtractor = interfaces.IWidgetExtractor(
+  ...      intField, sub, request)
   
   >>> emptyExtractor
   <dolmen.forms.ztk.widgets.number.IntWidgetExtractor object at ...>
@@ -101,8 +99,8 @@ For int::
 
 And for float::
 
-  >>> emptyExtractor = component.getMultiAdapter(
-  ...      (floatField, sub, request), interfaces.IWidgetExtractor)
+  >>> emptyExtractor = interfaces.IWidgetExtractor(
+  ...      floatField, sub, request)
   
   >>> emptyExtractor
   <dolmen.forms.ztk.widgets.number.FloatWidgetExtractor object at ...>
@@ -120,8 +118,8 @@ And if there is a correct value in the request it works:
 
 For int::
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (intField, sub, validRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      intField, sub, validRequest)
   
   >>> extractor.extract()
   (3, None)
@@ -130,8 +128,8 @@ For int::
 
 And for float::
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (floatField, sub, validRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      floatField, sub, validRequest)
   
   >>> num, errors = extractor.extract()
   >>> ('%.1f' % num, errors)  # use %.1f to avoid rounding problem
@@ -142,8 +140,8 @@ Event with longs::
   
   >>> longRequest = TestRequest(
   ...         form={intWidget.identifier: u'10000000000000000000'})
-  >>> extractor = component.getMultiAdapter(
-  ...      (intField, sub, longRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      intField, sub, longRequest)
   
   >>> extractor.extract()
   (10000000000000000000L, None)
@@ -157,8 +155,8 @@ Empty value in the request gives None:
 
 For int::
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (intField, sub, noneRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      intField, sub, noneRequest)
   
   >>> extractor.extract()
   (None, None)
@@ -167,8 +165,8 @@ For int::
 
 And for float::
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (floatField, sub, noneRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      floatField, sub, noneRequest)
   
   >>> extractor.extract()
   (None, None)
@@ -182,8 +180,8 @@ Strange values triggers errors::
 
 For int::
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (intField, sub, invalidRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      intField, sub, invalidRequest)
   
   >>> extractor.extract()
   (None, u'Invalid value.')
@@ -192,8 +190,8 @@ For int::
 
 And for float::
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (floatField, sub, invalidRequest), interfaces.IWidgetExtractor)
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      floatField, sub, invalidRequest)
   
   >>> extractor.extract()
   (None, u'Invalid value.')
@@ -207,20 +205,15 @@ Extractor works in HIDDEN mode::
   ...         form={intWidget.identifier: u'3',
   ...               floatWidget.identifier : u'13.2'})
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (intField, sub, validRequest), 
-  ...      interfaces.IWidgetExtractor, 
-  ...      'hidden')
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      intField, sub, validRequest, name='hidden')
   
   >>> extractor.extract()
   (3, None)
 
-  >>> extractor = component.getMultiAdapter(
-  ...      (floatField, sub, validRequest),
-  ...      interfaces.IWidgetExtractor,
-  ...      'hidden')
+  >>> extractor = interfaces.IWidgetExtractor(
+  ...      floatField, sub, validRequest, name='hidden')
   
   >>> num, errors = extractor.extract()
   >>> ('%.1f' % num, errors)  # use %.1f to avoid rounding problem
   ('13.2', None)
-

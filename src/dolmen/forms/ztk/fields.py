@@ -1,26 +1,26 @@
 # -*- coding: utf-8 -*-
 
+import crom
+from crom.implicit import implicit
 from cromlech.browser.interfaces import IRequest
-from grokcore import component as grok
 
 from dolmen.forms.base import interfaces, _
 from dolmen.forms.base.fields import Field
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import FieldWidget, WidgetExtractor
 from dolmen.forms.base.interfaces import IFieldExtractionValueSetting
-
 from dolmen.forms.ztk.interfaces import ISchemaField
 
-from zope import schema, component
-from zope.interface import Interface, Invalid
+from zope import schema
+from zope.interface import Interface, Invalid, implementer
 from zope.interface.interfaces import IInterface
 from zope.schema import interfaces as schema_interfaces
 
 
+@implementer(interfaces.IFieldFactory)
 class SchemaFieldFactory(object):
     """Create form fields from a zope.schema field (by adapting it).
     """
-    grok.implements(interfaces.IFieldFactory)
 
     def __init__(self, context):
         self.context = context
@@ -32,11 +32,11 @@ class SchemaFieldFactory(object):
         yield interfaces.IField(self.context)
 
 
+@implementer(interfaces.IFieldFactory)
 class InterfaceSchemaFieldFactory(object):
     """Create a set of form fields from a zope.interface by looking
     each zope.schema fields defined on it and adapting them.
     """
-    grok.implements(interfaces.IFieldFactory)
 
     def __init__(self, context):
         self.context = context
@@ -46,10 +46,10 @@ class InterfaceSchemaFieldFactory(object):
             yield interfaces.IField(field)
 
 
+@implementer(ISchemaField)
 class SchemaField(Field):
     """A form field using a zope.schema field as settings.
     """
-    grok.implements(ISchemaField)
 
     def __init__(self, field):
         super(SchemaField, self).__init__(
@@ -99,13 +99,17 @@ class SchemaField(Field):
         return default
 
 
-def registerSchemaField(factory, schema_field):
+def registerSchemaField(factory, schema_field, registry=None):
     # We register it by hand to have the adapter available when loading ZCML.
-    component.provideAdapter(factory, (schema_field,), interfaces.IField)
+    if registry is None:
+        registry = implicit.registry
+    registry.register((schema_field,), interfaces.IField, u'', factory)
 
 
+@crom.adapter
+@crom.target(interfaces.IWidget)
+@crom.sources(ISchemaField, Interface, Interface)
 class SchemaFieldWidget(FieldWidget):
-    grok.adapts(ISchemaField, Interface, Interface)
 
     def htmlClass(self):
         css_class = ['field']
@@ -116,10 +120,10 @@ class SchemaFieldWidget(FieldWidget):
         return ' '.join(css_class)
 
 
+@crom.adapter
+@crom.target(interfaces.IWidgetExtractor)
+@crom.sources(ISchemaField, IFieldExtractionValueSetting, IRequest)
 class SchemaWidgetExtractor(WidgetExtractor):
-    grok.adapts(ISchemaField,
-                IFieldExtractionValueSetting,
-                IRequest)
 
     empty_is_None = False
 
@@ -143,17 +147,35 @@ class SchemaWidgetExtractor(WidgetExtractor):
         return value, None
 
 
+@crom.adapter
+@crom.name('hidden')
+@crom.target(interfaces.IWidgetExtractor)
+@crom.sources(ISchemaField, IFieldExtractionValueSetting, IRequest)
 class HiddenSchemaWidgetExtractor(SchemaWidgetExtractor):
-    grok.name('hidden')
+    pass
 
 
+@crom.adapter
+@crom.name('readonly')
+@crom.target(interfaces.IWidgetExtractor)
+@crom.sources(ISchemaField, IFieldExtractionValueSetting, IRequest)
 class ReadOnlySchemaWidgetExtractor(SchemaWidgetExtractor):
-    grok.name('readonly')
+    pass
 
 
-def registerDefault():
+def registerDefault(registry=None):
     """Register default fields factories.
     """
-    component.provideAdapter(SchemaFieldFactory, (schema.interfaces.IField,))
-    component.provideAdapter(InterfaceSchemaFieldFactory, (IInterface,))
-    registerSchemaField(SchemaField, schema_interfaces.IField)
+    if registry is None:
+        registry = implicit.registry
+
+    registry.register(
+        (schema.interfaces.IField,),
+        interfaces.IFieldFactory, u'', SchemaFieldFactory)
+
+    registry.register(
+        (IInterface,),
+        interfaces.IFieldFactory, u'', InterfaceSchemaFieldFactory)
+
+    registerSchemaField(
+        SchemaField, schema_interfaces.IField, registry=registry)

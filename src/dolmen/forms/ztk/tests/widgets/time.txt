@@ -6,7 +6,6 @@ Let's create some interface using times::
 
   >>> from zope import schema, interface
   >>> from zope.interface.verify import verifyObject
-  >>> from zope.component import getMultiAdapter
   >>> import datetime
 
   >>> class ITimeInfo(interface.Interface):
@@ -79,9 +78,8 @@ here because the parsing is a bit more advanced::
   ...     'form.field.time': u'12:21'})
   >>> niceTimeData = FormData(timeinfo, timeRequest)
 
-  >>> niceTimeExtractor = getMultiAdapter(
-  ...      (timeField, niceTimeData, timeRequest),
-  ...      interfaces.IWidgetExtractor)
+  >>> niceTimeExtractor = interfaces.IWidgetExtractor(
+  ...     timeField, niceTimeData, timeRequest)	
 
   >>> verifyObject(interfaces.IWidgetExtractor, niceTimeExtractor)
   True
@@ -93,9 +91,9 @@ Empty text is interpreted as None::
   >>> timeRequest = TestRequest(form={
   ...     'form.field.time': u''})
   >>> niceTimeData = FormData(timeinfo, timeRequest)
-  >>> niceTimeExtractor = getMultiAdapter(
-  ...      (timeField, niceTimeData, timeRequest),
-  ...      interfaces.IWidgetExtractor)
+
+  >>> niceTimeExtractor = interfaces.IWidgetExtractor(
+  ...     timeField, niceTimeData, timeRequest)
   >>> niceTimeExtractor.extract()
   (None, None)
 
@@ -105,9 +103,8 @@ Now if you give an invalid time you will have an error::
   ...     'form.field.time': u'the best time ever'})
   >>> invalidTimeData = FormData(timeinfo, invalidTimeRequest)
 
-  >>> invalidTimeExtractor = getMultiAdapter(
-  ...      (timeField, invalidTimeData, invalidTimeRequest),
-  ...      interfaces.IWidgetExtractor)
+  >>> invalidTimeExtractor = interfaces.IWidgetExtractor(
+  ...     timeField, invalidTimeData, invalidTimeRequest)
 
   >>> verifyObject(interfaces.IWidgetExtractor, invalidTimeExtractor)
   True
@@ -123,10 +120,8 @@ The extractor also work in HIDDEN mode::
   ...     'form.field.time': u'12:21'})
   >>> niceTimeData = FormData(timeinfo, timeRequest)
 
-  >>> niceTimeExtractor = getMultiAdapter(
-  ...      (timeField, niceTimeData, timeRequest),
-  ...      interfaces.IWidgetExtractor,
-  ...      'hidden')
+  >>> niceTimeExtractor = interfaces.IWidgetExtractor(
+  ...    timeField, niceTimeData, timeRequest)
 
   >>> niceTimeExtractor.extract()
   (datetime.time(12, 21), None)

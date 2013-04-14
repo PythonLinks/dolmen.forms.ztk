@@ -146,11 +146,10 @@ Extractor
 We need a custom extractor as the token value used in the form can be
 different than the real value:
 
-  >>> from zope import component
   >>> from dolmen.forms.base import interfaces
 
-  >>> simple_extractor = component.getMultiAdapter(
-  ...      (simple_field, simple_form, request), interfaces.IWidgetExtractor)
+  >>> simple_extractor = interfaces.IWidgetExtractor(
+  ...      simple_field, simple_form, request)
 
   >>> simple_extractor
   <dolmen.forms.ztk.widgets.choice.ChoiceWidgetExtractor object at ...>
@@ -162,9 +161,8 @@ Let's now do it with a value:
   >>> simple_request = TestRequest(
   ...    form={simple_widget.identifier: u'a1', })
 
-  >>> simple_extractor = component.getMultiAdapter(
-  ...    (simple_field, simple_form, simple_request),
-  ...    interfaces.IWidgetExtractor)
+  >>> simple_extractor = interfaces.IWidgetExtractor(
+  ...    simple_field, simple_form, simple_request)
 
   >>> simple_extractor.extract()
   ('A', None)
@@ -174,9 +172,8 @@ And a value which is not in the vocabulary:
   >>> broken_request = TestRequest(
   ...    form={simple_widget.identifier: u'z42', })
 
-  >>> broken_extractor = component.getMultiAdapter(
-  ...    (simple_field, simple_form, broken_request),
-  ...    interfaces.IWidgetExtractor)
+  >>> broken_extractor = interfaces.IWidgetExtractor(
+  ...    simple_field, simple_form, broken_request)
 
   >>> broken_extractor.extract()
   (None, u'Invalid value')
@@ -189,10 +186,8 @@ The extractor also work in HIDDEN mode::
   >>> simple_request = TestRequest(
   ...    form={simple_widget.identifier: u'a1', })
 
-  >>> simple_extractor = component.getMultiAdapter(
-  ...    (simple_field, simple_form, simple_request),
-  ...    interfaces.IWidgetExtractor,
-  ...    'hidden')
+  >>> simple_extractor = interfaces.IWidgetExtractor(
+  ...    simple_field, simple_form, simple_request, name='hidden')
 
   >>> simple_extractor.extract()
   ('A', None)
@@ -204,10 +199,10 @@ Context binded source
 Let's define a source which need the context to produce its values,
 and an interface for it:
 
-  >>> from grokcore import component
+  >>> from zope.interface import provider
   >>> from zope.schema.interfaces import IContextSourceBinder
 
-  >>> @component.provider(IContextSourceBinder)
+  >>> @provider(IContextSourceBinder)
   ... def secondVocabulary(context):
   ...     return letter_vocabulary
 
