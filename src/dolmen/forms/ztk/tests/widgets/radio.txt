@@ -113,7 +113,6 @@ Extractor
 We need a custom extractor as the token value used in the form can be
 different than the real value::
 
-  >>> from zope import component
   >>> from dolmen.forms.base import interfaces
 
   >>> firstExtractor = interfaces.IWidgetExtractor(
@@ -142,10 +141,10 @@ Context binded source
 Let's define a source which need the context to produce its values,
 and an interface for it::
 
-  >>> from grokcore import component
+  >>> from zope.interface import provider
   >>> from zope.schema.interfaces import IContextSourceBinder
 
-  >>> @component.provider(IContextSourceBinder)
+  >>> @provider(IContextSourceBinder)
   ... def secondVocabulary(context):
   ...     return letterVocabulary
 

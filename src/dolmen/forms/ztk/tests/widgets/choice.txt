@@ -34,11 +34,13 @@ And we will need a content and a request to test:
   >>> class SimpleContent(object):
   ...    interface.implements(ISimpleChoice)
   ...    choice = None
+
   >>> content = SimpleContent()
   >>> content.choice = 'B'
 
   >>> broken_content = SimpleContent()
   >>> broken_content.choice = 'Z'
+
 
 Field
 -----
@@ -62,6 +64,46 @@ So now you can create a field, and get a choice field:
 
   >>> verifyObject(interfaces.IField, simple_field)
   True
+
+
+Pluggable source
+----------------
+
+  >>> class IDuckChoice(interface.Interface):
+  ...     duck = schema.Choice(
+  ...         title=u"Ducks",
+  ...         source=u'ducks')
+
+
+A pluggable schema will need a factory:
+
+  >>> duck_fields = Fields(IDuckChoice)
+  >>> print duck_fields['duck'].source
+  Traceback (most recent call last):
+  ...
+  ComponentLookupError: Could not find component from sources () to target
+  <InterfaceClass zope.schema.interfaces.IVocabularyFactory>.
+
+  >>> from zope.interface import provider
+  >>> from zope.schema.interfaces import IVocabularyFactory
+
+  >>> @provider(IVocabularyFactory)
+  ... def donald_nephews(context):
+  ...     return SimpleVocabulary([
+  ...         SimpleTerm(value='huey', token='h', title='Huey'),
+  ...         SimpleTerm(value='dewey', token='d', title='Dewey'),
+  ...         SimpleTerm(value='louie', token='l', title='Louie')])
+
+  >>> from crom import implicit
+  >>> implicit.registry.register(
+  ...     tuple(), IVocabularyFactory, u'ducks', donald_nephews)
+
+  >>> print duck_fields['duck'].source
+  <function donald_nephews at ...>
+
+  >>> print [i.title for i in duck_fields['duck'].getChoices(object())]
+  ['Huey', 'Dewey', 'Louie']
+
 
 Widget
 ------

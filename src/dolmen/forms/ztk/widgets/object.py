@@ -2,6 +2,7 @@
 
 import crom
 
+from cromlech.content import IFactory
 from dolmen.forms.base import interfaces, cloneFormData, Fields, Widgets
 from dolmen.forms.base.datamanagers import ObjectDataManager
 from dolmen.forms.base.markers import NO_VALUE, Marker
@@ -70,8 +71,7 @@ class ObjectSchemaField(SchemaField):
         if self.objectFactory is not None:
             return self.objectFactory
         schema = self.objectSchema
-        raise NotImplementedError('FIXME')
-        #return getUtility(IFactory, name=schema.__identifier__)
+        return IFactory.component(name=schema.__identifier__)
 
 
 @crom.adapter

@@ -72,9 +72,10 @@ register an utility with name the schema interface identifier of the
 object, or set your factory on the field, as ``objectFactory``. That
 last will be used in priority::
 
-  >>> from zope.component import IFactory, provideUtility
+  >>> from crom import implicit
+  >>> from cromlech.content import IFactory
   >>> factoryName = postField.objectSchema.__identifier__
-  >>> provideUtility(Comment, IFactory, name=factoryName)
+  >>> implicit.registry.register(tuple(), IFactory, factoryName, Comment)
 
   >>> postField.getObjectFactory()
   <class 'Comment'>

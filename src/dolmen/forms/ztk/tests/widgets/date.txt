@@ -6,7 +6,6 @@ Let's create some interface using dates::
 
   >>> from zope import schema, interface
   >>> from zope.interface.verify import verifyObject
-  >>> from zope.component import getMultiAdapter
   >>> import datetime
 
   >>> class IDayInfo(interface.Interface):

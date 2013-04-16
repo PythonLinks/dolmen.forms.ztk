@@ -13,6 +13,7 @@ install_requires=[
     'dolmen.template',
     'setuptools',
     'zope.i18n',
+    'cromlech.content',
     'zope.interface',
     'zope.schema',
     'fanstatic',

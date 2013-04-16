@@ -29,7 +29,7 @@ class ChoiceSchemaField(SchemaField):
         self.__source_name = None
         if field.source is not None:
             self.__source = field.source
-        elif isinstance(field.vocabularyName, str):
+        elif isinstance(field.vocabularyName, (str, unicode)):
             # We delay the lookup of the vocabulary, to be sure it
             # have been registered.
             self.__source = None
@@ -38,9 +38,8 @@ class ChoiceSchemaField(SchemaField):
     @property
     def source(self):
         if self.__source is None:
-            raise NotImplementedError('Provide your own source!')
-            #self.__source = component.getUtility(
-            #    schema_interfaces.IVocabularyFactory, name=self.__source_name)
+            self.__source = schema_interfaces.IVocabularyFactory.component(
+                name=self.__source_name)
         return self.__source
 
     def getChoices(self, context):
