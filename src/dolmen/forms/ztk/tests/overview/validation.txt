@@ -196,17 +196,14 @@ Form integration
 Integration environment
 -----------------------
 
-  >>> from grokcore.component import context, Context
   >>> from dolmen.forms.base import Form, Fields
 
-  >>> class SomeContent(Context):
+  >>> class SomeContent(object):
   ...     pass
 
   >>> from cromlech.browser.testing import TestResponse
 
   >>> class MyLegalPage(Form):
-  ...     context(SomeContent)
-  ...
   ...     responseFactory = TestResponse
   ...     fields = Fields(IAgeAndLegals)
   ...     dataValidators = [InvariantsValidation]
