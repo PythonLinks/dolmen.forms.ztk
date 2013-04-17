@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import crom
+from cromlech.i18n import ILocale
 from dolmen.forms.base.interfaces import IWidget, IWidgetExtractor
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import DisplayFieldWidget
 from dolmen.forms.base.widgets import WidgetExtractor
 from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
 from dolmen.forms.ztk.fields import registerSchemaField
-
-from zope.i18n.format import DateTimeParseError
-from zope.i18n.interfaces.locales import ILocale
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
+from babel.dates import format_time, parse_time
 
 
 def register():
@@ -28,12 +27,9 @@ class TimeSchemaField(SchemaField):
 @crom.sources(TimeSchemaField, Interface, Interface)
 class TimeFieldWidget(SchemaFieldWidget):
 
-    valueType = 'time'
-
     def valueToUnicode(self, value):
-        locale = ILocale(self.request)
-        formatter = locale.dates.getFormatter(self.valueType, 'short')
-        return formatter.format(value)
+        locale = ILocale(self.request, default='en')
+        return format_time(value, locale=str(locale))
 
 
 @crom.adapter
@@ -41,18 +37,16 @@ class TimeFieldWidget(SchemaFieldWidget):
 @crom.sources(TimeSchemaField, Interface, Interface)
 class TimeWidgetExtractor(WidgetExtractor):
 
-    valueType = 'time'
-
     def extract(self):
         value, error = super(TimeWidgetExtractor, self).extract()
         if value is not NO_VALUE:
             if value:
-                locale = ILocale(self.request)
-                formatter = locale.dates.getFormatter(self.valueType, 'short')
                 try:
-                    value = formatter.parse(value)
-                except (ValueError, DateTimeParseError), error:
-                    return None, str(error)
+                    locale = ILocale(self.request, default='en')
+                    value = parse_time(value, locale=str(locale))
+                    return value, error
+                except (ValueError, IndexError), err:
+                    return None, 'Unknown time pattern'
             else:
                 value = None
         return value, error
@@ -72,9 +66,6 @@ class HiddenTimeWidgetExtractor(TimeWidgetExtractor):
 @crom.sources(TimeSchemaField, Interface, Interface)
 class TimeFieldDisplayWidget(DisplayFieldWidget):
 
-    valueType = 'time'
-
     def valueToUnicode(self, value):
-        locale = ILocale(self.request)
-        formatter = locale.dates.getFormatter(self.valueType)
-        return formatter.format(value)
+        locale = ILocale(self.request, default='en')
+        return format_time(value, locale=str(locale))

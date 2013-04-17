@@ -8,15 +8,16 @@ readme = open("README.txt").read()
 history = open(os.path.join("docs", "HISTORY.txt")).read()
 
 install_requires=[
+    'babel',
     'crom',
     'cromlech.browser >= 0.4',
     'cromlech.content',
+    'cromlech.i18n',
     'dolmen.forms.base >= 2.2.4',
     'dolmen.template',
     'fanstatic',
     'setuptools',
     'zeam.jsontemplate',
-    'zope.i18n',
     'zope.interface',
     'zope.schema',
     ],

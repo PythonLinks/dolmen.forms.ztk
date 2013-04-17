@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import crom
+from cromlech.i18n import ILocale
 from dolmen.forms.base import interfaces
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import DisplayFieldWidget, WidgetExtractor
 from dolmen.forms.ztk.fields import (
     SchemaField, SchemaFieldWidget, registerSchemaField)
-
-from zope.i18n.format import DateTimeParseError
-from zope.i18n.interfaces.locales import ILocale
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
+from babel.dates import format_date, format_datetime
+from babel.dates import parse_date, parse_datetime
 
 
 def register():
@@ -33,12 +33,9 @@ class DateSchemaField(SchemaField):
 @crom.sources(DateSchemaField, Interface, Interface)
 class DateFieldWidget(SchemaFieldWidget):
 
-    valueType = 'date'
-
     def valueToUnicode(self, value):
-        locale = ILocale(self.request)
-        formatter = locale.dates.getFormatter(self.valueType, 'short')
-        return formatter.format(value)
+        locale = ILocale(self.request, default='en')
+        return format_date(value, format='short', locale=str(locale))
 
 
 @crom.adapter
@@ -46,18 +43,16 @@ class DateFieldWidget(SchemaFieldWidget):
 @crom.sources(DateSchemaField, Interface, Interface)
 class DateWidgetExtractor(WidgetExtractor):
 
-    valueType = 'date'
-
     def extract(self):
         value, error = super(DateWidgetExtractor, self).extract()
         if value is not NO_VALUE:
             if value:
-                locale = ILocale(self.request)
-                formatter = locale.dates.getFormatter(self.valueType, 'short')
                 try:
-                    value = formatter.parse(value)
-                except (ValueError, DateTimeParseError), error:
-                    return None, str(error)
+                    locale = ILocale(self.request, default='en')
+                    value = parse_date(value, locale=str(locale))
+                    return value, error
+                except (ValueError, IndexError), err:
+                    return None, 'Unknown date pattern'
             else:
                 value = None
         return value, error
@@ -75,14 +70,31 @@ class HiddenDateWidgetExtractor(DateWidgetExtractor):
 @crom.target(interfaces.IWidget)
 @crom.sources(DatetimeSchemaField, Interface, Interface)
 class DatetimeFieldWidget(DateFieldWidget):
-    valueType = 'dateTime'
+
+    def valueToUnicode(self, value):
+        locale = ILocale(self.request, default='en')
+        return format_datetime(value, format='short', locale=str(locale))
 
 
 @crom.adapter
 @crom.target(interfaces.IWidgetExtractor)
 @crom.sources(DatetimeSchemaField, Interface, Interface)
 class DatetimeWidgetExtractor(DateWidgetExtractor):
-    valueType = 'dateTime'
+
+    def extract(self):
+        value, error = super(DateWidgetExtractor, self).extract()
+        if value is not NO_VALUE:
+            if value:
+                try:
+                    locale = ILocale(self.request, default='en')
+                    value = parse_datetime(value, locale=str(locale))
+                    return value, error
+                except (ValueError, IndexError), err:
+                    return None, 'Unknown datetime pattern'
+            else:
+                value = None
+        return value, error
+
 
 
 @crom.adapter
@@ -100,12 +112,9 @@ class HiddenDatetimeWidgetExtractor(DatetimeWidgetExtractor):
 @crom.sources(DateSchemaField, Interface, Interface)
 class DateFieldDisplayWidget(DisplayFieldWidget):
 
-    valueType = 'date'
-
     def valueToUnicode(self, value):
-        locale = ILocale(self.request)
-        formatter = locale.dates.getFormatter(self.valueType)
-        return formatter.format(value)
+        locale = ILocale(self.request, default='en')
+        return format_date(value, format='short', locale=str(locale))
 
 
 @crom.adapter
@@ -113,4 +122,7 @@ class DateFieldDisplayWidget(DisplayFieldWidget):
 @crom.target(interfaces.IWidget)
 @crom.sources(DatetimeSchemaField, Interface, Interface)
 class DatetimeFieldDisplayWidget(DateFieldDisplayWidget):
-    valueType = 'dateTime'
+
+    def valueToUnicode(self, value):
+        locale = ILocale(self.request, default='en')
+        return format_datetime(value, format='short', locale=str(locale))

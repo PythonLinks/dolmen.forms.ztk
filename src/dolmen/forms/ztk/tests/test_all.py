@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import crom
-import cromlech.webob.request
 import doctest
 import dolmen.forms.base
 import dolmen.forms.ztk
@@ -11,18 +10,13 @@ import unittest
 import webob.dec
 
 from crom import testing
+from cromlech.webob.request import Request
 from cromlech.browser.interfaces import IPublicationRoot
 from dolmen.collection import load
 from dolmen.forms.ztk.fields import registerDefault
 from pkg_resources import resource_listdir
 from zope.interface import Interface, directlyProvides
 from zope.location import Location
-from zope.i18n.interfaces.locales import ILocale
-from zope.i18n.locales import locales
-
-
-def get_locale(request):
-    return locales.getLocale()
 
 
 def setUp(test):
@@ -31,9 +25,8 @@ def setUp(test):
     load.reloadComponents()
     crom.configure(dolmen.forms.base)
     crom.configure(dolmen.forms.ztk)
-    crom.implicit.registry.register((Interface,), ILocale, '', get_locale)
 
-    
+
 def tearDown(test):
     testing.teardown()
 
@@ -44,7 +37,7 @@ class WSGIApplication(object):
     	self.context = context
         self.formname = formname
 
-    @webob.dec.wsgify(RequestClass=cromlech.webob.request.Request)
+    @webob.dec.wsgify(RequestClass=Request)
     def __call__(self, req):
         form = Interface(self.context, req, name=self.formname)
         return form()
