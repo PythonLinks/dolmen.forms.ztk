@@ -11,12 +11,10 @@ import webob.dec
 
 from crom import testing
 from cromlech.webob.request import Request
-from cromlech.browser.interfaces import IPublicationRoot
 from dolmen.collection import load
 from dolmen.forms.ztk.fields import registerDefault
 from pkg_resources import resource_listdir
-from zope.interface import Interface, directlyProvides
-from zope.location import Location
+from zope.interface import Interface
 
 
 def setUp(test):

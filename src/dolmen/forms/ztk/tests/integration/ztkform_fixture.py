@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import crom
 from cromlech.webob.response import Response
 from dolmen.forms.base import Form, Fields, action
 from dolmen.forms.base import form_component, context

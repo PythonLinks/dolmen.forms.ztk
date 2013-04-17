@@ -28,7 +28,6 @@ tests_require = [
     'cromlech.webob',
     'dolmen.collection',
     'infrae.testbrowser',
-    'zope.location',
     ]
 
 setup(name='dolmen.forms.ztk',
