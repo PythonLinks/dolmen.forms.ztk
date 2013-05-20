@@ -56,6 +56,7 @@
   <input type="hidden" class="field-collection-counter" name="#" value="#"
          tal:attributes="name string:${widget.identifier};
                          value widget.inputValue()" />
+
   <div class="multi-actions">
     <input type="submit" name="#" value="Add"
            class="field-collection-add-line"
