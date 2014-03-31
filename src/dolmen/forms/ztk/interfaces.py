@@ -2,6 +2,13 @@
 
 from zope import interface
 from dolmen.forms.base.interfaces import IField, IDolmenFormsBaseAPI
+from zope.schema.interfaces import ISource
+
+
+class IFormSourceBinder(ISource):
+    """Marker interface used with zope.schema Choice in order to give
+    a factory that takes the source.
+    """
 
 
 class ISchemaField(IField):
@@ -13,7 +20,7 @@ class ISchemaField(IField):
         """
 
 
-class ICollectionSchemaField(ISchemaField):
+class ICollectionField(IField):
     """This is a field for zope schema collection field. It is defined
     in order to be able to have a generic behavior on collections.
     """
@@ -21,9 +28,22 @@ class ICollectionSchemaField(ISchemaField):
         u"Python type represented by this collection (like set, list...)")
     valueField = interface.Attribute(
         u"Field corresponding to the value type contained in the collection")
+    allowAdding = interface.Attribute(
+        u"Boolean flag to allow adding of values to the collection")
+    allowRemove = interface.Attribute(
+        u"Boolean flag to allow removing of values from the collection")
+    inlineValidation = interface.Attribute(
+        u"Boolean flag to validate data when a value is added or removed")
 
 
-class IObjectSchemaField(ISchemaField):
+class IListField(ICollectionField):
+    """This is a field for zope schema list field.
+    """
+    allowOrdering = interface.Attribute(
+        u"Boolean flag to allow ordering of values")
+
+
+class IObjectField(IField):
     """This field is mapped to the zope.schema Object schema field.
     """
     objectFactory = interface.Attribute(

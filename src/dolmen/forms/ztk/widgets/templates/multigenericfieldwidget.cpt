@@ -1,4 +1,4 @@
-<div class="field-list field-collection"
+<div class="field-collection"
      i18n:domain="zeam.form.base">
   <p class="field-collection-empty"
      tal:condition="widget.includeEmptyMessage"
@@ -11,20 +11,9 @@
            metal:define-macro="line"
            tal:define="valueIdentifier valueWidget.component.identifier"
            tal:attributes="rel valueWidget.identifier">
-        <div class="#"
-             tal:attributes="class widget.allowOrdering and 'line-actions ordering-actions' or 'line-actions'">
+        <div class="line-actions">
           <input type="checkbox" class="field-collection-line-selector"
                  name="${widget.identifier}.checked.${valueIdentifier}" />
-          <tal:ordering tal:condition="widget.allowOrdering">
-            <button type="submit" title="Move up" class="field-collection-move-up"
-                    i18n:attributes="title">
-              &nbsp;
-            </button>
-            <button title="Move down" class="field-collection-move-down"
-                    i18n:attributes="title">
-              &nbsp;
-            </button>
-          </tal:ordering>
         </div>
         <div class="line-data">
           <input type="hidden" value="1"
@@ -38,7 +27,7 @@
        tal:condition="widget.jsonAddIdentifier"
        tal:define="valueWidget widget.jsonAddTemplate"
        tal:attributes="rel widget.jsonAddIdentifier">
-    <metal:line metal:use-macro="template.macros['line']" />
+    <metal:line metal:use-macro="template.macros.line" />
   </div>
 
   <input type="hidden" class="field-collection-counter" name="#" value="#"

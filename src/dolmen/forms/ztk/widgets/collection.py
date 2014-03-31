@@ -24,16 +24,17 @@ except ImportError:
     library = Library()
     requireCollectionResources = lambda: None
 
-from dolmen.forms.base.datamanager import NoneDataManager
+from dolmen.forms.base.components import cloneFormData
+from dolmen.forms.base.datamanagers import NoneDataManager
 from dolmen.forms.base.errors import Errors, Error
 from dolmen.forms.base.fields import Field, Fields
-from dolmen.forms.base.markers import Marker
-from dolmen.forms.base.form import cloneFormData
 from dolmen.forms.base.interfaces import IField, IWidget, IWidgetExtractor
+from dolmen.forms.base.markers import Marker
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import WidgetExtractor, FieldWidget, Widgets
 from dolmen.forms.ztk.fields import registerSchemaField
 from dolmen.forms.ztk.interfaces import ICollectionField, IListField
+from dolmen.forms.ztk.widgets import getTemplate
 from dolmen.forms.ztk.widgets.choice import ChoiceField, ChoiceFieldWidget
 from dolmen.forms.ztk.widgets.object import ObjectField
 
@@ -48,7 +49,7 @@ _ = MessageFactory("dolmen.forms.base")
 
 class CollectionField(Field):
     """A collection field.
-"""
+    """
     grok.implements(ICollectionField)
 
     collectionType = list
@@ -92,7 +93,7 @@ CollectionSchemaField = CollectionField
 
 class ListField(CollectionField):
     """A list field
-"""
+    """
     grok.implements(IListField)
     collectionType = list
     allowOrdering = True
@@ -104,7 +105,7 @@ ListSchemaField = ListField
 
 class SetField(CollectionField):
     """A set field
-"""
+    """
     collectionType = set
 
 
@@ -114,7 +115,7 @@ SetSchemaField = SetField
 
 class TupleField(CollectionField):
     """A tuple field.
-"""
+    """
     collectionType = tuple
 
 
@@ -125,8 +126,8 @@ TupleSchemaField = TupleField
 def newCollectionWidgetFactory(mode=u"", interface=IWidget):
     def collectionWidgetFactory(field, form, request):
         """A widget of a collection is a bit advanced. We have to adapt
-the sub-type of the field as well.
-"""
+        the sub-type of the field as well.
+        """
         widget = component.getMultiAdapter(
             (field, field.valueField, form, request), interface, name=mode)
         return widget
@@ -164,6 +165,8 @@ class MultiGenericFieldWidget(FieldWidget):
     allowRemove = True
     inlineValidation = False
 
+    template = getTemplate('multigenericfieldwidget.cpt')
+    
     def __init__(self, field, value_field, form, request):
         super(MultiGenericFieldWidget, self).__init__(field, form, request)
         self.allowAdding = field.allowAdding
@@ -290,13 +293,15 @@ class ListGenericFieldWidget(MultiGenericFieldWidget):
 
 class MultiGenericDisplayFieldWidget(MultiGenericFieldWidget):
     grok.name('display')
-
+    template = getTemplate('multigenericdisplayfieldwidget.cpt')
 
 # For collection of objects, generate a different widget (with a table)
 
 class MultiObjectFieldWidget(MultiGenericFieldWidget):
     grok.adapts(ICollectionField, ObjectField, Interface, Interface)
 
+    template = getTemplate('multiobjectfieldwidget.cpt')
+    
     def getFields(self):
         return self.valueField.objectFields
 
@@ -304,6 +309,8 @@ class MultiObjectFieldWidget(MultiGenericFieldWidget):
 class ListObjectFieldWidget(MultiObjectFieldWidget):
     grok.adapts(ListField, ObjectField, Interface, Interface)
 
+    template = getTemplate('listobjectfieldwidget.cpt')
+    
     def __init__(self, field, value_field, form, request):
         super(ListObjectFieldWidget, self).__init__(
             field, value_field, form, request)
@@ -364,6 +371,8 @@ class MultiChoiceFieldWidget(ChoiceFieldWidget):
     grok.adapts(SetField, ChoiceField, Interface, Interface)
     defaultHtmlClass = ['field', 'field-multichoice']
 
+    template = getTemplate('multichoicefieldwidget.cpt')
+    
     def __init__(self, field, value_field, form, request):
         super(MultiChoiceFieldWidget, self).__init__(field, form, request)
         self.source = value_field
@@ -400,11 +409,13 @@ grok.global_adapter(
 
 class MultiSelectFieldWidget(MultiChoiceFieldWidget):
     grok.name('multiselect')
+    template = getTemplate('multiselectfieldwidget.cpt')
 
 
 class MultiChoiceDisplayFieldWidget(MultiChoiceFieldWidget):
     grok.name('display')
-
+    template = getTemplate('multichoicedisplayfieldwidget.cpt')
+    
     def renderableChoice(self):
         current = self.inputValue()
         base_id = self.htmlId()

@@ -4,6 +4,7 @@ from dolmen.forms.base.fields import Field
 from dolmen.forms.base.markers import Marker, NO_VALUE
 from dolmen.forms.base.widgets import FieldWidget
 from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.widgets import getTemplate
 
 from grokcore import component as grok
 from zope.i18nmessageid import MessageFactory
@@ -15,7 +16,7 @@ _ = MessageFactory("dolmen.forms.base")
 
 class TextField(Field):
     """A text field.
-"""
+    """
 
     def __init__(self, title,
                  minLength=0,
@@ -51,6 +52,9 @@ TextSchemaField = TextField
 
 class TextareaWidget(FieldWidget):
     grok.adapts(TextField, Interface, Interface)
+
+    template = getTemplate('textareawidget.cpt')
+    
     defaultHtmlClass = ['field', 'field-text']
     defaultHtmlAttributes = set(['maxlength', 'placeholder', 'required',
                                  'rows', 'warp', 'readonly', 'cols',
