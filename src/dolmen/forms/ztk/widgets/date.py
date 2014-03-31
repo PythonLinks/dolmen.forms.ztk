@@ -2,6 +2,7 @@
 
 import grokcore.component as grok
 
+from dolmen.clockwork import IFormDateManager
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import DisplayFieldWidget, WidgetExtractor
 from dolmen.forms.ztk.fields import (
@@ -34,8 +35,7 @@ class DateFieldWidget(SchemaFieldWidget):
     valueType = 'date'
 
     def valueToUnicode(self, value):
-        locale = ILocale(self.request)
-        formatter = locale.dates.getFormatter(self.valueType, 'short')
+        formatter = IFormDateManager(self.request)
         return formatter.format(value)
 
 
@@ -48,8 +48,7 @@ class DateWidgetExtractor(WidgetExtractor):
         value, error = super(DateWidgetExtractor, self).extract()
         if value is not NO_VALUE:
             if value:
-                locale = ILocale(self.request)
-                formatter = locale.dates.getFormatter(self.valueType, 'short')
+                formatter = IFormDateManager(self.request)
                 try:
                     value = formatter.parse(value)
                 except (ValueError, DateTimeParseError), error:

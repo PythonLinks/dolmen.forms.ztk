@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.3'
+version = '2.4-dev'
 readme = open("README.txt").read()
 history = open(os.path.join("docs", "HISTORY.txt")).read()
 
@@ -12,6 +12,7 @@ install_requires=[
     'dolmen.forms.base >= 2.2.4',
     'dolmen.location',
     'dolmen.template',
+    'dolmen.clockwork',
     'grokcore.component',
     'setuptools',
     'zope.component',
