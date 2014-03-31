@@ -1,64 +1,118 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms.base.markers import NO_VALUE
+from dolmen.forms.base.markers import NO_VALUE, Marker
+from dolmen.forms.base.fields import Field
+from dolmen.forms.base.widgets import FieldWidget
 from dolmen.forms.base.widgets import WidgetExtractor
-
-from dolmen.forms.ztk.widgets import getTemplate
-from dolmen.forms.ztk.fields import (
-    SchemaField, registerSchemaField, SchemaFieldWidget)
-
-from zope import component
-from zope.interface import Interface
-from zope.schema import interfaces as schema_interfaces
+from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.interfaces import IFormSourceBinder
 
 from grokcore import component as grok
+from zope import component
+from zope.i18nmessageid import MessageFactory
+from zope.interface import Interface
+from zope.schema import interfaces as schema_interfaces
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.interfaces import IVocabularyTokenized, IVocabularyFactory
+
+_ = MessageFactory("dolmen.forms.base")
 
 
-def register():
-    registerSchemaField(ChoiceSchemaField, schema_interfaces.IChoice)
-
-
-class ChoiceSchemaField(SchemaField):
+class ChoiceField(Field):
     """A choice field.
-    """
+"""
+    _source = None
+    _vocabularyFactory = None
+    _vocabularyName = None
 
-    def __init__(self, field):
-        super(ChoiceSchemaField, self).__init__(field)
-        self.__source = None
-        self.__source_name = None
-        if field.source is not None:
-            self.__source = field.source
-        elif isinstance(field.vocabularyName, str):
-            # We delay the lookup of the vocabulary, to be sure it
-            # have been registered.
-            self.__source = None
-            self.__source_name = field.vocabularyName
+    def __init__(self, title,
+                 source=None,
+                 vocabularyName=None,
+                 **options):
+        super(ChoiceField, self).__init__(title, **options)
+        if source is not None:
+            self.source = source
+        elif vocabularyName is not None:
+            self.vocabularyFactory = vocabularyName
 
-    @property
-    def source(self):
-        if self.__source is None:
-            self.__source = component.getUtility(
-                schema_interfaces.IVocabularyFactory, name=self.__source_name)
-        return self.__source
+    @apply
+    def vocabularyFactory():
 
-    def getChoices(self, context):
+        def getter(self):
+            if self._vocabularyFactory is None:
+                if self._vocabularyName is not None:
+                    self._vocabularyFactory = component.getUtility(
+                        schema_interfaces.IVocabularyFactory,
+                        name=self._vocabularyName)
+            return self._vocabularyFactory
+
+        def setter(self, factory):
+            if isinstance(factory, str):
+                self._vocabularyName = factory
+                self._vocabularyFactory = None
+            else:
+                self._vocabularyName = None
+                self._vocabularyFactory = factory
+            self._source = None
+
+        return property(getter, setter)
+
+    @apply
+    def source():
+
+        def getter(self):
+            return self._source
+
+        def setter(self, source):
+            # Verify if this is a source or a vocabulary
+            if IVocabularyTokenized.providedBy(source):
+                self._source = source
+            else:
+                # Be sure to reset the source
+                self._source = None
+                self._vocabularyFactory = source
+
+        return property(getter, setter)
+
+    def getChoices(self, form):
         source = self.source
-        if (schema_interfaces.IContextSourceBinder.providedBy(source) or
-            schema_interfaces.IVocabularyFactory.providedBy(source)):
-            source = source(context)
-        assert schema_interfaces.IVocabularyTokenized.providedBy(source)
+        if source is None:
+            factory = self.vocabularyFactory
+            assert factory is not None, \
+                "No vocabulary source available."
+            if (IContextSourceBinder.providedBy(factory) or
+                IVocabularyFactory.providedBy(factory)):
+                source = factory(form.context)
+            elif IFormSourceBinder.providedBy(factory):
+                source = factory(form)
+            assert IVocabularyTokenized.providedBy(source), \
+                "No valid vocabulary available, %s is not valid for %s" % (
+                source, self)
         return source
 
+    def validate(self, value, form):
+        error = super(ChoiceField, self).validate(value, form)
+        if error is not None:
+            return error
+        if not isinstance(value, Marker):
+            choices = self.getChoices(form)
+            if value not in choices:
+                return _(u"The selected value is not among the possible choices.")
+        return None
 
-class ChoiceFieldWidget(SchemaFieldWidget):
-    grok.adapts(ChoiceSchemaField, Interface, Interface)
+# BBB
+ChoiceSchemaField = ChoiceField
 
-    template = getTemplate('choicefieldwidget.pt')
+
+class ChoiceFieldWidget(FieldWidget):
+    grok.adapts(ChoiceField, Interface, Interface)
+    defaultHtmlClass = ['field', 'field-choice']
+    defaultHtmlAttributes = set(['required', 'size', 'style', 'disabled'])
+    _choices = None
 
     def __init__(self, field, form, request):
         super(ChoiceFieldWidget, self).__init__(field, form, request)
         self.source = field
-        self.__choices = None
 
     def lookupTerm(self, value):
         choices = self.choices()
@@ -78,18 +132,16 @@ class ChoiceFieldWidget(SchemaFieldWidget):
         return u''
 
     def choices(self):
-        if self.__choices is not None:
-            return self.__choices
+        if self._choices is not None:
+            return self._choices
         # self.source is used instead of self.component in order to be
         # able to override it in subclasses.
-        self.__choices = self.source.getChoices(self.form.context)
-        return self.__choices
+        self._choices = self.source.getChoices(self.form)
+        return self._choices
 
 
 class ChoiceDisplayWidget(ChoiceFieldWidget):
     grok.name('display')
-
-    template = getTemplate('choicedisplaywidget.pt')
 
     def valueToUnicode(self, value):
         term = self.lookupTerm(value)
@@ -99,12 +151,12 @@ class ChoiceDisplayWidget(ChoiceFieldWidget):
 
 
 class ChoiceWidgetExtractor(WidgetExtractor):
-    grok.adapts(ChoiceSchemaField, Interface, Interface)
+    grok.adapts(ChoiceField, Interface, Interface)
 
     def extract(self):
         value, error = super(ChoiceWidgetExtractor, self).extract()
         if value is not NO_VALUE:
-            choices = self.component.getChoices(self.form.context)
+            choices = self.component.getChoices(self.form)
             try:
                 value = choices.getTermByToken(value).value
             except LookupError:
@@ -112,17 +164,11 @@ class ChoiceWidgetExtractor(WidgetExtractor):
         return (value, error)
 
 
-class HiddenChoiceWidgetExtractor(ChoiceWidgetExtractor):
-    grok.name('hidden')
-
-
 # Radio Widget
 
 class RadioFieldWidget(ChoiceFieldWidget):
-    grok.adapts(ChoiceSchemaField, Interface, Interface)
+    grok.adapts(ChoiceField, Interface, Interface)
     grok.name('radio')
-
-    template = getTemplate('radiofieldwidget.pt')
 
     def renderableChoices(self):
         current = self.inputValue()
@@ -132,3 +178,21 @@ class RadioFieldWidget(ChoiceFieldWidget):
                    'title': choice.title or choice.token,
                    'checked': choice.token == current and 'checked' or None,
                    'id': base_id + '-' + str(i)}
+
+
+def ChoiceSchemaFactory(schema):
+    field = ChoiceField(
+        schema.title or None,
+        identifier=schema.__name__,
+        description=schema.description,
+        required=schema.required,
+        readonly=schema.readonly,
+        source=schema.vocabulary,
+        vocabularyName=schema.vocabularyName,
+        interface=schema.interface,
+        constrainValue=schema.constraint,
+        defaultValue=schema.default or NO_VALUE)
+    return field
+
+def register():
+    registerSchemaField(ChoiceSchemaFactory, schema_interfaces.IChoice)

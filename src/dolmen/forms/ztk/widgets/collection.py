@@ -1,79 +1,132 @@
 # -*- coding: utf-8 -*-
 
-import grokcore.component as grok
-import hashlib
-md5hash = lambda s: hashlib.md5(s).hexdigest()
+try:
+    import hashlib
+    md5hash = lambda s: hashlib.md5(s).hexdigest()
+except ImportError:
+    import md5
+    md5hash = lambda s: md5.new(s).hexdigest()
 
-from dolmen.forms.base import _, Fields, Widgets, cloneFormData
-from dolmen.forms.base.datamanagers import NoneDataManager
+try:
+    # If you have the fanstatic extra, add support to include widget JS
+    import fanstatic
+    import js.jquery
+    import zeam.jsontemplate
+
+    library = fanstatic.Library('dolmen.forms.ztk.widgets', 'static')
+    collection = fanstatic.Resource(
+        library, 'collection.js', depends=[js.jquery.jquery,
+                                           zeam.jsontemplate.jsontemplate])
+    requireCollectionResources = collection.need
+except ImportError:
+    class Library(object):
+        name = ""
+    library = Library()
+    requireCollectionResources = lambda: None
+
+from dolmen.forms.base.datamanager import NoneDataManager
+from dolmen.forms.base.errors import Errors, Error
+from dolmen.forms.base.fields import Field, Fields
+from dolmen.forms.base.markers import Marker
+from dolmen.forms.base.form import cloneFormData
 from dolmen.forms.base.interfaces import IField, IWidget, IWidgetExtractor
 from dolmen.forms.base.markers import NO_VALUE
-from dolmen.forms.base.widgets import WidgetExtractor, createWidget
+from dolmen.forms.base.widgets import WidgetExtractor, FieldWidget, Widgets
+from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.interfaces import ICollectionField, IListField
+from dolmen.forms.ztk.widgets.choice import ChoiceField, ChoiceFieldWidget
+from dolmen.forms.ztk.widgets.object import ObjectField
 
-from dolmen.forms.ztk.widgets import getTemplate
-from dolmen.forms.ztk.interfaces import ICollectionSchemaField
-from dolmen.forms.ztk.widgets.choice import ChoiceSchemaField, ChoiceFieldWidget
-from dolmen.forms.ztk.widgets.object import ObjectSchemaField
-from dolmen.forms.ztk.fields import (
-    SchemaField, registerSchemaField, SchemaFieldWidget)
-
+from grokcore import component as grok
 from zope import component
+from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
 
-
-def register():
-    registerSchemaField(CollectionSchemaField, schema_interfaces.ICollection)
-    registerSchemaField(ListSchemaField, schema_interfaces.IList)
-    registerSchemaField(SetSchemaField, schema_interfaces.ISet)
-    registerSchemaField(TupleSchemaField, schema_interfaces.ITuple)
+_ = MessageFactory("dolmen.forms.base")
 
 
-class CollectionSchemaField(SchemaField):
+class CollectionField(Field):
     """A collection field.
-    """
-    grok.implements(ICollectionSchemaField)
+"""
+    grok.implements(ICollectionField)
 
     collectionType = list
     allowAdding = True
     allowRemove = True
+    inlineValidation = False
 
-    def __init__(self, field):
-        super(CollectionSchemaField, self).__init__(field)
-        self.__value_field = IField(self._field.value_type)
+    def __init__(self, title,
+                 valueField=None,
+                 minLength=0,
+                 maxLength=None,
+                 **options):
+        super(CollectionField, self).__init__(title, **options)
+        self._valueField = IField(valueField, None)
+        self.minLength = minLength
+        self.maxLength = maxLength
 
     @property
     def valueField(self):
-        return self.__value_field
+        return self._valueField
+
+    def validate(self, value, form):
+        error = super(CollectionField, self).validate(value, form)
+        if error is not None:
+            return error
+        if not isinstance(value, Marker):
+            assert isinstance(value, self.collectionType)
+            if self.minLength and len(value) < self.minLength:
+                return _(u"There are too few items.")
+            if self.maxLength and len(value) > self.maxLength:
+                return _(u"There are too many items.")
+        return None
 
     def isEmpty(self, value):
         return value is NO_VALUE or not len(value)
 
 
-class ListSchemaField(CollectionSchemaField):
+# BBB
+CollectionSchemaField = CollectionField
+
+
+class ListField(CollectionField):
     """A list field
-    """
+"""
+    grok.implements(IListField)
     collectionType = list
     allowOrdering = True
 
 
-class SetSchemaField(CollectionSchemaField):
+# BBB
+ListSchemaField = ListField
+
+
+class SetField(CollectionField):
     """A set field
-    """
+"""
     collectionType = set
 
 
-class TupleSchemaField(CollectionSchemaField):
+# BBB
+SetSchemaField = SetField
+
+
+class TupleField(CollectionField):
     """A tuple field.
-    """
+"""
     collectionType = tuple
+
+
+# BBB
+TupleSchemaField = TupleField
 
 
 def newCollectionWidgetFactory(mode=u"", interface=IWidget):
     def collectionWidgetFactory(field, form, request):
         """A widget of a collection is a bit advanced. We have to adapt
-        the sub-type of the field as well.
-        """
+the sub-type of the field as well.
+"""
         widget = component.getMultiAdapter(
             (field, field.valueField, form, request), interface, name=mode)
         return widget
@@ -82,34 +135,40 @@ def newCollectionWidgetFactory(mode=u"", interface=IWidget):
 
 grok.global_adapter(
     newCollectionWidgetFactory(mode='input'),
-    adapts=(ICollectionSchemaField, Interface, Interface),
+    adapts=(ICollectionField, Interface, Interface),
     provides=IWidget,
     name='input')
 
 grok.global_adapter(
+    newCollectionWidgetFactory(mode='input-list'),
+    adapts=(ICollectionField, Interface, Interface),
+    provides=IWidget,
+    name='input-list')
+
+grok.global_adapter(
     newCollectionWidgetFactory(mode='display'),
-    adapts=(ICollectionSchemaField, Interface, Interface),
+    adapts=(ICollectionField, Interface, Interface),
     provides=IWidget,
     name='display')
 
 grok.global_adapter(
     newCollectionWidgetFactory(interface=IWidgetExtractor),
-    adapts=(ICollectionSchemaField, Interface, Interface),
+    adapts=(ICollectionField, Interface, Interface),
     provides=IWidgetExtractor)
 
 
-class MultiGenericFieldWidget(SchemaFieldWidget):
-    grok.adapts(ICollectionSchemaField, Interface, Interface, Interface)
+class MultiGenericFieldWidget(FieldWidget):
+    grok.adapts(ICollectionField, Interface, Interface, Interface)
 
     allowAdding = True
     allowRemove = True
-
-    template = getTemplate('multigenericfieldwidget.pt')
+    inlineValidation = False
 
     def __init__(self, field, value_field, form, request):
         super(MultiGenericFieldWidget, self).__init__(field, form, request)
         self.allowAdding = field.allowAdding
         self.allowRemove = field.allowRemove
+        self.inlineValidation = field.inlineValidation
         self.valueField = value_field
         self.valueWidgets = Widgets()
         self.haveValues = False
@@ -123,7 +182,7 @@ class MultiGenericFieldWidget(SchemaFieldWidget):
         else:
             form.ignoreRequest = False
             form.ignoreContent = True
-        return createWidget(field, form, self.request)
+        return form.widgetFactory.widget(field)
 
     def addValueWidget(self, new_identifier, value):
         widget = self.createValueWidget(new_identifier, value)
@@ -132,36 +191,68 @@ class MultiGenericFieldWidget(SchemaFieldWidget):
         return widget
 
     def prepareContentValue(self, values):
-        if values is NO_VALUE:
-            return {self.identifier: '0'}
-        for position, value in enumerate(values):
-            # Create new widgets for each value
-            self.addValueWidget(position, value)
-        count = len(values)
+        count = 0
+        if values is not NO_VALUE:
+            for position, value in enumerate(values):
+                # Create new widgets for each value
+                self.addValueWidget(position, value)
+            count += len(values)
+        if self.allowAdding and self.required and not count:
+            self.addValueWidget(count, None)
+            count += 1
         if count:
             self.haveValues = True
         return {self.identifier: str(count)}
 
-    def prepareRequestValue(self, values):
+    def prepareRequestValue(self, values, extractor):
         value_count = 0
+        errors = None
         identifier_count = int(values.get(self.identifier, '0'))
         remove_something = self.identifier + '.remove' in values
+        add_something = self.identifier + '.add' in values
+
+        if self.inlineValidation:
+            # If inlineValidation is on, and we removed or added
+            # something, we extract this field to get the
+            # validation messages right away (if the user clicked
+            # on add or remove, he cannot have clicked on an
+            # action button)
+            if add_something or remove_something:
+                ignored, errors = extractor.extract()
+                if errors:
+                    self.form.errors.append(errors)
+
         for position in range(0, identifier_count):
             value_marker = (self.identifier, position,)
             value_present = '%s.present.%d' % value_marker in values
             if not value_present:
                 continue
+            value_identifier = '%s.field.%d' % value_marker
             value_selected = '%s.checked.%d' % value_marker in values
             if remove_something and value_selected:
+                if errors and value_identifier in errors:
+                    # If the field have an error, remove it
+                    del errors[value_identifier]
                 continue
+            # We need to provide the widget error now, but cannot set
+            # all of them on the form now, as we might remove them
+            # with delete
             self.addValueWidget(position, None)
             value_count += 1
-        if self.identifier + '.add' in values:
+        if (add_something or
+            (self.allowAdding and self.required and not value_count)):
             self.addValueWidget(identifier_count, None)
             value_count += 1
             values[self.identifier] = str(identifier_count + 1)
         if value_count:
             self.haveValues = True
+        if errors:
+            if len(errors) > 1:
+                self.form.errors.append(
+                    Error(_(u"There were errors."), self.form.prefix))
+            else:
+                # If no errors are left, remove from the form (top level error)
+                del self.form.errors[self.identifier]
         return values
 
     @property
@@ -174,6 +265,7 @@ class MultiGenericFieldWidget(SchemaFieldWidget):
     def update(self):
         super(MultiGenericFieldWidget, self).update()
         self.valueWidgets.update()
+        requireCollectionResources()
 
         self.jsonAddIdentifier = None
         self.jsonAddTemplate = None
@@ -188,7 +280,7 @@ class MultiGenericFieldWidget(SchemaFieldWidget):
 
 
 class ListGenericFieldWidget(MultiGenericFieldWidget):
-    grok.adapts(ListSchemaField, Interface, Interface, Interface)
+    grok.adapts(ListField, Interface, Interface, Interface)
 
     def __init__(self, field, value_field, form, request):
         super(ListGenericFieldWidget, self).__init__(
@@ -198,23 +290,19 @@ class ListGenericFieldWidget(MultiGenericFieldWidget):
 
 class MultiGenericDisplayFieldWidget(MultiGenericFieldWidget):
     grok.name('display')
-    template = getTemplate('multigenericdisplayfieldwidget.pt')
+
 
 # For collection of objects, generate a different widget (with a table)
 
 class MultiObjectFieldWidget(MultiGenericFieldWidget):
-    grok.adapts(ICollectionSchemaField, ObjectSchemaField, Interface, Interface)
-
-    template = getTemplate('multiobjectfieldwidget.pt')
+    grok.adapts(ICollectionField, ObjectField, Interface, Interface)
 
     def getFields(self):
         return self.valueField.objectFields
 
 
 class ListObjectFieldWidget(MultiObjectFieldWidget):
-    grok.adapts(ListSchemaField, ObjectSchemaField, Interface, Interface)
-
-    template = getTemplate('listobjectfieldwidget.pt')
+    grok.adapts(ListField, ObjectField, Interface, Interface)
 
     def __init__(self, field, value_field, form, request):
         super(ListObjectFieldWidget, self).__init__(
@@ -222,8 +310,20 @@ class ListObjectFieldWidget(MultiObjectFieldWidget):
         self.allowOrdering = field.allowOrdering
 
 
+# Still make possible to have the non-table implementation
+
+class RegularMultiObjectFieldWidget(MultiGenericFieldWidget):
+    grok.adapts(ICollectionField, ObjectField, Interface, Interface)
+    grok.name('input-list')
+
+
+class RegularListObjectFieldWidget(ListGenericFieldWidget):
+    grok.adapts(ListField, ObjectField, Interface, Interface)
+    grok.name('input-list')
+
+
 class MultiGenericWidgetExtractor(WidgetExtractor):
-    grok.adapts(ICollectionSchemaField, Interface, Interface, Interface)
+    grok.adapts(ICollectionField, Interface, Interface, Interface)
 
     def __init__(self, field, value_field, form, request):
         super(MultiGenericWidgetExtractor, self).__init__(
@@ -238,7 +338,8 @@ class MultiGenericWidgetExtractor(WidgetExtractor):
             except ValueError:
                 return (None, u"Invalid internal input")
             collectedValues = []
-            for position in range(0, int(value)):
+            collectedErrors = Errors(identifier=self.identifier)
+            for position in range(0, value):
                 value_present = '%s.present.%d' % (
                     self.identifier, position) in self.request.form
                 if not value_present:
@@ -248,8 +349,11 @@ class MultiGenericWidgetExtractor(WidgetExtractor):
                 form = cloneFormData(self.form, prefix=self.identifier)
                 data, errors = form.extractData(Fields(field))
                 if errors:
-                    return (None, errors)
-                collectedValues.append(data[field.identifier])
+                    collectedErrors.extend(errors)
+                else:
+                    collectedValues.append(data[field.identifier])
+            if collectedErrors:
+                return (None, collectedErrors)
             value = self.component.collectionType(collectedValues)
         return (value, None)
 
@@ -257,9 +361,8 @@ class MultiGenericWidgetExtractor(WidgetExtractor):
 # Multi-Choice widget
 
 class MultiChoiceFieldWidget(ChoiceFieldWidget):
-    grok.adapts(SetSchemaField, ChoiceSchemaField, Interface, Interface)
-
-    template = getTemplate('multichoicefieldwidget.pt')
+    grok.adapts(SetField, ChoiceField, Interface, Interface)
+    defaultHtmlClass = ['field', 'field-multichoice']
 
     def __init__(self, field, value_field, form, request):
         super(MultiChoiceFieldWidget, self).__init__(field, form, request)
@@ -290,19 +393,17 @@ class MultiChoiceFieldWidget(ChoiceFieldWidget):
 
 grok.global_adapter(
     newCollectionWidgetFactory(mode='multiselect'),
-    adapts=(ICollectionSchemaField, Interface, Interface),
+    adapts=(ICollectionField, Interface, Interface),
     provides=IWidget,
     name='multiselect')
 
 
 class MultiSelectFieldWidget(MultiChoiceFieldWidget):
     grok.name('multiselect')
-    template = getTemplate('multiselectfieldwidget.pt')
 
 
 class MultiChoiceDisplayFieldWidget(MultiChoiceFieldWidget):
     grok.name('display')
-    template = getTemplate('multichoicedisplayfieldwidget.pt')
 
     def renderableChoice(self):
         current = self.inputValue()
@@ -314,7 +415,7 @@ class MultiChoiceDisplayFieldWidget(MultiChoiceFieldWidget):
 
 
 class MultiChoiceWidgetExtractor(WidgetExtractor):
-    grok.adapts(SetSchemaField, ChoiceSchemaField, Interface, Interface)
+    grok.adapts(SetField, ChoiceField, Interface, Interface)
 
     def __init__(self, field, value_field, form, request):
         super(MultiChoiceWidgetExtractor, self).__init__(field, form, request)
@@ -331,7 +432,7 @@ class MultiChoiceWidgetExtractor(WidgetExtractor):
             if value is NO_VALUE:
                 # Nothing selected
                 return (self.component.collectionType(), None)
-            choices = self.source.getChoices(self.form.context)
+            choices = self.source.getChoices(self.form)
             try:
                 if not isinstance(value, list):
                     value = [value]
@@ -340,3 +441,38 @@ class MultiChoiceWidgetExtractor(WidgetExtractor):
             except LookupError:
                 return (None, _(u'The selected value is not available.'))
         return (value, errors)
+
+
+def makeCollectionSchemaFactory(factory):
+
+    def CollectionSchemaFactory(schema):
+        field = factory(
+            schema.title or None,
+            identifier=schema.__name__,
+            description=schema.description,
+            required=schema.required,
+            readonly=schema.readonly,
+            minLength=schema.min_length,
+            maxLength=schema.max_length,
+            valueField=schema.value_type,
+            interface=schema.interface,
+            constrainValue=schema.constraint,
+            defaultValue=schema.default or NO_VALUE)
+        return field
+
+    return CollectionSchemaFactory
+
+
+def register():
+    registerSchemaField(
+        makeCollectionSchemaFactory(CollectionField),
+        schema_interfaces.ICollection)
+    registerSchemaField(
+        makeCollectionSchemaFactory(ListField),
+        schema_interfaces.IList)
+    registerSchemaField(
+        makeCollectionSchemaFactory(SetField),
+        schema_interfaces.ISet)
+    registerSchemaField(
+        makeCollectionSchemaFactory(TupleField),
+        schema_interfaces.ITuple)

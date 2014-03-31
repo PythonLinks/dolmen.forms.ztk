@@ -1,30 +1,35 @@
 # -*- coding: utf-8 -*-
 
-import grokcore.component as grok
-
-from dolmen.forms.base import _
-from dolmen.forms.base.markers import NO_VALUE
-from dolmen.forms.base.widgets import WidgetExtractor, DisplayFieldWidget
-
-from dolmen.forms.ztk.widgets import getTemplate
-from dolmen.forms.ztk.fields import SchemaField, SchemaFieldWidget
+from dolmen.forms.base.fields import Field
+from dolmen.forms.base.widgets import FieldWidget, DisplayFieldWidget
+from dolmen.forms.base.widgets import WidgetExtractor
 from dolmen.forms.ztk.fields import registerSchemaField
 
+from grokcore import component as grok
+from zope.i18nmessageid import MessageFactory
 from zope.schema import interfaces as schema_interfaces
 
 
-class BooleanSchemaField(SchemaField):
+_ = MessageFactory("dolmen.forms.base")
+
+
+class BooleanField(Field):
     """A boolean field.
-    """
+"""
+
+# BBB
+BooleanSchemaField = BooleanField
 
 
-class CheckBoxWidget(SchemaFieldWidget):
-    grok.adapts(BooleanSchemaField, None, None)
-    template = getTemplate('checkboxwidget.pt')
+class CheckBoxWidget(FieldWidget):
+    grok.adapts(BooleanField, None, None)
+    defaultHtmlClass = ['field', 'field-bool']
+    defaultHtmlAttributes = set(['readonly', 'style', 'disabled'])
+    alternateLayout = True
 
 
 class CheckBoxDisplayWidget(DisplayFieldWidget):
-    grok.adapts(BooleanSchemaField, None, None)
+    grok.adapts(BooleanField, None, None)
 
     def valueToUnicode(self, value):
         if bool(value):
@@ -33,27 +38,29 @@ class CheckBoxDisplayWidget(DisplayFieldWidget):
 
 
 class CheckBoxWidgetExtractor(WidgetExtractor):
-    grok.adapts(BooleanSchemaField, None, None)
+    grok.adapts(BooleanField, None, None)
 
     def extract(self):
         value, error = WidgetExtractor.extract(self)
-        is_present = self.request.form.get(
-            self.identifier + '.present', NO_VALUE)
-
-        if is_present is NO_VALUE:
-            value = NO_VALUE
-        elif is_present is not NO_VALUE and value == u'True':
+        if value == 'True':
             value = True
         else:
             value = False
         return (value, error)
 
 
-class HiddenCheckBoxWidgetExtractor(CheckBoxWidgetExtractor):
-    grok.name('hidden')
+def BooleanSchemaFactory(schema):
+    field = BooleanField(
+        schema.title or None,
+        identifier=schema.__name__,
+        description=schema.description,
+        required=schema.required,
+        readonly=schema.readonly,
+        interface=schema.interface,
+        constrainValue=schema.constraint,
+        defaultValue=bool(schema.default))
+    return field
 
 
 def register():
-    """Entry point hook.
-    """
-    registerSchemaField(BooleanSchemaField, schema_interfaces.IBool)
+    registerSchemaField(BooleanSchemaFactory, schema_interfaces.IBool)

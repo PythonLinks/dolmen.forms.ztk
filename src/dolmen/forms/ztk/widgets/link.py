@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
 
 from dolmen.forms.base.interfaces import IField
-from dolmen.forms.base.widgets import FieldWidget
-from dolmen.forms.ztk.widgets import getTemplate
-from dolmen.location import get_absolute_url
-from grokcore import component as grok
+from dolmen.forms.base.widgets import DisplayFieldWidget
+from dolmen.forms.base.markers import ModeMarker
+
+from zope.component import getMultiAdapter
 from zope.interface import Interface
+from zope.traversing.browser.interfaces import IAbsoluteURL
+
+from grokcore import component as grok
 
 
-class LinkFieldWidget(FieldWidget):
+class LinkFieldWidget(DisplayFieldWidget):
     grok.adapts(IField, Interface, Interface)
     grok.name('link')
 
-    template = getTemplate('linkfieldwidget.pt')
-
     def url(self):
-        content = self.form.getContentData().getContent()
-        return get_absolute_url(content, self.request)
+        context = self.form.context
+        return getMultiAdapter((context, self.request), IAbsoluteURL)()
+
+
+LINK = ModeMarker('LINK', extractable=False)
