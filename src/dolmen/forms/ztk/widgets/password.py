@@ -14,7 +14,7 @@ _ = MessageFactory("dolmen.forms.base")
 
 class PasswordField(Field):
     """A password field.
-"""
+    """
 
     def __init__(self, title,
                  minLength=0,

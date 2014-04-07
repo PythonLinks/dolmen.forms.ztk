@@ -2,6 +2,13 @@
 
 from zope import interface
 from dolmen.forms.base.interfaces import IField, IDolmenFormsBaseAPI
+from zope.schema.interfaces import ISource
+
+
+class IFormSourceBinder(ISource):
+    """Marker interface used with zope.schema Choice in order to give
+    a factory that takes the source.
+    """
 
 
 class ISchemaField(IField):
