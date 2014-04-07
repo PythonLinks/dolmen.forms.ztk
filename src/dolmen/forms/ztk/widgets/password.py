@@ -4,6 +4,7 @@ from dolmen.forms.base.fields import Field
 from dolmen.forms.base.markers import Marker, NO_VALUE
 from dolmen.forms.base.widgets import FieldWidget
 from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.widgets import getTemplate
 
 from grokcore import component as grok
 from zope.i18nmessageid import MessageFactory
@@ -42,6 +43,7 @@ class PasswordField(Field):
 
 class PasswordWidget(FieldWidget):
     grok.adapts(PasswordField, None, None)
+    template = getTemplate('passwordwidget.cpt')
     defaultHtmlClass = ['field', 'field-password']
     defaultHtmlAttributes = ['readonly', 'required', 'autocomplete',
                              'maxlength', 'pattern', 'placeholder',

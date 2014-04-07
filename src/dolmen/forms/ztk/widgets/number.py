@@ -5,6 +5,7 @@ from dolmen.forms.base.interfaces import IFieldExtractionValueSetting
 from dolmen.forms.base.markers import Marker, NO_VALUE
 from dolmen.forms.base.widgets import FieldWidget, FieldWidgetExtractor
 from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.widgets import getTemplate
 
 from grokcore import component as grok
 from zope.i18nmessageid import MessageFactory
@@ -106,6 +107,7 @@ class FloatFieldWidgetExtractor(IntegerFieldWidgetExtractor):
 
 class NumberWidget(FieldWidget):
     grok.adapts(IntegerField, Interface, Interface)
+    template = getTemplate('numberwidget.cpt')
     defaultHtmlClass = ['field', 'field-number']
     defaultHtmlAttributes = set(['readonly', 'required', 'autocomplete',
                                  'max', 'min', 'setup', 'placeholder',
@@ -116,6 +118,7 @@ class CurrencyDisplayWidget(FieldWidget):
     grok.adapts(CurrencyField, Interface, Interface)
     grok.name('display')
 
+    template = getTemplate('currencydisplaywidget.cpt')
     defaultHtmlClass = ['field', 'field-currency']
 
     def valueToUnicode(self, value):

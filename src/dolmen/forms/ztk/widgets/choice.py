@@ -6,6 +6,7 @@ from dolmen.forms.base.widgets import FieldWidget
 from dolmen.forms.base.widgets import WidgetExtractor
 from dolmen.forms.ztk.fields import registerSchemaField
 from dolmen.forms.ztk.interfaces import IFormSourceBinder
+from dolmen.forms.ztk.widgets import getTemplate
 
 from grokcore import component as grok
 from zope import component
@@ -110,6 +111,8 @@ class ChoiceFieldWidget(FieldWidget):
     defaultHtmlAttributes = set(['required', 'size', 'style', 'disabled'])
     _choices = None
 
+    template = getTemplate('choicefieldwidget.cpt')
+    
     def __init__(self, field, form, request):
         super(ChoiceFieldWidget, self).__init__(field, form, request)
         self.source = field
@@ -143,6 +146,8 @@ class ChoiceFieldWidget(FieldWidget):
 class ChoiceDisplayWidget(ChoiceFieldWidget):
     grok.name('display')
 
+    template = getTemplate('choicedisplaywidget.cpt')
+    
     def valueToUnicode(self, value):
         term = self.lookupTerm(value)
         if term is not None:
@@ -193,6 +198,7 @@ def ChoiceSchemaFactory(schema):
         constrainValue=schema.constraint,
         defaultValue=schema.default or NO_VALUE)
     return field
+
 
 def register():
     registerSchemaField(ChoiceSchemaFactory, schema_interfaces.IChoice)

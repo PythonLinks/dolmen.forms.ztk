@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms.base.datamanager import ObjectDataManager
+from dolmen.forms.base.datamanagers import ObjectDataManager
 from dolmen.forms.base.errors import Errors
 from dolmen.forms.base.fields import Field, Fields
-from dolmen.forms.base.form import cloneFormData
+from dolmen.forms.base.components import cloneFormData
 from dolmen.forms.base.markers import NO_VALUE, Marker, DEFAULT
 from dolmen.forms.base.widgets import WidgetExtractor
 from dolmen.forms.base.widgets import Widgets, FieldWidget
 from dolmen.forms.ztk.fields import registerSchemaField
 from dolmen.forms.ztk.interfaces import IObjectField
+from dolmen.forms.ztk.widgets import getTemplate
 
 from grokcore import component as grok
 from zope.component import getUtility
@@ -52,6 +53,8 @@ ObjectSchemaField = ObjectField
 class ObjectFieldWidget(FieldWidget):
     grok.adapts(ObjectField, Interface, Interface)
 
+    template = getTemplate('objectfieldwidget.cpt')
+    
     def prepareContentValue(self, value):
         if value is NO_VALUE:
             return {self.identifier: []}

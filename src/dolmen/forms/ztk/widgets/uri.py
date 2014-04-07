@@ -2,17 +2,18 @@
 
 import re
 
-from zeam.form.base.markers import Marker, NO_VALUE
-from zeam.form.base.fields import Field
-from zeam.form.base.widgets import FieldWidget
-from zeam.form.ztk.fields import registerSchemaField
+from dolmen.forms.base.markers import Marker, NO_VALUE
+from dolmen.forms.base.fields import Field
+from dolmen.forms.base.widgets import FieldWidget
+from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.widgets import getTemplate
 
 from grokcore import component as grok
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
 
-_ = MessageFactory("zeam.form.base")
+_ = MessageFactory("dolmen.forms.base")
 
 
 isURI = re.compile(
@@ -24,7 +25,7 @@ isURI = re.compile(
 
 class URIField(Field):
     """A text line field.
-"""
+    """
     target = '_self'
 
     def __init__(self, title,
@@ -57,6 +58,9 @@ URISchemaField = URIField
 
 class URIWidget(FieldWidget):
     grok.adapts(URIField, Interface, Interface)
+
+    template = getTemplate('uriwidget.pt')
+    
     defaultHtmlClass = ['field', 'field-uri']
     defaultHtmlAttributes = set(['readonly', 'required', 'autocomplete',
                                  'maxlength', 'pattern', 'placeholder',
@@ -67,6 +71,8 @@ class URIDisplayWidget(FieldWidget):
     grok.adapts(URIField, Interface, Interface)
     grok.name('display')
 
+    template = getTemplate('uridisplaywidget.pt')
+    
     @property
     def target(self):
         return self.component.target

@@ -1,7 +1,7 @@
 <tal:object>
   <tal:widgets tal:repeat="objectWidget widget.objectWidgets">
     <tal:presentation
-       tal:condition="widget.visible">
+       tal:condition="widget.isVisible()">
       <label class="field-label" for="#"
              tal:attributes="for objectWidget.htmlId()"
              tal:content="objectWidget.title">

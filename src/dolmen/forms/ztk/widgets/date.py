@@ -17,7 +17,7 @@ _ = MessageFactory("dolmen.forms.base")
 
 class DateField(Field):
     """A date field.
-"""
+    """
     valueLength = 'short'
 
     @property
@@ -56,7 +56,7 @@ DateSchemaField = DateField
 
 class DatetimeField(DateField):
     """A datetime field.
-"""
+    """
     valueLength = 'short'
 
     @property
