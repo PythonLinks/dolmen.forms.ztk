@@ -20,14 +20,14 @@ You can create a full set of fields from a Zope interface::
   >>> from dolmen.forms.base import Fields
   >>> s2 = Fields(IPlanet)
   >>> list(s2)
-  [<TextLineSchemaField Name>, <IntSchemaField Size>]
+  [<TextLineField Name>, <IntegerField Size>]
 
 Those are correct fields, filled with the interface definition
 information::
 
   >>> f2, f3 = list(s2)
   >>> f2
-  <TextLineSchemaField Name>
+  <TextLineField Name>
   >>> f2.title
   u'Name'
   >>> f2.identifier
@@ -35,7 +35,7 @@ information::
   >>> f2.description
   u''
   >>> f3
-  <IntSchemaField Size>
+  <IntegerField Size>
   >>> f3.description
   u'Size in Km'
 
@@ -54,8 +54,8 @@ You can add fields via an interface after::
 
   >>> s2.extend(IHabitationSupport)
   >>> list(s2)
-  [<TextLineSchemaField Name>, <IntSchemaField Size>,
-   <TextLineSchemaField City name>, <IntSchemaField Number of people>]
+  [<TextLineField Name>, <IntegerField Size>,
+   <TextLineField City name>, <IntegerField Number of people>]
 
 You can add a field from an interface alone::
 
@@ -65,10 +65,10 @@ You can add a field from an interface alone::
 
   >>> s2.extend(IFoodSupport['vegetables'])
   >>> list(s2.select('vegetables'))
-  [<TextLineSchemaField Vegetables kind>]
+  [<TextLineField Vegetables kind>]
 
   >>> list(Fields(IFoodSupport['meat']))
-  [<TextLineSchemaField Meat kind>]
+  [<TextLineField Meat kind>]
 
 But it need to belong to an interface::
 
@@ -87,9 +87,9 @@ Or to specify at least a __name__:
   ...     __name__="quality",
   ...     title=u"Quality of McDo restaurant"))
   >>> list(fields_created_with_name)
-  [<TextLineSchemaField Quality of McDo restaurant>]
+  [<TextLineField Quality of McDo restaurant>]
   >>> fields_created_with_name['quality']
-  <TextLineSchemaField Quality of McDo restaurant>
+  <TextLineField Quality of McDo restaurant>
 
 Description, required and readonly
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,7 +125,7 @@ You can clone a field and keep all settings::
   >>> clone = s2['size'].clone(new_identifier='myclone')
 
   >>> clone
-  <IntSchemaField Size>
+  <IntegerField Size>
   >>> clone.identifier
   'myclone'
   >>> clone.description

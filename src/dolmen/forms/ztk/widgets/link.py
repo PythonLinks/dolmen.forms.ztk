@@ -7,7 +7,7 @@ from dolmen.forms.ztk.widgets import getTemplate
 
 from zope.component import getMultiAdapter
 from zope.interface import Interface
-from zope.traversing.browser.interfaces import IAbsoluteURL
+from dolmen.location import get_absolute_url
 
 from grokcore import component as grok
 
@@ -20,7 +20,7 @@ class LinkFieldWidget(DisplayFieldWidget):
     
     def url(self):
         context = self.form.context
-        return getMultiAdapter((context, self.request), IAbsoluteURL)()
+        return get_absolute_url(context, self.request)
 
 
 LINK = ModeMarker('LINK', extractable=False)

@@ -34,12 +34,12 @@ So now you can create a field, and get a int/float field::
   >>> fields = Fields(IAnimal)
   >>> intField = fields['age']
   >>> intField
-  <IntSchemaField Age>
+  <IntegerField Age>
   >>> verifyObject(interfaces.IField, intField)
   True
   >>> floatField = fields['weight']
   >>> floatField
-  <FloatSchemaField Weight>
+  <FloatField Weight>
   >>> verifyObject(interfaces.IField, floatField)
   True
 
@@ -59,12 +59,12 @@ You have associated widgets::
 
   >>> intWidget = widgets['form.field.age']
   >>> intWidget
-  <SchemaFieldWidget Age>
+  <NumberWidget Age>
   >>> verifyObject(interfaces.IWidget, intWidget)
   True
   >>> floatWidget = widgets['form.field.weight']
   >>> floatWidget
-  <SchemaFieldWidget Weight>
+  <NumberWidget Weight>
   >>> verifyObject(interfaces.IWidget, floatWidget)
   True
 

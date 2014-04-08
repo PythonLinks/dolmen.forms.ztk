@@ -59,7 +59,7 @@ URISchemaField = URIField
 class URIWidget(FieldWidget):
     grok.adapts(URIField, Interface, Interface)
 
-    template = getTemplate('uriwidget.pt')
+    template = getTemplate('uriwidget.cpt')
     
     defaultHtmlClass = ['field', 'field-uri']
     defaultHtmlAttributes = set(['readonly', 'required', 'autocomplete',

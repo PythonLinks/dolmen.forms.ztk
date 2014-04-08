@@ -51,12 +51,12 @@ We can have a field out of the interface:
   >>> from dolmen.forms.base.markers import NO_VALUE
   >>> from dolmen.forms.base import Fields
 
-  >>> from dolmen.forms.ztk.interfaces import ICollectionSchemaField
+  >>> from dolmen.forms.ztk.interfaces import ICollectionField
 
   >>> fields = Fields(ISetOfChoices)
   >>> field = fields['choices']
   >>> field
-  <SetSchemaField My choices>
+  <SetField My choices>
   >>> verifyObject(interfaces.IField, field)
   True
   >>> field.required
@@ -68,7 +68,7 @@ And the field manage a set collection of choice:
   <type 'set'>
   >>> value_field = field.valueField
   >>> value_field
-  <ChoiceSchemaField >
+  <ChoiceField >
   >>> verifyObject(interfaces.IField, value_field)
   True
 
@@ -77,7 +77,7 @@ It can be required:
   >>> required_fields = Fields(IRequiredSetOfChoices)
   >>> required_field = required_fields['choices']
   >>> required_field
-  <SetSchemaField My required choices>
+  <SetField My required choices>
   >>> required_field.required
   True
 

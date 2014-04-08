@@ -15,6 +15,7 @@ from zope import schema, component
 from zope.interface import Interface, Invalid
 from zope.interface.interfaces import IInterface
 from zope.schema import interfaces as schema_interfaces
+from zope.schema._bootstrapinterfaces import IContextAwareDefaultFactory
 
 
 class SchemaFieldFactory(object):
@@ -90,7 +91,13 @@ class SchemaField(Field):
         return value
 
     def getDefaultValue(self, form):
-        default = super(SchemaField, self).getDefaultValue(form)
+        defaultFactory = self._field.get('defaultFactory') 
+        if defaultFactory is None:
+            default = super(SchemaField, self).getDefaultValue(form)
+        elif IContextAwareDefaultFactory.providedBy(defaultFactory): 
+            default = defaultFactory(form.getContent()) 
+        else: 
+            default = defaultFactory()
         if default is not NO_VALUE:
             return default
         default = self._field.default

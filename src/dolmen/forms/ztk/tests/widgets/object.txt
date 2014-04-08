@@ -43,15 +43,15 @@ You have an Object field you get out of the interface::
 
   >>> from dolmen.forms.base import Fields
   >>> from dolmen.forms.base import interfaces
-  >>> from dolmen.forms.ztk.interfaces import IObjectSchemaField
+  >>> from dolmen.forms.ztk.interfaces import IObjectField
 
   >>> postFields = Fields(IPost)
   >>> postField = postFields['comment']
   >>> postField
-  <ObjectSchemaField Comment>
-  >>> verifyObject(IObjectSchemaField, postField)
+  <ObjectField Comment>
+  >>> verifyObject(IObjectField, postField)
   True
-  >>> IObjectSchemaField.extends(interfaces.IField)
+  >>> IObjectField.extends(interfaces.IField)
   True
 
 Now we have a couple more methods on our field to help us with our
@@ -64,9 +64,9 @@ object, to get its schema and fields::
   >>> commentFields
   <Fields>
   >>> list(commentFields)
-  [<TextLineSchemaField Title>,
-   <TextSchemaField Comment>,
-   <TextLineSchemaField Email>]
+  [<TextLineField Title>,
+   <TextField Comment>,
+   <TextLineField Email>]
 
 An another method let you get a factory for the object. You can either
 register an utility with name the schema interface identifier of the

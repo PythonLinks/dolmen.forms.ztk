@@ -21,7 +21,7 @@ _ = MessageFactory("dolmen.forms.base")
 
 class ChoiceField(Field):
     """A choice field.
-"""
+    """
     _source = None
     _vocabularyFactory = None
     _vocabularyName = None
@@ -170,7 +170,6 @@ class ChoiceWidgetExtractor(WidgetExtractor):
 
 
 # Radio Widget
-
 class RadioFieldWidget(ChoiceFieldWidget):
     grok.adapts(ChoiceField, Interface, Interface)
     grok.name('radio')
@@ -192,7 +191,7 @@ def ChoiceSchemaFactory(schema):
         description=schema.description,
         required=schema.required,
         readonly=schema.readonly,
-        source=schema.vocabulary,
+        source=schema.vocabulary or schema.source,
         vocabularyName=schema.vocabularyName,
         interface=schema.interface,
         constrainValue=schema.constraint,

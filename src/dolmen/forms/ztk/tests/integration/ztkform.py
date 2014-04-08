@@ -30,7 +30,7 @@ We can now lookup our form by the name of its class:
   1
 
   >>> print list(form.fields)
-  [<TextLineSchemaField Person name>, <IntSchemaField Person age>]
+  [<TextLineField Person name>, <IntegerField Person age>]
 
 
 Integration test
@@ -62,7 +62,7 @@ We can access the form, fill it and submit it:
 
   >>> agefield = form.get_control('form.field.age')
   >>> agefield.name, agefield.type
-  ('form.field.age', 'text')
+  ('form.field.age', 'number')
   >>> agefield.value = '42'
 
   >>> form.get_control('form.action.send').click()

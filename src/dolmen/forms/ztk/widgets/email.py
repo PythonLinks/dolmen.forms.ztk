@@ -3,7 +3,7 @@
 from dolmen.forms.base.fields import Field
 from dolmen.forms.ztk.fields import (SchemaField, registerSchemaField,
                                      SchemaWidgetExtractor)
-
+from dolmen.forms.base.widgets import FieldWidget
 from grokcore import component as grok
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface

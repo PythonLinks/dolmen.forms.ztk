@@ -51,14 +51,14 @@ So now you can create a field, and get a choice field:
   >>> simple_choice_fields = Fields(ISimpleChoice)
   >>> simple_field = simple_choice_fields['choice']
   >>> simple_field
-  <ChoiceSchemaField My favorite letter>
+  <ChoiceField My favorite letter>
 
   >>> simple_field.source is letter_vocabulary
   True
 
-  >>> simple_field.validate('A')
-  >>> simple_field.validate('foo')
-  u'Constraint not satisfied'
+  >>> simple_field.validate('A', None)
+  >>> simple_field.validate('foo', None)
+  u'The selected value is not among the possible choices.'
 
   >>> verifyObject(interfaces.IField, simple_field)
   True
@@ -88,7 +88,7 @@ You have an associated widget:
   'b1'
 
   >>> print simple_widget.render()
-  <select id="form-field-choice" name="form.field.choice" class="field field-choice field-required">
+  <select id="form-field-choice" name="form.field.choice" class="field field-choice field-required" required="required">
     <option value="a1">Letter A</option>
     <option value="b1" selected="selected">Letter B</option>
     <option value="c1">Letter C</option>
@@ -233,11 +233,9 @@ So now you can create a field, and get a choice field:
   >>> secondChoiceFields = Fields(ISecondChoice)
   >>> secondField = secondChoiceFields['choice']
   >>> secondField
-  <ChoiceSchemaField My Choice>
-  >>> secondField.source is secondVocabulary
-  True
+  <ChoiceField My Choice>
 
-  >>> choices = secondField.getChoices(None)
+  >>> choices = secondField.getChoices(simple_form)
   >>> choices
   <zope.schema.vocabulary.SimpleVocabulary object at ...>
   >>> display_vocabulary(choices)
@@ -245,9 +243,9 @@ So now you can create a field, and get a choice field:
   'B' 'b1' 'Letter B'
   'C' 'c1' 'Letter C'
 
-  >>> secondField.validate('A')
-  >>> secondField.validate(42)
-  u'Constraint not satisfied'
+  >>> secondField.validate('A', simple_form)
+  >>> secondField.validate(42, simple_form)
+  u'The selected value is not among the possible choices.'
 
 Widget
 ------
@@ -274,7 +272,7 @@ You have an associated widget:
   'c1'
 
   >>> print secondWidget.render()
-  <select id="form-field-choice" name="form.field.choice" class="field field-choice field-required">
+  <select id="form-field-choice" name="form.field.choice" class="field field-choice field-required" required="required">
     <option value="a1">Letter A</option>
     <option value="b1">Letter B</option>
     <option value="c1" selected="selected">Letter C</option>

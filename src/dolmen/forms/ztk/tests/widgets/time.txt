@@ -35,7 +35,7 @@ You can get a field for a time::
   >>> timeFields = Fields(ITimeInfo)
   >>> timeField = timeFields['time']
   >>> timeField
-  <TimeSchemaField Current time>
+  <TimeField Current time>
   >>> verifyObject(interfaces.IField, timeField)
   True
 

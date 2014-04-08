@@ -3,6 +3,9 @@
     xmlns:grok="http://namespaces.zope.org/grok">
 
   <include package="dolmen.forms.ztk" />
+  <include package="dolmen.clockwork" />
+
+  <grok:grok package="cromlech.i18n" />
   <grok:grok package="dolmen.location" />
 
 </configure>

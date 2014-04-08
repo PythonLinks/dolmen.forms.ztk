@@ -49,7 +49,7 @@ So now you can create a field, and get a choice field::
   >>> firstChoiceFields = Fields(IFirstChoice)
   >>> firstField = firstChoiceFields['choice']
   >>> firstField
-  <ChoiceSchemaField My favorite letter>
+  <ChoiceField My favorite letter>
 
   >>> firstField.source is letterVocabulary
   True
@@ -172,7 +172,7 @@ So now you can create a field, and get a choice field::
   >>> secondChoiceFields = Fields(ISecondChoice)
   >>> secondField = secondChoiceFields['choice']
   >>> secondField
-  <ChoiceSchemaField My Choice>
+  <ChoiceField My Choice>
   >>> secondField.source is secondVocabulary
   True
 

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from dolmen.clockwork import IFormDateManager
+
 from dolmen.forms.base.fields import Field
 from dolmen.forms.base.markers import Marker, NO_VALUE
 from dolmen.forms.base.widgets import FieldWidget, DisplayFieldWidget
@@ -33,8 +35,7 @@ class DateField(Field):
         self.max = max
 
     def getFormatter(self, form):
-        return form.request.locale.dates.getFormatter(
-            self.valueType, self.valueLength)
+        return IFormDateManager(form.request)
 
     def validate(self, value, form):
         error = super(DateField, self).validate(value, form)
@@ -42,11 +43,11 @@ class DateField(Field):
             return error
         if not isinstance(value, Marker):
             if self.min is not None and value < self.min:
-                formatter = self.getFormatter(form)
+                formatter = IFormDateManager(form.request)
                 return _(u"This date is before the ${not_before}.",
                          dict(not_before=formatter.format(self.min)))
             if self.max is not None and value > self.max:
-                formatter = self.getFormatter(form)
+                formatter = IFormDateManager(form.request)
                 return _(u"This date is after the ${not_after}.",
                          dict(not_after=formatter.format(self.max)))
         return None
@@ -72,7 +73,7 @@ class DateFieldWidget(FieldWidget):
     defaultHtmlClass = ['field', 'field-date']
 
     def valueToUnicode(self, value):
-        formatter = self.component.getFormatter(self.form)
+        formatter = IFormDateManager(self.form.request)
         return formatter.format(value)
 
 
@@ -84,7 +85,7 @@ class DateWidgetExtractor(WidgetExtractor):
         if value is not NO_VALUE:
             if not len(value):
                 return NO_VALUE, None
-            formatter = self.component.getFormatter(self.form)
+            formatter = IFormDateManager(self.form.request)
             try:
                 value = formatter.parse(value)
             except (ValueError, DateTimeParseError), error:
@@ -96,7 +97,7 @@ class DateFieldDisplayWidget(DisplayFieldWidget):
     grok.adapts(DateField, Interface, Interface)
 
     def valueToUnicode(self, value):
-        formatter = self.component.getFormatter(self.form)
+        formatter = IFormDateManager(self.form.request)
         return formatter.format(value)
 
 
@@ -113,6 +114,7 @@ def DateSchemaFactory(schema):
         constrainValue=schema.constraint,
         defaultValue=schema.default or NO_VALUE)
     return field
+
 
 def DatetimeSchemaFactory(schema):
     field = DatetimeField(
