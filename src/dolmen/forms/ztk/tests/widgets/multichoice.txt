@@ -147,27 +147,27 @@ ones already selected in the content will already by marked::
 And we can render this widget:
 
   >>> print widget.render() #doctest: +NORMALIZE_WHITESPACE
-  <input type="checkbox" id="form-field-choices-0"
-         name="form.field.choices" value="vodka" checked="checked"
-	 class="field field-multichoice" />
-  <label for="form-field-choices-0">Vodka</label>
-  <br />
-  <input type="checkbox" id="form-field-choices-1"
-         name="form.field.choices" value="tequila"
-	 class="field field-multichoice" />
-  <label for="form-field-choices-1">Tequila</label>
-  <br />
-  <input type="checkbox" id="form-field-choices-2"
-         name="form.field.choices" value="cognac"
-         class="field field-multichoice" />
-  <label for="form-field-choices-2">Cognac</label>
-  <br />
-  <input type="checkbox" id="form-field-choices-3"
-         name="form.field.choices" value="champagne"
-	 checked="checked" class="field field-multichoice" />
-  <label for="form-field-choices-3">Champagne</label>
-  <br />
-  <input type="hidden" name="form.field.choices.present" value="1" 
+  <BLANKLINE>
+  <BLANKLINE>
+      <input type="checkbox" id="form-field-choices-0" name="form.field.choices" value="vodka" checked="checked" class="field field-multichoice" />
+      <label for="form-field-choices-0">Vodka</label>
+      <br />
+  <BLANKLINE>
+      <input type="checkbox" id="form-field-choices-1" name="form.field.choices" value="tequila" class="field field-multichoice" />
+      <label for="form-field-choices-1">Tequila</label>
+      <br />
+  <BLANKLINE>
+      <input type="checkbox" id="form-field-choices-2" name="form.field.choices" value="cognac" class="field field-multichoice" />
+      <label for="form-field-choices-2">Cognac</label>
+      <br />
+  <BLANKLINE>
+      <input type="checkbox" id="form-field-choices-3" name="form.field.choices" value="champagne" checked="checked" class="field field-multichoice" />
+      <label for="form-field-choices-3">Champagne</label>
+      <br />
+  <BLANKLINE>
+    <input type="hidden" name="form.field.choices.present" value="1" />
+  <BLANKLINE>
+  <BLANKLINE>
 
 
 Getting input from the request
@@ -284,12 +284,14 @@ You can use a multi select widget as well:
 
 And we can render this widget:
 
-  >>> print select_widget.render()
-  <select id="form-field-choices" name="form.field.choices"
-   class="field field-set" multiple="multiple">
-    <option value="vodka" selected="selected">Vodka</option>
-    <option value="tequila">Tequila</option>
-    <option value="cognac">Cognac</option>
-    <option value="champagne" selected="selected">Champagne</option>
-  </select>
-  <input type="hidden" name="form.field.choices.present" value="1" />
+  >>> print select_widget.render() #doctest: +NORMALIZE_WHITESPACE
+  <BLANKLINE>
+  <select id="form-field-choices" name="form.field.choices" class="field field-multichoice" multiple="multiple">
+      <option value="vodka" selected="selected">Vodka</option>
+      <option value="tequila">Tequila</option>
+      <option value="cognac">Cognac</option>
+      <option value="champagne" selected="selected">Champagne</option>
+    </select>
+    <input type="hidden" name="form.field.choices.present" value="1" />
+  <BLANKLINE>
+  <BLANKLINE>

@@ -61,6 +61,12 @@ class TextareaWidget(FieldWidget):
                                  'style'])
 
 
+class DisplayTextareaWidget(TextareaWidget):
+    grok.name('display')
+    template = getTemplate('pre_text.cpt')
+    defaultHtmlAttributes = set(['style'])
+
+    
 def TextSchemaFactory(schema):
     field = TextField(
         schema.title or None,

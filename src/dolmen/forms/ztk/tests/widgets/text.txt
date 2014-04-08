@@ -65,7 +65,7 @@ You have an associated widget::
 And the display mode::
 
   >>> from dolmen.forms.base import markers
-  >>> fields.get('text').mode = markers.DISPLAY
+  >>> fields.get('text').mode = str(markers.DISPLAY)
   >>> CodeWidgets = Widgets(
   ...     fields,
   ...     form=Form,
@@ -74,5 +74,4 @@ And the display mode::
   >>> TextWidget = CodeWidgets['form.field.text']
 
   >>> print TextWidget.render() #doctest: +NORMALIZE_WHITESPACE
-  <pre name="form.field.text" id="form-field-text" class="field field-text
-  field-required"></pre>
+  <pre id="form-field-text" name="form.field.text" class="field field-text field-required"></pre>

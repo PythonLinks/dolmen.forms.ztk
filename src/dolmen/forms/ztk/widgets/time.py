@@ -2,6 +2,8 @@
 
 import datetime
 
+from dolmen.clockwork import IFormTimeManager
+
 from dolmen.forms.base.fields import Field
 from dolmen.forms.base.markers import NO_VALUE, Marker
 from dolmen.forms.base.widgets import FieldWidget, DisplayFieldWidget
@@ -31,7 +33,7 @@ class TimeField(Field):
         self.max = max
 
     def getFormatter(self, form):
-        return form.request.locale.dates.getFormatter('time', self.valueLength)
+        return IFormTimeManager(form.request)
 
     def validate(self, value, form):
         error = super(TimeField, self).validate(value, form)

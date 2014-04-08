@@ -26,7 +26,7 @@ class TextLineField(Field):
         self.maxLength = maxLength
 
     def isEmpty(self, value):
-        return value is NO_VALUE or not len(value)
+        return value is NO_VALUE or not value
 
     def validate(self, value, form):
         error = super(TextLineField, self).validate(value, form)

@@ -16,6 +16,8 @@ And some content for them::
 
   >>> from cromlech.browser.testing import TestRequest
   >>> request = TestRequest()
+  >>> from cromlech.i18n import setLanguage
+  >>> setLanguage('en')
 
   >>> class TimeInfo(object):
   ...    interface.implements(ITimeInfo)
@@ -66,7 +68,7 @@ of the time, based on the locale of the request::
   True
 
   >>> timeWidget.inputValue()
-  u'12:00'
+  u'12:00 PM'
 
 
 Widget extractor
@@ -76,7 +78,7 @@ You can extract a value from the request. It is a bit more difficult
 here because the parsing is a bit more advanced::
 
   >>> timeRequest = TestRequest(form={
-  ...     'form.field.time': u'12:21'})
+  ...     'form.field.time': u'12:21 PM'})
   >>> niceTimeData = FormData(timeinfo, timeRequest)
 
   >>> niceTimeExtractor = getMultiAdapter(
@@ -88,7 +90,7 @@ here because the parsing is a bit more advanced::
   >>> niceTimeExtractor.extract()
   (datetime.time(12, 21), None)
 
-Empty text is interpreted as None::
+Empty text makes an error::
 
   >>> timeRequest = TestRequest(form={
   ...     'form.field.time': u''})
@@ -97,7 +99,7 @@ Empty text is interpreted as None::
   ...      (timeField, niceTimeData, timeRequest),
   ...      interfaces.IWidgetExtractor)
   >>> niceTimeExtractor.extract()
-  (None, None)
+  (None, "The datetime string did not match the pattern u'h:mm a'.")
 
 Now if you give an invalid time you will have an error::
 
@@ -112,4 +114,4 @@ Now if you give an invalid time you will have an error::
   >>> verifyObject(interfaces.IWidgetExtractor, invalidTimeExtractor)
   True
   >>> invalidTimeExtractor.extract()
-  (None, "The datetime string did not match the pattern u'HH:mm'.")
+  (None, "The datetime string did not match the pattern u'h:mm a'.")

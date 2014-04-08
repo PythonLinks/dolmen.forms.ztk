@@ -44,7 +44,7 @@ class DateField(BaseField):
             return error
         if not isinstance(value, Marker):
             if self.min is not None and value < self.min:
-                formatter = IFormDateManager(form.request)
+                formatter = self.getFormatter
                 return _(u"This date is before the ${not_before}.",
                          dict(not_before=formatter.format(self.min)))
             if self.max is not None and value > self.max:
@@ -74,7 +74,7 @@ class DateFieldWidget(FieldWidget):
     defaultHtmlClass = ['field', 'field-date']
 
     def valueToUnicode(self, value):
-        formatter = IFormDateManager(self.form.request)
+        formatter = self.component.getFormatter(self.form)
         return formatter.format(value)
 
 
@@ -86,7 +86,7 @@ class DateWidgetExtractor(WidgetExtractor):
         if value is not NO_VALUE:
             if not len(value):
                 return NO_VALUE, None
-            formatter = IFormDateManager(self.form.request)
+            formatter = self.component.getFormatter(self.form)
             try:
                 value = formatter.parse(value)
             except (ValueError, DateTimeParseError), error:
@@ -98,7 +98,7 @@ class DateFieldDisplayWidget(DisplayFieldWidget):
     grok.adapts(DateField, Interface, Interface)
 
     def valueToUnicode(self, value):
-        formatter = IFormDateManager(self.form.request)
+        formatter = self.component.getFormatter(self.form)
         return formatter.format(value)
 
 
