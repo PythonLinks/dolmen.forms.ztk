@@ -6,7 +6,8 @@ from dolmen.forms.base.fields import Field
 from dolmen.forms.base.markers import Marker, NO_VALUE
 from dolmen.forms.base.widgets import FieldWidget, DisplayFieldWidget
 from dolmen.forms.base.widgets import WidgetExtractor
-from dolmen.forms.ztk.fields import registerSchemaField
+
+from ..fields import BaseField, registerSchemaField
 
 from grokcore import component as grok
 from zope.i18n.format import DateTimeParseError
@@ -17,7 +18,7 @@ from zope.schema import interfaces as schema_interfaces
 _ = MessageFactory("dolmen.forms.base")
 
 
-class DateField(Field):
+class DateField(BaseField):
     """A date field.
     """
     valueLength = 'short'
@@ -112,6 +113,7 @@ def DateSchemaFactory(schema):
         max=schema.max,
         interface=schema.interface,
         constrainValue=schema.constraint,
+        defaultFactory=schema.defaultFactory,
         defaultValue=schema.default or NO_VALUE)
     return field
 
@@ -127,6 +129,7 @@ def DatetimeSchemaFactory(schema):
         max=schema.max,
         interface=schema.interface,
         constrainValue=schema.constraint,
+        defaultFactory=schema.defaultFactory,
         defaultValue=schema.default or NO_VALUE)
     return field
 

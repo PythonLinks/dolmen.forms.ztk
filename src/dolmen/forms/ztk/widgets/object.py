@@ -103,6 +103,7 @@ def ObjectSchemaFactory(schema):
         schema=schema.schema,
         interface=schema.interface,
         constrainValue=schema.constraint,
+        defaultFactory=schema.defaultFactory,
         defaultValue=schema.default or NO_VALUE)
     return field
 

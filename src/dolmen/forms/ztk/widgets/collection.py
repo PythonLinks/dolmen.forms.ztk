@@ -468,6 +468,7 @@ def makeCollectionSchemaFactory(factory):
             valueField=schema.value_type,
             interface=schema.interface,
             constrainValue=schema.constraint,
+            defaultFactory=schema.defaultFactory,
             defaultValue=schema.default or NO_VALUE)
         return field
 

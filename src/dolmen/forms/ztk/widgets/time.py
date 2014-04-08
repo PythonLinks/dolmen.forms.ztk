@@ -95,6 +95,7 @@ def TimeSchemaFactory(schema):
         max=schema.max,
         interface=schema.interface,
         constrainValue=schema.constraint,
+        defaultFactory=schema.defaultFactory,
         defaultValue=schema.default or NO_VALUE)
     return field
 

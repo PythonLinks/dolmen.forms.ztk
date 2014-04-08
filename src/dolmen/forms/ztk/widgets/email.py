@@ -112,6 +112,7 @@ def EmailSchemaFactory(schema):
         maxLength=schema.max_length,
         interface=schema.interface,
         constrainValue=schema.constraint,
+        defaultFactory=schema.defaultFactory,
         defaultValue=schema.default or NO_VALUE)
     return field
 

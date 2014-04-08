@@ -47,6 +47,26 @@ class InterfaceSchemaFieldFactory(object):
             yield interfaces.IField(field)
 
 
+class BaseField(Field):
+
+    def getDefaultValue(self, form):
+        if self.defaultFactory is not None:
+            if IContextAwareDefaultFactory.providedBy(self.defaultFactory):
+                default = self.defaultFactory(form.getContent()) 
+            else: 
+                default = self.defaultFactory()
+        else:
+            default = super(BaseField, self).getDefaultValue(form)
+
+        if default is NO_VALUE:
+            default = self.defaultValue
+
+        if default is None:
+            return NO_VALUE
+
+        return default
+
+    
 class SchemaField(Field):
     """A form field using a zope.schema field as settings.
     """
@@ -90,22 +110,7 @@ class SchemaField(Field):
             return self._field.fromUnicode(value)
         return value
 
-    def getDefaultValue(self, form):
-        defaultFactory = self._field.get('defaultFactory') 
-        if defaultFactory is None:
-            default = super(SchemaField, self).getDefaultValue(form)
-        elif IContextAwareDefaultFactory.providedBy(defaultFactory): 
-            default = defaultFactory(form.getContent()) 
-        else: 
-            default = defaultFactory()
-        if default is not NO_VALUE:
-            return default
-        default = self._field.default
-        if default is None:     # Zope schema use None to say no default
-            return NO_VALUE
-        return default
-
-
+    
 def registerSchemaField(factory, schema_field):
     # We register it by hand to have the adapter available when loading ZCML.
     component.provideAdapter(factory, (schema_field,), interfaces.IField)

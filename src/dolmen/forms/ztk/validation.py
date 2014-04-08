@@ -53,7 +53,6 @@ class InvariantsValidation(object):
                     self.interfaces.append(interface)
         self.form = form
 
-
     def validate(self, data):
         errors = []
         manager = self.form.getContentData()
