@@ -80,17 +80,17 @@ last will be used in priority::
   >>> postField.getObjectFactory()
   <class 'Comment'>
 
-  >>> def customizedOtherFactory(*args):
-  ...    return Comment(*args)
+  >>> def customizedOtherFactory(*args, **kwargs):
+  ...    return Comment(*args, **kwargs)
 
   >>> postField.objectFactory = customizedOtherFactory
 
-  >>> postField.getObjectFactory()
+  >>> factory = postField.getObjectFactory()
+  >>> factory
   <function customizedOtherFactory at ...>
 
-  >>> postField.objectFactory = None
-  >>> postField.getObjectFactory()
-  <class 'Comment'>
+  >>> factory()
+  <Comment object at ...>
 
 
 Widget
@@ -121,9 +121,8 @@ object, all of them prefixed by the main widget identifier::
   >>> len(commentWidget.objectWidgets)
   3
   >>> list(commentWidget.objectWidgets)
-  [<TextLineWidget Title>,
-   <TextFieldWidget Comment>,
-   <TextLineWidget Email>]
+  [<TextLineWidget Title>, <TextareaWidget Comment>, <TextLineWidget Email>]
+
   >>> map(lambda w: w.identifier, commentWidget.objectWidgets)
   ['form.field.comment.field.title',
    'form.field.comment.field.comment',

@@ -155,14 +155,6 @@ class SchemaWidgetExtractor(WidgetExtractor):
         return value, None
 
 
-class HiddenSchemaWidgetExtractor(SchemaWidgetExtractor):
-    grok.name('hidden')
-
-
-class ReadOnlySchemaWidgetExtractor(SchemaWidgetExtractor):
-    grok.name('readonly')
-
-
 def registerDefault():
     """Register default fields factories.
     """

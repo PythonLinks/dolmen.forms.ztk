@@ -54,9 +54,9 @@ So now you can create a field, and get a choice field::
   >>> firstField.source is letterVocabulary
   True
 
-  >>> firstField.validate('A')
-  >>> firstField.validate('foo')
-  u'Constraint not satisfied'
+  >>> firstField.validate('A', None)
+  >>> firstField.validate('foo', None)
+  u'The selected value is not among the possible choices.'
 
   >>> verifyObject(interfaces.IField, firstField)
   True
@@ -96,6 +96,12 @@ You have an associated widget::
   'b1'
 
   >>> print firstWidget.render()
+  <select id="form-field-choice" name="form.field.choice" class="field field-choice field-required" required="required">
+     <option value="a1">Letter A</option>
+     <option value="b1" selected="selected">Letter B</option>
+     <option value="c1">Letter C</option>
+   </select>
+
   <input type="radio" id="form-field-choice-0" name="form.field.choice" value="a1" class="field field-choice field-required" />
     <label for="form-field-choice-0">Letter A</label>
     <br />
@@ -171,12 +177,8 @@ So now you can create a field, and get a choice field::
 
   >>> secondChoiceFields = Fields(ISecondChoice)
   >>> secondField = secondChoiceFields['choice']
-  >>> secondField
-  <ChoiceField My Choice>
-  >>> secondField.source is secondVocabulary
-  True
 
-  >>> choices = secondField.getChoices(None)
+  >>> choices = secondField.getChoices(firstForm)
   >>> choices
   <zope.schema.vocabulary.SimpleVocabulary object at ...>
   >>> displayVocabulary(choices)
@@ -184,8 +186,8 @@ So now you can create a field, and get a choice field::
   'B' 'b1' 'Letter B'
   'C' 'c1' 'Letter C'
 
-  >>> secondField.validate('A')
-  >>> secondField.validate(42)
+  >>> secondField.validate('A', firstForm)
+  >>> secondField.validate(42, firstForm)
   u'Constraint not satisfied'
 
 

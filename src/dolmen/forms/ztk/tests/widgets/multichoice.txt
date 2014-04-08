@@ -86,25 +86,25 @@ Validation
 
 Validation should validate only set that contains correct choices:
 
-  >>> field.validate(NO_VALUE)
-  >>> field.validate(set())
-  >>> field.validate(set(['42%', '51%']))
+  >>> field.validate(NO_VALUE, None)
+  >>> field.validate(set(), None)
+  >>> field.validate(set(['42%', '51%']), None)
 
 If the value is not a set or value is incorrect, the validation shall
 fail:
 
-  >>> field.validate([])
+  >>> field.validate([], None)
   u'Object is of wrong type.'
-  >>> field.validate(set(['apple juice', '51%']))
-  u'Wrong contained type'
+  >>> field.validate(set(['apple juice', '51%']), None)
+  u'The selected value is not among the possible choices.'
 
 If the field is required, an empty collection will not validate:
 
-  >>> required_field.validate(NO_VALUE)
+  >>> required_field.validate(NO_VALUE, None)
   u'Missing required value.'
-  >>> required_field.validate(set())
+  >>> required_field.validate(set(), None)
   u'Missing required value.'
-  >>> required_field.validate(set(['42%', '51%']))
+  >>> required_field.validate(set(['42%', '51%']), None)
 
 Multi choice widget
 -------------------
@@ -146,24 +146,28 @@ ones already selected in the content will already by marked::
 
 And we can render this widget:
 
-  >>> print widget.render()
-  <input type="checkbox" id="form-field-choices-0" name="form.field.choices"
-   value="vodka" checked="checked" class="field field-set" />
+  >>> print widget.render() #doctest: +NORMALIZE_WHITESPACE
+  <input type="checkbox" id="form-field-choices-0"
+         name="form.field.choices" value="vodka" checked="checked"
+	 class="field field-multichoice" />
   <label for="form-field-choices-0">Vodka</label>
   <br />
-  <input type="checkbox" id="form-field-choices-1" name="form.field.choices"
-   value="tequila" class="field field-set" />
+  <input type="checkbox" id="form-field-choices-1"
+         name="form.field.choices" value="tequila"
+	 class="field field-multichoice" />
   <label for="form-field-choices-1">Tequila</label>
   <br />
-  <input type="checkbox" id="form-field-choices-2" name="form.field.choices"
-   value="cognac" class="field field-set" />
+  <input type="checkbox" id="form-field-choices-2"
+         name="form.field.choices" value="cognac"
+         class="field field-multichoice" />
   <label for="form-field-choices-2">Cognac</label>
   <br />
-  <input type="checkbox" id="form-field-choices-3" name="form.field.choices"
-   value="champagne" checked="checked" class="field field-set" />
+  <input type="checkbox" id="form-field-choices-3"
+         name="form.field.choices" value="champagne"
+	 checked="checked" class="field field-multichoice" />
   <label for="form-field-choices-3">Champagne</label>
   <br />
-  <input type="hidden" name="form.field.choices.present" value="1" />
+  <input type="hidden" name="form.field.choices.present" value="1" 
 
 
 Getting input from the request

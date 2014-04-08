@@ -20,7 +20,7 @@ from zope.schema import interfaces as schema_interfaces
 
 class ObjectField(Field):
     """A collection field.
-"""
+    """
     implements(IObjectField)
     objectFactory = DEFAULT
     dataManager = ObjectDataManager

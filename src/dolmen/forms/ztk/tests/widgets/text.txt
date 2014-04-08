@@ -54,11 +54,13 @@ You have an associated widget::
 
   >>> TextWidget = CodeWidgets['form.field.text']
   >>> TextWidget
-  <TextFieldWidget Some text>
+  <TextareaWidget Some text>
 
   >>> print TextWidget.render() #doctest: +NORMALIZE_WHITESPACE
   <textarea id="form-field-text" name="form.field.text"
-  class="field field-text field-required" cols="80" rows="5"></textarea>
+            class="field field-text field-required" rows="5"
+	    cols="80" required="required"></textarea>
+
 
 And the display mode::
 

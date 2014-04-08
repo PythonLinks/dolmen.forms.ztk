@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from dolmen.forms.base.markers import NO_VALUE, Marker
-from dolmen.forms.base.fields import Field
+from dolmen.forms.ztk.fields import BaseField
 from dolmen.forms.base.widgets import FieldWidget
 from dolmen.forms.base.widgets import WidgetExtractor
 from dolmen.forms.ztk.fields import registerSchemaField
@@ -19,7 +19,7 @@ from zope.schema.interfaces import IVocabularyTokenized, IVocabularyFactory
 _ = MessageFactory("dolmen.forms.base")
 
 
-class ChoiceField(Field):
+class ChoiceField(BaseField):
     """A choice field.
     """
     _source = None

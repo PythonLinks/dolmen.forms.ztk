@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from dolmen.forms.base.markers import NO_VALUE
-from dolmen.forms.ztk.interfaces import ISchemaField
-
+from dolmen.forms.base.interfaces import IField
 from zope.interface.interfaces import IMethod
 from zope.interface import directlyProvides, Invalid
 
@@ -47,10 +46,9 @@ class InvariantsValidation(object):
     def __init__(self, fields, form):
         self.interfaces = []
         for field in fields:
-            if ISchemaField.providedBy(field):
-                interface = field._field.interface
-                if interface not in self.interfaces:
-                    self.interfaces.append(interface)
+            if IField.providedBy(field):
+                if field.interface not in self.interfaces:
+                    self.interfaces.append(field.interface)
         self.form = form
 
     def validate(self, data):

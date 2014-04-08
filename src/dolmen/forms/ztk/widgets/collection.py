@@ -76,11 +76,16 @@ class CollectionField(Field):
         if error is not None:
             return error
         if not isinstance(value, Marker):
-            assert isinstance(value, self.collectionType)
+            if not isinstance(value, self.collectionType):
+                return _(u'Object is of wrong type.')
             if self.minLength and len(value) < self.minLength:
                 return _(u"There are too few items.")
             if self.maxLength and len(value) > self.maxLength:
                 return _(u"There are too many items.")
+            for item in value:
+                error = self._valueField.validate(item, form)
+                if error is not None:
+                    return error
         return None
 
     def isEmpty(self, value):
