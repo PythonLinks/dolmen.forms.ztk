@@ -1,6 +1,21 @@
 Changelog
 =========
 
+2.3 (2014-04-11)
+------------------
+
+* Backported the changes from the latest `zeam.form`. This includes :
+
+  - ZTK fields are no longer adapters but standalone fields
+  - New templates incorporating the htmlAttributes values
+
+* Added the defaultFactory computing to the defaultValue property
+
+* Remove the readonly and hidden extractors. All the widgets use the
+  "input" extractor as a fallback. This can be overriden by registering
+  an "hidden" or "readonly" extractor for the target fields.
+
+
 2.2.2 (2012-11-28)
 ------------------
 

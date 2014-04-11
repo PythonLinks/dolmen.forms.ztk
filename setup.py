@@ -3,24 +3,36 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.4-dev'
+version = '2.3'
 readme = open("README.txt").read()
 history = open(os.path.join("docs", "HISTORY.txt")).read()
 
 install_requires=[
     'cromlech.browser >= 0.4',
-    'dolmen.forms.base >= 2.2.4',
+    'cromlech.i18n',
+    'dolmen.clockwork',
+    'dolmen.collection',
+    'dolmen.forms.base >= 2.5',
     'dolmen.location',
     'dolmen.template',
-    'dolmen.clockwork',
-    'grokcore.component',
-    'setuptools',
-    'zope.component',
-    'zope.i18n',
-    'zope.interface',
-    'zope.schema',
+    'dolmen.view',
     'fanstatic',
+    'grokcore.component',
+    'js.jquery',
+    'pytz',
+    'setuptools',
+    'z3c.schema',
+    'zc.buildout',
     'zeam.jsontemplate',
+    'zope.cachedescriptors',
+    'zope.component',
+    'zope.configuration',
+    'zope.event',
+    'zope.i18n',
+    'zope.i18nmessageid',
+    'zope.interface',
+    'zope.lifecycleevent',
+    'zope.schema',
     ],
 
 tests_require = [
