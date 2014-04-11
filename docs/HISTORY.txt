@@ -15,6 +15,9 @@ Changelog
   "input" extractor as a fallback. This can be overriden by registering
   an "hidden" or "readonly" extractor for the target fields.
 
+* Date fields now use the `dolmen.clockwork` package to compute the language
+  related format of the date and time.
+
 
 2.2.2 (2012-11-28)
 ------------------
