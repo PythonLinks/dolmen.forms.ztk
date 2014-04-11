@@ -4,11 +4,10 @@ import datetime
 
 from dolmen.clockwork import IFormTimeManager
 
-from dolmen.forms.base.fields import Field
 from dolmen.forms.base.markers import NO_VALUE, Marker
 from dolmen.forms.base.widgets import FieldWidget, DisplayFieldWidget
 from dolmen.forms.base.widgets import WidgetExtractor
-from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.fields import BaseField, registerSchemaField
 
 from grokcore import component as grok
 from zope.i18n.format import DateTimeParseError
@@ -19,7 +18,7 @@ from zope.schema import interfaces as schema_interfaces
 _ = MessageFactory("dolmen.forms.base")
 
 
-class TimeField(Field):
+class TimeField(BaseField):
     """A time field.
 """
     valueLength = 'short'

@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2.3.1 (2014-04-11)
+------------------
+
+* Corrected the GenericAdaptiveDataManager, to work if the content already
+  provides the interface.
+
+* All the fields now use the `BaseField` baseclas, making them aware of the
+  defaultFactory.
+
+
 2.3 (2014-04-11)
 ------------------
 

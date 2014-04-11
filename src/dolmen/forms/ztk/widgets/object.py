@@ -2,12 +2,12 @@
 
 from dolmen.forms.base.datamanagers import ObjectDataManager
 from dolmen.forms.base.errors import Errors
-from dolmen.forms.base.fields import Field, Fields
+from dolmen.forms.base.fields import Fields
 from dolmen.forms.base.components import cloneFormData
 from dolmen.forms.base.markers import NO_VALUE, Marker, DEFAULT
 from dolmen.forms.base.widgets import WidgetExtractor
 from dolmen.forms.base.widgets import Widgets, FieldWidget
-from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.fields import BaseField, registerSchemaField
 from dolmen.forms.ztk.interfaces import IObjectField
 from dolmen.forms.ztk.widgets import getTemplate
 
@@ -18,7 +18,7 @@ from zope.interface import Interface, implements
 from zope.schema import interfaces as schema_interfaces
 
 
-class ObjectField(Field):
+class ObjectField(BaseField):
     """A collection field.
     """
     implements(IObjectField)

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms.base.fields import Field
-from dolmen.forms.ztk.fields import (SchemaField, registerSchemaField,
-                                     SchemaWidgetExtractor)
+from dolmen.forms.ztk.fields import BaseField, SchemaField
+from dolmen.forms.ztk.fields import registerSchemaField, SchemaWidgetExtractor
 from dolmen.forms.base.widgets import FieldWidget
 from grokcore import component as grok
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
+
 
 _ = MessageFactory("zeam.form.base")
 rfc822_specials = '()<>@,;:\\"[]'
@@ -60,7 +60,7 @@ def isMailAddress(addr):
     return False
 
 
-class EmailField(Field):
+class EmailField(BaseField):
 
     def __init__(self, title,
                  minLength=0,

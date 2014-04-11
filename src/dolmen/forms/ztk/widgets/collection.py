@@ -27,12 +27,12 @@ except ImportError:
 from dolmen.forms.base.components import cloneFormData
 from dolmen.forms.base.datamanagers import NoneDataManager
 from dolmen.forms.base.errors import Errors, Error
-from dolmen.forms.base.fields import Field, Fields
+from dolmen.forms.base.fields import Fields
 from dolmen.forms.base.interfaces import IField, IWidget, IWidgetExtractor
 from dolmen.forms.base.markers import Marker
 from dolmen.forms.base.markers import NO_VALUE
 from dolmen.forms.base.widgets import WidgetExtractor, FieldWidget, Widgets
-from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.fields import BaseField, registerSchemaField
 from dolmen.forms.ztk.interfaces import ICollectionField, IListField
 from dolmen.forms.ztk.widgets import getTemplate
 from dolmen.forms.ztk.widgets.choice import ChoiceField, ChoiceFieldWidget
@@ -47,7 +47,7 @@ from zope.schema import interfaces as schema_interfaces
 _ = MessageFactory("dolmen.forms.base")
 
 
-class CollectionField(Field):
+class CollectionField(BaseField):
     """A collection field.
     """
     grok.implements(ICollectionField)

@@ -16,10 +16,12 @@ def makeGenericAdaptiveDataManager(*fields):
             for field in fields:
                 interface = field.interface
                 self.fields[field.identifier] = interface
-                if (not interface.providedBy(content) and
-                    not interface in self.adapters):
+                if not interface in self.adapters:
                     alsoProvides(self, interface)
-                    self.adapters[interface] = interface(content)
+                    if interface.providedBy(content):
+                        self.adapters[interface] = content
+                    else:
+                        self.adapters[interface] = interface(content)
             self.content = content
 
         def _getAdapter(self, identifier):

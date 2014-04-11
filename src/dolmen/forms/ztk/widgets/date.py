@@ -2,7 +2,6 @@
 
 from dolmen.clockwork import IFormDateManager
 
-from dolmen.forms.base.fields import Field
 from dolmen.forms.base.markers import Marker, NO_VALUE
 from dolmen.forms.base.widgets import FieldWidget, DisplayFieldWidget
 from dolmen.forms.base.widgets import WidgetExtractor

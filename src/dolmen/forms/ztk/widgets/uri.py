@@ -3,9 +3,8 @@
 import re
 
 from dolmen.forms.base.markers import Marker, NO_VALUE
-from dolmen.forms.base.fields import Field
 from dolmen.forms.base.widgets import FieldWidget
-from dolmen.forms.ztk.fields import registerSchemaField
+from dolmen.forms.ztk.fields import BaseField, registerSchemaField
 from dolmen.forms.ztk.widgets import getTemplate
 
 from grokcore import component as grok
@@ -23,7 +22,7 @@ isURI = re.compile(
     r"\S*$").match
 
 
-class URIField(Field):
+class URIField(BaseField):
     """A text line field.
     """
     target = '_self'
