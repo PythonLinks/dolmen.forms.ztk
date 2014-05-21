@@ -9,6 +9,7 @@ from dolmen.forms.base.widgets import WidgetExtractor
 from ..fields import BaseField, registerSchemaField
 
 from grokcore import component as grok
+from zope.component import queryAdapter
 from zope.i18n.format import DateTimeParseError
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
@@ -35,7 +36,8 @@ class DateField(BaseField):
         self.max = max
 
     def getFormatter(self, form):
-        return IFormDateManager(form.request)
+        return queryAdapter(
+            form.request, IFormDateManager, name=self.valueType)
 
     def validate(self, value, form):
         error = super(DateField, self).validate(value, form)
@@ -76,6 +78,17 @@ class DateFieldWidget(FieldWidget):
         formatter = self.component.getFormatter(self.form)
         return formatter.format(value)
 
+
+class DateFieldWidget(FieldWidget):
+    grok.adapts(DatetimeField, Interface, Interface)
+    defaultHtmlClass = ['field', 'field-date']
+
+    def valueToUnicode(self, value):
+        formatter = self.component.getFormatter(self.form)
+        return formatter.format(value)
+
+
+    
 
 class DateWidgetExtractor(WidgetExtractor):
     grok.adapts(DateField, Interface, Interface)
