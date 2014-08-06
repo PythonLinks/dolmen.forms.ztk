@@ -20,6 +20,7 @@ install_requires=[
     'zeam.jsontemplate',
     'zope.interface',
     'zope.schema',
+    'python-dateutil',
     ],
 
 tests_require = [

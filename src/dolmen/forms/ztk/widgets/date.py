@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import crom
+import dateutil.parser
+
 from cromlech.i18n import ILocale
 from dolmen.forms.base import interfaces
 from dolmen.forms.base.markers import NO_VALUE
@@ -10,7 +12,8 @@ from dolmen.forms.ztk.fields import (
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
 from babel.dates import format_date, format_datetime
-from babel.dates import parse_date, parse_datetime
+from babel.dates import parse_date
+
 
 
 def register():
@@ -87,7 +90,7 @@ class DatetimeWidgetExtractor(DateWidgetExtractor):
             if value:
                 try:
                     locale = ILocale(self.request, default='en')
-                    value = parse_datetime(value, locale=str(locale))
+                    value = dateutil.parser(value)
                     return value, error
                 except (ValueError, IndexError), err:
                     return None, 'Unknown datetime pattern'
