@@ -5,6 +5,7 @@ import re
 from dolmen.forms.base.markers import Marker, NO_VALUE
 from dolmen.forms.base.widgets import FieldWidget
 from dolmen.forms.ztk.fields import BaseField, registerSchemaField
+from dolmen.forms.base.widgets import WidgetExtractor
 from dolmen.forms.ztk.widgets import getTemplate
 
 from grokcore import component as grok
@@ -52,14 +53,24 @@ class URIField(BaseField):
                 return _(u"The URI is too long.")
         return None
 
+
+class DateWidgetExtractor(WidgetExtractor):
+    grok.adapts(URIField, Interface, Interface)
+
+    def extract(self):
+        value, error = super(DateWidgetExtractor, self).extract()
+        return str(value), error
+
+
 # BBB
 URISchemaField = URIField
+
 
 class URIWidget(FieldWidget):
     grok.adapts(URIField, Interface, Interface)
 
     template = getTemplate('uriwidget.cpt')
-    
+
     defaultHtmlClass = ['field', 'field-uri']
     defaultHtmlAttributes = set(['readonly', 'required', 'autocomplete',
                                  'maxlength', 'pattern', 'placeholder',
@@ -70,8 +81,8 @@ class URIDisplayWidget(FieldWidget):
     grok.adapts(URIField, Interface, Interface)
     grok.name('display')
 
-    template = getTemplate('uridisplaywidget.pt')
-    
+    template = getTemplate('uridisplaywidget.cpt')
+
     @property
     def target(self):
         return self.component.target
