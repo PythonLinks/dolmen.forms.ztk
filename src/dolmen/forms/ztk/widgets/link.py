@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from dolmen.forms.base.interfaces import IField
-from dolmen.forms.base.widgets import DisplayFieldWidget
 from dolmen.forms.base.markers import ModeMarker
+from dolmen.forms.base.widgets import DisplayFieldWidget
 from dolmen.forms.ztk.widgets import getTemplate
-
-from zope.component import getMultiAdapter
-from zope.interface import Interface
 from dolmen.location import get_absolute_url
-
 from grokcore import component as grok
+from zope.interface import Interface
 
 
 class LinkFieldWidget(DisplayFieldWidget):

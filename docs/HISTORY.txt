@@ -1,13 +1,13 @@
 Changelog
 =========
 
-2.3.3 (unreleased)
+2.3.3 (2014-10-09)
 ------------------
 
 * Using now the latest changes in dolmen.clockwork : date and datetime parsers
   are named adapters. We're using the valueType to query the right adapter.
 
-* ...
+* Reduced the dependencies
 
 
 2.3.2 (2014-05-13)

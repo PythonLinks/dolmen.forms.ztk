@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from dolmen.forms.ztk.fields import BaseField, SchemaField
+from dolmen.forms.ztk.fields import BaseField
 from dolmen.forms.ztk.fields import registerSchemaField, SchemaWidgetExtractor
 from dolmen.forms.base.widgets import FieldWidget
 from grokcore import component as grok
