@@ -79,7 +79,7 @@ class DateFieldWidget(FieldWidget):
         return formatter.format(value)
 
 
-class DateFieldWidget(FieldWidget):
+class DatetimeFieldWidget(FieldWidget):
     grok.adapts(DatetimeField, Interface, Interface)
     defaultHtmlClass = ['field', 'field-date']
 
@@ -87,8 +87,6 @@ class DateFieldWidget(FieldWidget):
         formatter = self.component.getFormatter(self.form)
         return formatter.format(value)
 
-
-    
 
 class DateWidgetExtractor(WidgetExtractor):
     grok.adapts(DateField, Interface, Interface)

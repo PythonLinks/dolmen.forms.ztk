@@ -9,7 +9,7 @@ history = open(os.path.join("docs", "HISTORY.txt")).read()
 
 install_requires=[
     'cromlech.browser >= 0.4',
-    'dolmen.clockwork',
+    'dolmen.clockwork >= 0.2',
     'dolmen.forms.base >= 2.5',
     'dolmen.location',
     'dolmen.template',
