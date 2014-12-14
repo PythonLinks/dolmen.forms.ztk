@@ -15,7 +15,6 @@ from babel.dates import format_date, format_datetime
 from babel.dates import parse_date
 
 
-
 def register():
     registerSchemaField(DatetimeSchemaField, schema_interfaces.IDatetime)
     registerSchemaField(DateSchemaField, schema_interfaces.IDate)
@@ -54,7 +53,7 @@ class DateWidgetExtractor(WidgetExtractor):
                     locale = ILocale(self.request, default='en')
                     value = parse_date(value, locale=str(locale))
                     return value, error
-                except (ValueError, IndexError), err:
+                except (ValueError, IndexError) as err:
                     return None, 'Unknown date pattern'
             else:
                 value = None
@@ -92,7 +91,7 @@ class DatetimeWidgetExtractor(DateWidgetExtractor):
                     locale = ILocale(self.request, default='en')
                     value = dateutil.parser(value)
                     return value, error
-                except (ValueError, IndexError), err:
+                except (ValueError, IndexError) as err:
                     return None, 'Unknown datetime pattern'
             else:
                 value = None

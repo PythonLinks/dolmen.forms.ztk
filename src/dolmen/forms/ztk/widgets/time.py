@@ -45,7 +45,7 @@ class TimeWidgetExtractor(WidgetExtractor):
                     locale = ILocale(self.request, default='en')
                     value = parse_time(value, locale=str(locale))
                     return value, error
-                except (ValueError, IndexError), err:
+                except (ValueError, IndexError) as err:
                     return None, 'Unknown time pattern'
             else:
                 value = None

@@ -111,7 +111,7 @@ class ObjectFieldExtractor(WidgetExtractor):
             factory = self.component.getObjectFactory()
             # Create an object with values
             value = factory(**dict(filter(
-                        lambda (k, v): not isinstance(v, Marker),
+                        lambda k, v: not isinstance(v, Marker),
                         data.items())))
             return (value, None)
         return (value, errors)
