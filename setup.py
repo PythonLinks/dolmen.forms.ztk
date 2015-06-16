@@ -74,6 +74,6 @@ setup(name='dolmen.forms.ztk',
       uri = dolmen.forms.ztk.widgets.uri:register
       time = dolmen.forms.ztk.widgets.time:register
       [fanstatic.libraries]
-      dztk = dolmen.forms.ztk.widgets.collection:library
+      dolmen_forms_ztk = dolmen.forms.ztk.widgets.collection:library
       """,
       )
