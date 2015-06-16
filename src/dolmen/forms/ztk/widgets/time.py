@@ -12,15 +12,17 @@ from dolmen.forms.ztk.fields import BaseField, registerSchemaField
 from grokcore import component as grok
 from zope.i18n.format import DateTimeParseError
 from zope.i18nmessageid import MessageFactory
+from zope.i18nmessageid.message import Message
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
+
 
 _ = MessageFactory("dolmen.forms.base")
 
 
 class TimeField(BaseField):
     """A time field.
-"""
+    """
     valueLength = 'short'
 
     def __init__(self, title,
@@ -73,7 +75,10 @@ class TimeWidgetExtractor(WidgetExtractor):
             try:
                 value = formatter.parse(value)
             except (ValueError, DateTimeParseError), error:
-                return None, str(error)
+                error_msg = error.message
+                if not isinstance(error_msg, Message):
+                    error_msg = _(error_msg)
+                return None, error_msg
         return value, error
 
 

@@ -11,7 +11,7 @@ from ..fields import BaseField, registerSchemaField
 from grokcore import component as grok
 from zope.component import queryAdapter
 from zope.i18n.format import DateTimeParseError
-from zope.i18nmessageid import MessageFactory
+from zope.i18nmessageid import MessageFactory, Message
 from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
 
@@ -100,7 +100,10 @@ class DateWidgetExtractor(WidgetExtractor):
             try:
                 value = formatter.parse(value)
             except (ValueError, DateTimeParseError), error:
-                return None, str(error)
+                error_msg = error.message
+                if not isinstance(error_msg, Message):
+                    error_msg = _(error_msg)
+                return None, error_msg
         return value, error
 
 
