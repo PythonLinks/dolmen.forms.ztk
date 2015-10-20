@@ -326,7 +326,6 @@ class MultiSelectFieldWidget(MultiChoiceFieldWidget):
     template = getTemplate('multiselectfieldwidget.pt')
 
 
-
 @crom.adapter
 @crom.name('display')
 @crom.target(IWidget)

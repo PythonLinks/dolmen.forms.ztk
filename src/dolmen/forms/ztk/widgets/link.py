@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import crom
+from cromlech.browser import IURL
 from dolmen.forms.base.interfaces import IField, IWidget
 from dolmen.forms.base.widgets import FieldWidget
 from dolmen.forms.ztk.widgets import getTemplate

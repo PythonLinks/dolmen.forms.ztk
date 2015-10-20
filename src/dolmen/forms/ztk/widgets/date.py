@@ -89,7 +89,7 @@ class DatetimeWidgetExtractor(DateWidgetExtractor):
             if value:
                 try:
                     locale = ILocale(self.request, default='en')
-                    value = dateutil.parser(value)
+                    value = dateutil.parser.parse(value)
                     return value, error
                 except (ValueError, IndexError) as err:
                     return None, 'Unknown datetime pattern'
