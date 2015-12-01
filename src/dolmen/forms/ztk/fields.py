@@ -91,7 +91,7 @@ class SchemaField(Field):
         return copy
 
     def validate(self, value, context=None):
-        error = super(SchemaField, self).validate(value)
+        error = super(SchemaField, self).validate(value, context)
         if error is not None:
             return error
 
