@@ -1,6 +1,6 @@
 <input type="text" value="#" id="#" class="#"
-       tal:attributes="readonly widget.readonly and 'readonly' or None;
-                       name widget.identifier;
+       tal:attributes="name widget.identifier;
                        value widget.inputValue();
                        id widget.htmlId();
-                       class widget.htmlClass()" />
+                       class widget.htmlClass();
+		       widget.htmlAttributes()" />
