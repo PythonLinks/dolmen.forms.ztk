@@ -22,3 +22,7 @@ class TextLineSchemaField(SchemaField):
 @crom.sources(TextLineSchemaField, Interface, Interface)
 class TextLineWidget(SchemaFieldWidget):
     template = getTemplate('textlinewidget.pt')
+    defaultHtmlClass = ['field', 'field-textline']
+    defaultHtmlAttributes = set(['readonly', 'required', 'autocomplete',
+                                 'maxlength', 'pattern', 'placeholder',
+                                 'size', 'style', 'disabled'])

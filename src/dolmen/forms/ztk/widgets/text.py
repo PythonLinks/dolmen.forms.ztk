@@ -24,11 +24,15 @@ class TextSchemaField(SchemaField):
 @crom.sources(TextSchemaField, Interface, Interface)
 class TextFieldWidget(SchemaFieldWidget):
     template = getTemplate('textfieldwidget.pt')
-
+    defaultHtmlClass = ['field', 'field-text']
+    defaultHtmlAttributes = set(['maxlength', 'placeholder', 'required',
+                                 'rows', 'warp', 'readonly', 'cols',
+                                 'style'])
 
 @crom.adapter
 @crom.name('display')
 @crom.target(IWidget)
 @crom.sources(TextSchemaField, Interface, Interface)
 class TextDisplayWidget(SchemaFieldWidget):
-    template = getTemplate('textdisplaywidget.pt')
+    template = getTemplate('pre_text.pt')
+    defaultHtmlAttributes = set(['style'])

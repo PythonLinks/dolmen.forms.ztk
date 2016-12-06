@@ -1,6 +1,6 @@
-<textarea id="#" name="#" class="#" cols="80" rows="5"
-          tal:attributes="readonly widget.readonly and 'readonly' or None;
-                          name widget.identifier;
+<textarea id="#" name="#" class="#"
+          tal:attributes="name widget.identifier;
                           id widget.htmlId();
-                          class widget.htmlClass()"
+                          class widget.htmlClass();
+                          widget.htmlAttributes()"
           tal:content="widget.inputValue()"></textarea>

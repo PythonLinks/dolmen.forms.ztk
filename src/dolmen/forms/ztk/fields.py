@@ -110,14 +110,7 @@ def registerSchemaField(factory, schema_field, registry=None):
 @crom.target(interfaces.IWidget)
 @crom.sources(ISchemaField, Interface, Interface)
 class SchemaFieldWidget(FieldWidget):
-
-    def htmlClass(self):
-        css_class = ['field']
-        css_class.append('field-%s' % (
-                self.component._field.__class__.__name__.lower()))
-        if self.required:
-            css_class.append('field-required')
-        return ' '.join(css_class)
+    pass
 
 
 @crom.adapter

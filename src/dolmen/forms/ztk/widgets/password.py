@@ -23,3 +23,7 @@ class PasswordField(SchemaField):
 @crom.sources(PasswordField, Interface, Interface)
 class PasswordWidget(SchemaFieldWidget):
     template = getTemplate('passwordwidget.pt')
+    defaultHtmlClass = ['field', 'field-password']
+    defaultHtmlAttributes = ['readonly', 'required', 'autocomplete',
+                             'maxlength', 'pattern', 'placeholder',
+                             'size', 'style']
