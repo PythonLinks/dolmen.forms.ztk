@@ -18,19 +18,19 @@ Definition
 
   >>> class IPasswords(Interface):
   ...     passwd = Password(
-  ...         title=u"Password",
-  ...         description=u"Type the password.",
+  ...         title="Password",
+  ...         description="Type the password.",
   ...         required=True)
   ...
   ...     verify = Password(
-  ...         title=u"Password checking",
-  ...         description=u"Retype the password.",
+  ...         title="Password checking",
+  ...         description="Retype the password.",
   ...         required=True)
   ...
   ...     @invariant
   ...     def check_pass(data):
   ...         if data.passwd != data.verify:
-  ...             raise Invalid(u"Mismatching passwords!")
+  ...             raise Invalid("Mismatching passwords!")
 
 
 Instanciation
@@ -44,11 +44,11 @@ Instanciation
   >>> from dolmen.forms.ztk import InvariantsValidation
   >>> validator = InvariantsValidation(fields, form)
 
-  >>> print validator
+  >>> print(validator)
   <dolmen.forms.ztk.validation.InvariantsValidation object at ...>
 
-  >>> print validator.interfaces
-  [<InterfaceClass __builtin__.IPasswords>]
+  >>> print(validator.interfaces)
+  [<InterfaceClass builtins.IPasswords>]
 
 
 Providing some data
@@ -58,12 +58,12 @@ Providing some data
 
   >>> data = FieldsValues(form, fields)
   >>> data.update({'passwd': 'test', 'verify': 'nopass'})
-  >>> print validator.validate(data)
-  [Invalid(u'Mismatching passwords!',)]
+  >>> print(validator.validate(data))
+  [Invalid('Mismatching passwords!',)]
 
   >>> data = FieldsValues(form, fields)
   >>> data.update({'passwd': 'test', 'verify': 'test'})
-  >>> print validator.validate(data)
+  >>> print(validator.validate(data))
   []
 
 
@@ -77,23 +77,24 @@ Definition
 
   >>> class IAgeAndLegals(Interface):
   ...    age = Int(
-  ...        title=u"Enter your age.",
+  ...        default=0,
+  ...        title="Enter your age.",
   ...        required=True)
   ...        
   ...    accept = Choice(
-  ...        title=u"I accept the conditions of use.",
+  ...        title="I accept the conditions of use.",
   ...        required=True,
-  ...        values=[u"I accept", u"I disapprove"])
+  ...        values=["I accept", "I disapprove"])
   ...
   ...    @invariant
   ...    def check_age(data):
   ...        if data.age < 18:
-  ...            raise Invalid(u"You must be at least 18 to proceed.")
+  ...            raise Invalid("You must be at least 18 to proceed.")
   ...
   ...    @invariant
   ...    def check_legals(data):
-  ...        if data.accept != u"I accept":
-  ...            raise Invalid(u"You can not proceed if you disagree.")
+  ...        if data.accept != "I accept":
+  ...            raise Invalid("You can not proceed if you disagree.")
 
 
 Instanciation
@@ -103,30 +104,30 @@ Instanciation
   >>> fields = Fields(IAgeAndLegals)
   >>> validator = InvariantsValidation(fields, form)
 
-  >>> print validator
+  >>> print(validator)
   <dolmen.forms.ztk.validation.InvariantsValidation object at ...>
 
-  >>> print validator.interfaces
-  [<InterfaceClass __builtin__.IAgeAndLegals>]
+  >>> print(validator.interfaces)
+  [<InterfaceClass builtins.IAgeAndLegals>]
 
 
 Providing some data
 -------------------
 
   >>> data = FieldsValues(form, fields)
-  >>> data.update({'age': 17, 'accept': u"I disapprove"})
-  >>> print validator.validate(data)
-  [Invalid(u'You must be at least 18 to proceed.',),
-   Invalid(u'You can not proceed if you disagree.',)]
+  >>> data.update({'age': 17, 'accept': "I disapprove"})
+  >>> print(validator.validate(data))
+  [Invalid('You must be at least 18 to proceed.',),
+   Invalid('You can not proceed if you disagree.',)]
 
   >>> data = FieldsValues(form, fields)
-  >>> data.update({'age': 17, 'accept': u"I accept"})
-  >>> print validator.validate(data)
-  [Invalid(u'You must be at least 18 to proceed.',)]
+  >>> data.update({'age': 17, 'accept': "I accept"})
+  >>> print(validator.validate(data))
+  [Invalid('You must be at least 18 to proceed.',)]
 
   >>> data = FieldsValues(form, fields)
-  >>> data.update({'age': 19, 'accept': u"I accept"})
-  >>> print validator.validate(data)
+  >>> data.update({'age': 19, 'accept': "I accept"})
+  >>> print(validator.validate(data))
   []
 
 
@@ -136,21 +137,23 @@ Invariant involving values not in form
 If some attributes used by invariant computation are not in the form the values
 will be ask to datamanager::
 
+  >>> country_data = {'Korea': 17, 'France':18}
+
   >>> class IAdult(Interface):
   ...    age = Int(
-  ...        title=u"Enter your age.",
+  ...        title="Enter your age.",
   ...        required=True)
   ...        
   ...    country = Choice(
-  ...        title=u"Country",
+  ...        title="Country",
   ...        required=True,
-  ...        values=[u'Korea', u'France'])
+  ...        values=['Korea', 'France'])
   ...
   ...    @invariant
   ...    def check_age(data):
-  ...        
-  ...        if data.age < {u'Korea': 17, u'France':18}[data.country]:
-  ...            raise Invalid(u"You must be major to proceed.")
+  ...        if data.age and data.country:
+  ...            if data.age < country_data[data.country]:
+  ...               raise Invalid("You must be major to proceed.")
 
 
 
@@ -165,8 +168,8 @@ just the age::
   ...     def __init__(self, country, age):
   ...         self.country, self.age = country, age
 
-  >>> edit_french = FormData(Person(u'France', None), TestRequest())
-  >>> edit_korean = FormData(Person(u'Korea', None), TestRequest())
+  >>> edit_french = FormData(Person('France', None), TestRequest())
+  >>> edit_korean = FormData(Person('Korea', None), TestRequest())
   >>> fields = Fields(IAdult).omit('country')
 
 
@@ -177,16 +180,16 @@ Let's edit the french and check
 
   >>> data = FieldsValues(edit_french, fields)
   >>> data.update({'age': 17})
-  >>> print InvariantsValidation(fields, edit_french).validate(data)
-  [Invalid(u'You must be major to proceed.',)]
+  >>> print(InvariantsValidation(fields, edit_french).validate(data))
+  [Invalid('You must be major to proceed.',)]
 
   >>> data.update({'age': 18})
-  >>> print InvariantsValidation(fields, edit_french).validate(data)
+  >>> print(InvariantsValidation(fields, edit_french).validate(data))
   []
 
   >>> data = FieldsValues(edit_korean, fields)
   >>> data.update({'age': 17})
-  >>> print InvariantsValidation(fields, edit_korean).validate(data)
+  >>> print(InvariantsValidation(fields, edit_korean).validate(data))
   []
 
 
@@ -223,13 +226,12 @@ two errors for the form itself:
   >>> form = MyLegalPage(content, request)
   >>> form.update()
 
+  >>> from dolmen.forms.base import NO_VALUE
   >>> data, errors = form.extractData()
-  >>> data
-  {'age': <Marker NO_VALUE>, 'accept': <Marker NO_VALUE>}
+  >>> assert data == {'age': NO_VALUE, 'accept': NO_VALUE}
+
   >>> list(errors)
-  [<Error Missing required value.>,
-   <Error Missing required value.>,
-   <Errors for 'form'>]
+  [<Error Missing required value.>, <Error Missing required value.>, <Errors for 'form'>]
 
   >>> list(errors['form'])
   [<Error You must be at least 18 to proceed.>,

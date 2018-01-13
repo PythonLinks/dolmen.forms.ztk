@@ -9,16 +9,17 @@ Let's create some interface using times::
   >>> import datetime
 
   >>> class ITimeInfo(interface.Interface):
-  ...     time = schema.Time(title=u'Current time')
+  ...     time = schema.Time(title='Current time')
 
 And some content for them::
 
   >>> from cromlech.browser.testing import TestRequest
   >>> request = TestRequest()
 
-  >>> class TimeInfo(object):
-  ...    interface.implements(ITimeInfo)
+  >>> @interface.implementer(ITimeInfo)
+  ... class TimeInfo(object):
   ...    time = None
+
   >>> timeinfo = TimeInfo()
   >>> timeinfo.time = datetime.time(12, 00, 00)
 
@@ -66,7 +67,7 @@ of the time, based on the locale of the request::
   True
 
   >>> timeWidget.inputValue()
-  u'12:00:00 PM'
+  '12:00:00 PM'
 
 
 Widget extractor
@@ -76,7 +77,7 @@ You can extract a value from the request. It is a bit more difficult
 here because the parsing is a bit more advanced::
 
   >>> timeRequest = TestRequest(form={
-  ...     'form.field.time': u'11:21:00'})
+  ...     'form.field.time': '11:21:00'})
   >>> niceTimeData = FormData(timeinfo, timeRequest)
 
   >>> niceTimeExtractor = interfaces.IWidgetExtractor(
@@ -90,7 +91,7 @@ here because the parsing is a bit more advanced::
 Empty text is interpreted as None::
 
   >>> timeRequest = TestRequest(form={
-  ...     'form.field.time': u''})
+  ...     'form.field.time': ''})
   >>> niceTimeData = FormData(timeinfo, timeRequest)
 
   >>> niceTimeExtractor = interfaces.IWidgetExtractor(
@@ -101,7 +102,7 @@ Empty text is interpreted as None::
 Now if you give an invalid time you will have an error::
 
   >>> invalidTimeRequest = TestRequest(form={
-  ...     'form.field.time': u'the best time ever'})
+  ...     'form.field.time': 'the best time ever'})
   >>> invalidTimeData = FormData(timeinfo, invalidTimeRequest)
 
   >>> invalidTimeExtractor = interfaces.IWidgetExtractor(
@@ -118,7 +119,7 @@ hidden mode
 The extractor also work in HIDDEN mode::
 
   >>> timeRequest = TestRequest(form={
-  ...     'form.field.time': u'11:21:00'})
+  ...     'form.field.time': '11:21:00'})
   >>> niceTimeData = FormData(timeinfo, timeRequest)
 
   >>> niceTimeExtractor = interfaces.IWidgetExtractor(

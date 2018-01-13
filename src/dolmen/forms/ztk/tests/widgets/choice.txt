@@ -13,7 +13,7 @@ First we need a choice:
 
   >>> def display_vocabulary(values):
   ...     for value in values:
-  ...         print "%r %r %r" % (value.value, value.token, value.title)
+  ...         print("%r %r %r" % (value.value, value.token, value.title))
 
   >>> letter_vocabulary = SimpleVocabulary([
   ...     SimpleTerm(value='A', token='a1', title='Letter A'),
@@ -22,7 +22,7 @@ First we need a choice:
 
   >>> class ISimpleChoice(interface.Interface):
   ...     choice = schema.Choice(
-  ...         title=u"My favorite letter",
+  ...         title="My favorite letter",
   ...         source=letter_vocabulary)
 
 
@@ -31,8 +31,8 @@ And we will need a content and a request to test:
   >>> from cromlech.browser.testing import TestRequest
   >>> request = TestRequest()
 
-  >>> class SimpleContent(object):
-  ...    interface.implements(ISimpleChoice)
+  >>> @interface.implementer(ISimpleChoice)
+  ... class SimpleContent(object):
   ...    choice = None
 
   >>> content = SimpleContent()
@@ -60,7 +60,7 @@ So now you can create a field, and get a choice field:
 
   >>> simple_field.validate('A')
   >>> simple_field.validate('foo')
-  u'Constraint not satisfied'
+  'Constraint not satisfied'
 
   >>> verifyObject(interfaces.IField, simple_field)
   True
@@ -71,18 +71,17 @@ Pluggable source
 
   >>> class IDuckChoice(interface.Interface):
   ...     duck = schema.Choice(
-  ...         title=u"Ducks",
-  ...         source=u'ducks')
+  ...         title="Ducks",
+  ...         source='ducks')
 
 
 A pluggable schema will need a factory:
 
   >>> duck_fields = Fields(IDuckChoice)
-  >>> print duck_fields['duck'].source
+  >>> print(duck_fields['duck'].source)
   Traceback (most recent call last):
   ...
-  ComponentLookupError: Could not find component from sources () to target
-  <InterfaceClass zope.schema.interfaces.IVocabularyFactory>.
+  zope.interface.interfaces.ComponentLookupError: Could not find component from sources () to target <InterfaceClass zope.schema.interfaces.IVocabularyFactory>.
 
   >>> from zope.interface import provider
   >>> from zope.schema.interfaces import IVocabularyFactory
@@ -96,12 +95,12 @@ A pluggable schema will need a factory:
 
   >>> from crom import implicit
   >>> implicit.registry.register(
-  ...     tuple(), IVocabularyFactory, u'ducks', donald_nephews)
+  ...     tuple(), IVocabularyFactory, 'ducks', donald_nephews)
 
-  >>> print duck_fields['duck'].source
+  >>> print(duck_fields['duck'].source)
   <function donald_nephews at ...>
 
-  >>> print [i.title for i in duck_fields['duck'].getChoices(object())]
+  >>> print([i.title for i in duck_fields['duck'].getChoices(object())])
   ['Huey', 'Dewey', 'Louie']
 
 
@@ -129,8 +128,8 @@ You have an associated widget:
   >>> simple_widget.inputValue()
   'b1'
 
-  >>> print simple_widget.render()
-  <select id="form-field-choice" name="form.field.choice" class="field field-choice field-required">
+  >>> print(simple_widget.render())
+  <select id="form-field-choice" name="form.field.choice" class="field field-required" required="required">
     <option value="a1">Letter A</option>
     <option value="b1" selected="selected">Letter B</option>
     <option value="c1">Letter C</option>
@@ -157,7 +156,7 @@ We have a display widget that display a value with the correct title:
   >>> display_widget
   <ChoiceDisplayWidget My favorite letter>
 
-  >>> print display_widget.render()
+  >>> print(display_widget.render())
   Letter B
 
 You can display a content that have a value which is not in the
@@ -179,7 +178,7 @@ vocabulary. Nothing will be displayed:
   >>> broken_display_widget
   <ChoiceDisplayWidget My favorite letter>
 
-  >>> print broken_display_widget.render()
+  >>> print(broken_display_widget.render())
   <BLANKLINE>
 
 Extractor
@@ -201,7 +200,7 @@ different than the real value:
 Let's now do it with a value:
 
   >>> simple_request = TestRequest(
-  ...    form={simple_widget.identifier: u'a1', })
+  ...    form={simple_widget.identifier: 'a1', })
 
   >>> simple_extractor = interfaces.IWidgetExtractor(
   ...    simple_field, simple_form, simple_request)
@@ -212,13 +211,13 @@ Let's now do it with a value:
 And a value which is not in the vocabulary:
 
   >>> broken_request = TestRequest(
-  ...    form={simple_widget.identifier: u'z42', })
+  ...    form={simple_widget.identifier: 'z42', })
 
   >>> broken_extractor = interfaces.IWidgetExtractor(
   ...    simple_field, simple_form, broken_request)
 
   >>> broken_extractor.extract()
-  (None, u'Invalid value')
+  (None, 'Invalid value')
 
 hidden mode
 -------------
@@ -226,7 +225,7 @@ hidden mode
 The extractor also work in HIDDEN mode::
 
   >>> simple_request = TestRequest(
-  ...    form={simple_widget.identifier: u'a1', })
+  ...    form={simple_widget.identifier: 'a1', })
 
   >>> simple_extractor = interfaces.IWidgetExtractor(
   ...    simple_field, simple_form, simple_request, name='hidden')
@@ -250,11 +249,11 @@ and an interface for it:
 
   >>> class ISecondChoice(interface.Interface):
   ...     choice = schema.Choice(
-  ...         title=u"My Choice",
+  ...         title="My Choice",
   ...         source=secondVocabulary)
 
-  >>> class SecondContent(object):
-  ...    interface.implements(ISecondChoice)
+  >>> @interface.implementer(ISecondChoice)
+  ... class SecondContent(object):
   ...    choice = None
 
   >>> content = SecondContent()
@@ -284,7 +283,7 @@ So now you can create a field, and get a choice field:
 
   >>> secondField.validate('A')
   >>> secondField.validate(42)
-  u'Constraint not satisfied'
+  'Constraint not satisfied'
 
 Widget
 ------
@@ -310,8 +309,8 @@ You have an associated widget:
   >>> secondWidget.inputValue()
   'c1'
 
-  >>> print secondWidget.render()
-  <select id="form-field-choice" name="form.field.choice" class="field field-choice field-required">
+  >>> print(secondWidget.render())
+  <select id="form-field-choice" name="form.field.choice" class="field field-required" required="required">
     <option value="a1">Letter A</option>
     <option value="b1">Letter B</option>
     <option value="c1" selected="selected">Letter C</option>

@@ -13,7 +13,7 @@ First we need a choice::
 
   >>> def displayVocabulary(values):
   ...     for value in values:
-  ...         print "%r %r %r" % (value.value, value.token, value.title)
+  ...         print("%r %r %r" % (value.value, value.token, value.title))
 
   >>> letterVocabulary = SimpleVocabulary([
   ...     SimpleTerm(value='A', token='a1', title='Letter A'),
@@ -31,9 +31,10 @@ And we will need a content and a request to test:
   >>> from cromlech.browser.testing import TestRequest
   >>> request = TestRequest()
 
-  >>> class FirstContent(object):
-  ...    interface.implements(IFirstChoice)
+  >>> @interface.implementer(IFirstChoice)
+  ... class FirstContent(object):
   ...    choice = None
+
   >>> content = FirstContent()
   >>> content.choice = 'B'
 
@@ -56,7 +57,7 @@ So now you can create a field, and get a choice field::
 
   >>> firstField.validate('A')
   >>> firstField.validate('foo')
-  u'Constraint not satisfied'
+  'Constraint not satisfied'
 
   >>> verifyObject(interfaces.IField, firstField)
   True
@@ -95,14 +96,14 @@ You have an associated widget::
   >>> firstWidget.inputValue()
   'b1'
 
-  >>> print firstWidget.render()
-  <input type="radio" id="form-field-choice-0" name="form.field.choice" value="a1" class="field field-choice field-required" />
+  >>> print(firstWidget.render())  # doctest: +NORMALIZE_WHITESPACE
+  <input type="radio" id="form-field-choice-0" name="form.field.choice" value="a1" class="field field-required" />
     <label for="form-field-choice-0">Letter A</label>
     <br />
-  <input type="radio" id="form-field-choice-1" name="form.field.choice" value="b1" checked="checked" class="field field-choice field-required" />
+  <input type="radio" id="form-field-choice-1" name="form.field.choice" value="b1" checked="checked" class="field field-required" />
     <label for="form-field-choice-1">Letter B</label>
     <br />
-  <input type="radio" id="form-field-choice-2" name="form.field.choice" value="c1" class="field field-choice field-required" />
+  <input type="radio" id="form-field-choice-2" name="form.field.choice" value="c1" class="field field-required" />
     <label for="form-field-choice-2">Letter C</label>
     <br />
 
@@ -153,8 +154,8 @@ and an interface for it::
   ...         title=u"My Choice",
   ...         source=secondVocabulary)
 
-  >>> class SecondContent(object):
-  ...    interface.implements(ISecondChoice)
+  >>> @interface.implementer(ISecondChoice)
+  ... class SecondContent(object):
   ...    choice = None
 
   >>> content = SecondContent()
@@ -185,7 +186,7 @@ So now you can create a field, and get a choice field::
 
   >>> secondField.validate('A')
   >>> secondField.validate(42)
-  u'Constraint not satisfied'
+  'Constraint not satisfied'
 
 
 Widget
@@ -212,8 +213,8 @@ You have an associated widget::
   >>> secondWidget.inputValue()
   'c1'
 
-  >>> print secondWidget.render()
-  <select id="form-field-choice" name="form.field.choice" class="field field-choice field-required">
+  >>> print(secondWidget.render())
+  <select id="form-field-choice" name="form.field.choice" class="field field-required" required="required">
     <option value="a1">Letter A</option>
     <option value="b1">Letter B</option>
     <option value="c1" selected="selected">Letter C</option>

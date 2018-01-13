@@ -29,15 +29,15 @@ information::
   >>> f2
   <TextLineSchemaField Name>
   >>> f2.title
-  u'Name'
+  'Name'
   >>> f2.identifier
   'name'
   >>> f2.description
-  u''
+  ''
   >>> f3
   <IntSchemaField Size>
   >>> f3.description
-  u'Size in Km'
+  'Size in Km'
 
   >>> from zope.interface.verify import verifyObject
   >>> from dolmen.forms.base import interfaces
@@ -97,17 +97,17 @@ Description, required and readonly
 Those values are correctly collected from the schema field::
 
   >>> s2['city'].description
-  u''
+  ''
   >>> s2['city'].required
   True
 
   >>> s2['people'].description
-  u'Or population size'
+  'Or population size'
   >>> s2['people'].required
   False
 
   >>> s2['size'].description
-  u'Size in Km'
+  'Size in Km'
   >>> s2['size'].required
   True
 
@@ -129,7 +129,7 @@ You can clone a field and keep all settings::
   >>> clone.identifier
   'myclone'
   >>> clone.description
-  u'Size in Km'
+  'Size in Km'
   >>> clone.required
   True
   >>> clone.mode
@@ -174,13 +174,13 @@ error, since no adapters are registered, yet::
 
   >>> from dolmen.forms.ztk.datamanagers import makeGenericAdaptiveDataManager
   >>> factory = makeGenericAdaptiveDataManager(*fields)
-  >>> print factory
-  <class 'dolmen.forms.ztk.datamanagers.GenericAdaptiveDataManager'>
+  >>> print(factory)
+  <class '...GenericAdaptiveDataManager'>
 
-  >>> gadm = factory(item)
+  >>> gadm = factory(item)  # doctest: +ELLIPSIS
   Traceback (most recent call last):
   ...
-  ComponentLookupError...
+  zope.interface.interfaces.ComponentLookupError:...
 
 
 Now, if we provide the correct adapters, we can build the data
@@ -219,7 +219,7 @@ manager::
   >>> implicit.registry.register((Item,), IDescriptiveItem, '', DescProvider)
  
   >>> gadm = factory(item)
-  >>> print gadm
+  >>> print(gadm)
   <GenericAdaptiveDataManager used for <Item object at ...>>
 
 The data manager should provide all the necessary interfaces::
@@ -229,27 +229,27 @@ The data manager should provide all the necessary interfaces::
 
 We can, now, simply get and set our attributes:: 
 
-  >>> print gadm.get("title")
+  >>> print(gadm.get("title"))
   None
 
-  >>> print gadm.get("description")
+  >>> print(gadm.get("description"))
   None
 
-  >>> print gadm.get("nothing")
+  >>> print(gadm.get("nothing"))
   Traceback (most recent call last):
   ...
   AttributeError: 'Item' object has no attribute 'nothing'
 
-  >>> gadm.set('title', u'My title')
+  >>> gadm.set('title', 'My title')
   >>> title = gadm.get('title')
-  >>> print title
+  >>> print(title)
   My title
   >>> title is item._title
   True
 
-  >>> gadm.set('description', u'My description')
+  >>> gadm.set('description', 'My description')
   >>> description = gadm.get('description')
-  >>> print description
+  >>> print(description)
   My description
   >>> description is item._description
   True
@@ -257,9 +257,11 @@ We can, now, simply get and set our attributes::
 To be thorough, we display the inner attributes that are created
 during the data manager initialisation::
 
-  >>> gadm.fields
-  {'description': <InterfaceClass __builtin__.IDescriptiveItem>,
-   'title': <InterfaceClass __builtin__.ITitledItem>}
+  >>> assert gadm.fields == {
+  ...   'description': IDescriptiveItem,
+  ...   'title': ITitledItem
+  ... }
+
   >>> isinstance(gadm.adapters[ITitledItem], TitleProvider)
   True
   >>> isinstance(gadm.adapters[IDescriptiveItem], DescProvider)

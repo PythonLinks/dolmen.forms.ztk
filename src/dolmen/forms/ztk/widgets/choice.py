@@ -14,7 +14,6 @@ from zope.interface import Interface
 from zope.schema import interfaces as schema_interfaces
 
 
-
 def register():
     registerSchemaField(ChoiceSchemaField, schema_interfaces.IChoice)
 
@@ -29,7 +28,7 @@ class ChoiceSchemaField(SchemaField):
         self.__source_name = None
         if field.source is not None:
             self.__source = field.source
-        elif isinstance(field.vocabularyName, (str, unicode)):
+        elif isinstance(field.vocabularyName, str):
             # We delay the lookup of the vocabulary, to be sure it
             # have been registered.
             self.__source = None

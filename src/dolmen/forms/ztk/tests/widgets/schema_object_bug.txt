@@ -12,8 +12,8 @@ schema using a vocabulary you have to use this package Object field::
 The first different thing is that Choice in zope schema get linked
 to their value and not to context. See the bug in action::
 
-  >>> class EnumSource(object):
-  ...     interface.implements(IContextSourceBinder)
+  >>> @interface.implementer(IContextSourceBinder)
+  ... class EnumSource(object):
   ...
   ...     def __call__(self, context):
   ...         return SimpleVocabulary([
@@ -23,8 +23,8 @@ to their value and not to context. See the bug in action::
   >>> class ISimpleChoice(interface.Interface):
   ...     choice = schema.Choice(source=EnumSource())
 
-  >>> class Choice(object):
-  ...     interface.implements(ISimpleChoice)
+  >>> @interface.implementer(ISimpleChoice)
+  ... class Choice(object):
   ...
   ...     def __init__(self, choice):
   ...         self.choice = choice
@@ -63,8 +63,8 @@ See the bug in action::
   >>> class IMultipleChoice(interface.Interface):
   ...     choices = schema.Set(value_type=schema.Choice(source=EnumSource()))
 
-  >>> class Choices(object):
-  ...     interface.implements(IMultipleChoice)
+  >>> @interface.implementer(IMultipleChoice)
+  ... class Choices(object):
   ...
   ...     def __iter__(self):
   ...         return iter(range(5))  # to have EnumSource work

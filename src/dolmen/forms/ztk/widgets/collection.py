@@ -2,7 +2,7 @@
 
 
 import hashlib
-md5hash = lambda s: hashlib.md5(s).hexdigest()
+md5hash = lambda s: hashlib.md5(s.encode('utf-8')).hexdigest()
 
 import crom
 

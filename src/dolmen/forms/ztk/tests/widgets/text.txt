@@ -56,9 +56,9 @@ You have an associated widget::
   >>> TextWidget
   <TextFieldWidget Some text>
 
-  >>> print TextWidget.render() #doctest: +NORMALIZE_WHITESPACE
+  >>> print(TextWidget.render())  #doctest: +NORMALIZE_WHITESPACE
   <textarea id="form-field-text" name="form.field.text"
-  class="field field-text field-required" cols="80" rows="5"></textarea>
+  class="field field-required" required="required"></textarea>
 
 And the display mode::
 
@@ -71,6 +71,5 @@ And the display mode::
   >>> CodeWidgets.update()
   >>> TextWidget = CodeWidgets['form.field.text']
 
-  >>> print TextWidget.render() #doctest: +NORMALIZE_WHITESPACE
-  <pre name="form.field.text" id="form-field-text" class="field field-text
-  field-required"></pre>
+  >>> print(TextWidget.render())  #doctest: +NORMALIZE_WHITESPACE
+  <pre id="form-field-text" name="form.field.text" class="field field-required"></pre>

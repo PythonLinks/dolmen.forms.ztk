@@ -23,8 +23,8 @@ def setUp(test):
     load.reloadComponents()
     crom.configure(dolmen.forms.base)
     crom.configure(dolmen.forms.ztk)
-
-
+    
+    
 def tearDown(test):
     testing.teardown()
 
@@ -32,7 +32,7 @@ def tearDown(test):
 class WSGIApplication(object):
 
     def __init__(self, context, formname):
-    	self.context = context
+        self.context = context
         self.formname = formname
 
     @webob.dec.wsgify(RequestClass=Request)
@@ -75,7 +75,7 @@ def testsFromPackage(name):
 
 def test_suite():
     suite = unittest.TestSuite()
-    for folder in ['overview', 'widgets', 'integration']:
+    for folder in ['overview', 'widgets']:
         for test in testsFromPackage(folder):
             suite.addTest(test)
     return suite

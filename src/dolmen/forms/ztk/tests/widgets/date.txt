@@ -9,24 +9,25 @@ Let's create some interface using dates::
   >>> import datetime
 
   >>> class IDayInfo(interface.Interface):
-  ...     date = schema.Date(title=u'Current date')
+  ...     date = schema.Date(title='Current date')
 
   >>> class IAppointment(interface.Interface):
-  ...     when = schema.Datetime(title=u'When')
+  ...     when = schema.Datetime(title='When')
 
 And some content for them::
 
   >>> from cromlech.browser.testing import TestRequest
   >>> request = TestRequest()
 
-  >>> class DayInfo(object):
-  ...    interface.implements(IDayInfo)
+  >>> @interface.implementer(IDayInfo)
+  ... class DayInfo(object):
   ...    date = None
+
   >>> day = DayInfo()
   >>> day.date = datetime.date(1983, 4, 25)
 
-  >>> class Appointment(object):
-  ...    interface.implements(IAppointment)
+  >>> @interface.implementer(IAppointment)
+  ... class Appointment(object):
   ...    when = None
   >>> appointment = Appointment()
 
@@ -83,7 +84,7 @@ of the date, based on the locale of the request::
   True
 
   >>> dailyWidget.inputValue()
-  u'4/25/83'
+  '4/25/83'
 
 
 Widget extractor
@@ -93,7 +94,7 @@ You can extract a value from the request. It is a bit more difficult
 here because the parsing is a bit more advanced::
 
   >>> dateRequest = TestRequest(form={
-  ...     'form.field.date': u'06/10/1982'})
+  ...     'form.field.date': '06/10/1982'})
   >>> niceDayData = FormData(day, dateRequest)
 
   >>> niceDayExtractor = interfaces.IWidgetExtractor(
@@ -107,7 +108,7 @@ here because the parsing is a bit more advanced::
 If date is empty it means None::
 
   >>> dateRequest = TestRequest(form={
-  ...     'form.field.date': u''})
+  ...     'form.field.date': ''})
   >>> niceDayData = FormData(day, dateRequest)
 
   >>> niceDayExtractor = interfaces.IWidgetExtractor(
@@ -119,7 +120,7 @@ If date is empty it means None::
 Now if you give an invalid date you will have an error::
 
   >>> invalidDateRequest = TestRequest(form={
-  ...     'form.field.date': u'the best day ever'})
+  ...     'form.field.date': 'the best day ever'})
   >>> invalidDayData = FormData(day, invalidDateRequest)
 
   >>> invalidDayExtractor = interfaces.IWidgetExtractor(
@@ -136,7 +137,7 @@ hidden mode
 The extractor also work in HIDDEN mode::
 
   >>> dateRequest = TestRequest(form={
-  ...     'form.field.date': u'06/10/1982'})
+  ...     'form.field.date': '06/10/1982'})
   >>> niceDayData = FormData(day, dateRequest)
 
   >>> niceDayExtractor = interfaces.IWidgetExtractor(

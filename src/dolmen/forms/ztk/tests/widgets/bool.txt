@@ -15,8 +15,8 @@ And a test content and request:
   >>> from cromlech.browser.testing import TestRequest
   >>> request = TestRequest()
 
-  >>> class Question(object):
-  ...    interface.implements(IQuestion)
+  >>> @interface.implementer(IQuestion)
+  ... class Question(object):
   ...    answer = True
   >>> content = Question()
 
@@ -58,12 +58,10 @@ You have an associated widget:
   >>> verifyObject(interfaces.IWidget, booleanWidget)
   True
 
-  >>> print booleanWidget.render()
+  >>> print(booleanWidget.render())
   <input id="form-field-answer" name="form.field.answer"
-         class="field field-bool field-required"
-         checked="checked" value="True" type="checkbox" />
-  <input value="True" type="hidden"
-         name="form.field.answer.present" />
+         class="field field-required" checked="checked"
+	 value="True" type="checkbox" required="required" />
 
 
 Extractor

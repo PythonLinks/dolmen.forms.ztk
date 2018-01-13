@@ -24,7 +24,7 @@ class TextSchemaField(SchemaField):
 @crom.sources(TextSchemaField, Interface, Interface)
 class TextFieldWidget(SchemaFieldWidget):
     template = getTemplate('textfieldwidget.pt')
-    defaultHtmlClass = ['field', 'field-text']
+    defaultHtmlClass = ['field']
     defaultHtmlAttributes = set(['maxlength', 'placeholder', 'required',
                                  'rows', 'warp', 'readonly', 'cols',
                                  'style'])
