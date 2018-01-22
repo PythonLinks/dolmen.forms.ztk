@@ -163,7 +163,7 @@ have a sub-widget for each entry of the collection::
   True
   >>> list_widget.allowRemove
   True
-  >>> list(list_widget.valueWidgets)
+  >>> list(list_widget.valueWidgets)  # doctest: +NORMALIZE_WHITESPACE
   [<TextLineWidget form.field.names.field.0>,
    <TextLineWidget form.field.names.field.1>,
    <TextLineWidget form.field.names.field.2>]
@@ -204,7 +204,7 @@ with the value ``Nicolas``, the other with the value ``Jean``::
   True
   >>> peopleWidget.allowRemove
   True
-  >>> list(peopleWidget.valueWidgets)
+  >>> list(peopleWidget.valueWidgets)  # doctest: +NORMALIZE_WHITESPACE
   [<TextLineWidget form.field.names.field.0>,
    <TextLineWidget form.field.names.field.1>]
 
@@ -274,7 +274,7 @@ empty::
   True
   >>> peopleWidget.allowRemove
   True
-  >>> list(peopleWidget.valueWidgets)
+  >>> list(peopleWidget.valueWidgets)  # doctest: +NORMALIZE_WHITESPACE
   [<TextLineWidget form.field.names.field.1>,
    <TextLineWidget form.field.names.field.3>]
 

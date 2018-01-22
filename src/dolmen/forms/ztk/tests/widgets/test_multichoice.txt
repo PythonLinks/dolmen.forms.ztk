@@ -145,7 +145,7 @@ ones already selected in the content will already by marked::
 
 And we can render this widget:
 
-  >>> print(widget.render())
+  >>> print(widget.render())  # doctest: +NORMALIZE_WHITESPACE
   <input type="checkbox" id="form-field-choices-0" name="form.field.choices"
    value="vodka" checked="checked" class="field" />
   <label for="form-field-choices-0">Vodka</label>
@@ -277,7 +277,7 @@ You can use a multi select widget as well:
 
 And we can render this widget:
 
-  >>> print(select_widget.render())
+  >>> print(select_widget.render())  # doctest: +NORMALIZE_WHITESPACE
   <select id="form-field-choices" name="form.field.choices"
    class="field" multiple="multiple">
     <option value="vodka" selected="selected">Vodka</option>

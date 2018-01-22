@@ -213,7 +213,7 @@ You have an associated widget::
   >>> secondWidget.inputValue()
   'c1'
 
-  >>> print(secondWidget.render())
+  >>> print(secondWidget.render())  # doctest: +NORMALIZE_WHITESPACE
   <select id="form-field-choice" name="form.field.choice" class="field field-required" required="required">
     <option value="a1">Letter A</option>
     <option value="b1">Letter B</option>

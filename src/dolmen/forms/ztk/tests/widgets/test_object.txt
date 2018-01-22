@@ -57,12 +57,12 @@ Now we have a couple more methods on our field to help us with our
 object, to get its schema and fields::
 
   >>> postField.objectSchema
-  <InterfaceClass builtins.IComment>
+  <InterfaceClass ...IComment>
 
   >>> commentFields = postField.objectFields
   >>> commentFields
   <Fields>
-  >>> list(commentFields)
+  >>> list(commentFields)  # doctest: +NORMALIZE_WHITESPACE
   [<TextLineSchemaField Title>,
    <TextSchemaField Comment>,
    <TextLineSchemaField Email>]
@@ -78,7 +78,7 @@ last will be used in priority::
   >>> implicit.registry.register(tuple(), IFactory, factoryName, Comment)
 
   >>> postField.getObjectFactory()
-  <class 'Comment'>
+  <class '...Comment'>
 
   >>> def customizedOtherFactory(*args):
   ...    return Comment(*args)
@@ -90,7 +90,7 @@ last will be used in priority::
 
   >>> postField.objectFactory = None
   >>> postField.getObjectFactory()
-  <class 'Comment'>
+  <class '...Comment'>
 
 
 Widget
@@ -120,11 +120,12 @@ object, all of them prefixed by the main widget identifier::
 
   >>> len(commentWidget.objectWidgets)
   3
-  >>> list(commentWidget.objectWidgets)
+  >>> list(commentWidget.objectWidgets)  # doctest: +NORMALIZE_WHITESPACE
   [<TextLineWidget Title>,
    <TextFieldWidget Comment>,
    <TextLineWidget Email>]
   >>> [w.identifier for w in commentWidget.objectWidgets]
+  ... # doctest: +NORMALIZE_WHITESPACE
   ['form.field.comment.field.title',
    'form.field.comment.field.comment',
    'form.field.comment.field.email']
@@ -155,7 +156,7 @@ And you can extract the object of the request::
 
   >>> value, errors = commentExtractor.extract()
   >>> value
-  <Comment object at ...>
+  <...Comment object at ...>
   >>> errors
 
   >>> value.title

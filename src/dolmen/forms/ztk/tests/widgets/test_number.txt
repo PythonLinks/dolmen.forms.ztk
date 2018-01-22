@@ -68,11 +68,11 @@ You have associated widgets::
   >>> verifyObject(interfaces.IWidget, floatWidget)
   True
 
-  >>> print(intWidget.render())
+  >>> print(intWidget.render())  # doctest: +NORMALIZE_WHITESPACE
   <input type="text" id="form-field-age" name="form.field.age"
          class="field field-required" value="4" />
   <BLANKLINE>
-  >>> print(floatWidget.render())
+  >>> print(floatWidget.render())  # doctest: +NORMALIZE_WHITESPACE
   <input type="text" id="form-field-weight" name="form.field.weight"
          class="field field-required" value="15.3" />
   <BLANKLINE>

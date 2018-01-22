@@ -48,7 +48,7 @@ Instanciation
   <dolmen.forms.ztk.validation.InvariantsValidation object at ...>
 
   >>> print(validator.interfaces)
-  [<InterfaceClass builtins.IPasswords>]
+  [<InterfaceClass ...IPasswords>]
 
 
 Providing some data
@@ -108,7 +108,7 @@ Instanciation
   <dolmen.forms.ztk.validation.InvariantsValidation object at ...>
 
   >>> print(validator.interfaces)
-  [<InterfaceClass builtins.IAgeAndLegals>]
+  [<InterfaceClass ...IAgeAndLegals>]
 
 
 Providing some data
@@ -116,13 +116,13 @@ Providing some data
 
   >>> data = FieldsValues(form, fields)
   >>> data.update({'age': 17, 'accept': "I disapprove"})
-  >>> print(validator.validate(data))
+  >>> print(validator.validate(data))  # doctest: +NORMALIZE_WHITESPACE
   [Invalid('You must be at least 18 to proceed.',),
    Invalid('You can not proceed if you disagree.',)]
 
   >>> data = FieldsValues(form, fields)
   >>> data.update({'age': 17, 'accept': "I accept"})
-  >>> print(validator.validate(data))
+  >>> print(validator.validate(data))  # doctest: +NORMALIZE_WHITESPACE
   [Invalid('You must be at least 18 to proceed.',)]
 
   >>> data = FieldsValues(form, fields)
@@ -230,13 +230,14 @@ two errors for the form itself:
   >>> data, errors = form.extractData()
   >>> assert data == {'age': NO_VALUE, 'accept': NO_VALUE}
 
-  >>> list(errors)
-  [<Error Missing required value.>, <Error Missing required value.>, <Errors for 'form'>]
+  >>> list(errors)  # doctest: +NORMALIZE_WHITESPACE
+  [<Error Missing required value.>,
+   <Error Missing required value.>, <Errors for 'form'>]
 
-  >>> list(errors['form'])
+  >>> list(errors['form'])  # doctest: +NORMALIZE_WHITESPACE
   [<Error You must be at least 18 to proceed.>,
    <Error You can not proceed if you disagree.>]
 
-  >>> list(form.formErrors)
+  >>> list(form.formErrors)  # doctest: +NORMALIZE_WHITESPACE
   [<Error You must be at least 18 to proceed.>,
    <Error You can not proceed if you disagree.>]

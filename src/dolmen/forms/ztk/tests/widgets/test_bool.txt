@@ -58,7 +58,7 @@ You have an associated widget:
   >>> verifyObject(interfaces.IWidget, booleanWidget)
   True
 
-  >>> print(booleanWidget.render())
+  >>> print(booleanWidget.render())  # doctest: +NORMALIZE_WHITESPACE
   <input id="form-field-answer" name="form.field.answer"
          class="field field-required" checked="checked"
 	 value="True" type="checkbox" required="required" />

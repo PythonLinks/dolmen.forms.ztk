@@ -25,6 +25,7 @@ install_requires=[
 
 tests_require = [
     'WebOb',
+    'pytest',
     'cromlech.browser [test]',
     'cromlech.webob',
     'dolmen.collection',

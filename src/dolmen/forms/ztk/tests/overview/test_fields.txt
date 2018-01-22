@@ -53,7 +53,7 @@ You can add fields via an interface after::
   ...                         description=u"Or population size")
 
   >>> s2.extend(IHabitationSupport)
-  >>> list(s2)
+  >>> list(s2)  # doctest: +NORMALIZE_WHITESPACE
   [<TextLineSchemaField Name>, <IntSchemaField Size>,
    <TextLineSchemaField City name>, <IntSchemaField Number of people>]
 
@@ -220,7 +220,7 @@ manager::
  
   >>> gadm = factory(item)
   >>> print(gadm)
-  <GenericAdaptiveDataManager used for <Item object at ...>>
+  <GenericAdaptiveDataManager used for <...Item object at ...>>
 
 The data manager should provide all the necessary interfaces::
 
