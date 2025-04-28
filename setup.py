@@ -17,7 +17,7 @@ install_requires=[
     'dolmen.template',
     'fanstatic',
     'setuptools',
-    'zeam.jsontemplate',
+ #   'zeam.jsontemplate',
     'zope.interface',
     'zope.schema',
     'python-dateutil',
